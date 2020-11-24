@@ -85,31 +85,33 @@ def mount_json_for_reports_tr_j1(result_query_reports_tr_j1, attrs):
         "Report_Items": []
     }
 
+    report_items = {}
+
     for r in result_query_reports_tr_j1:
-        report_item = {
-            'Title': r.title,
-            'Item_ID': [],
-            'Platform': attrs.get('plataform', ''),
-            'Publisher': r.publisherName,
-            'Publisher_ID': [],
-            'Data_Type': 'Journal',
-            'Section_Type': 'Article',
-            'Access_Type': 'Open Access',
-            'Access_Method': 'Regular',
-            'Performance': []
-        }
+        if r.journal_id not in report_items:
+            report_items[r.journal_id] = {
+                'Title': r.title,
+                'Item_ID': [],
+                'Platform': attrs.get('plataform', ''),
+                'Publisher': r.publisherName,
+                'Publisher_ID': [],
+                'Data_Type': 'Journal',
+                'Section_Type': 'Article',
+                'Access_Type': 'Open Access',
+                'Access_Method': 'Regular',
+                'Performance': []}
 
-        if r.printISSN:
-            report_item['Item_ID'].append({
-                "Type": 'Print_ISSN',
-                "Value": r.printISSN
-            })
+            if r.printISSN:
+                report_items[r.journal_id]['Item_ID'].append({
+                    "Type": 'Print_ISSN',
+                    "Value": r.printISSN
+                })
 
-        if r.onlineISSN:
-            report_item['Item_ID'].append({
-                "Type": 'Online_ISSN',
-                "Value": r.onlineISSN
-            })
+            if r.onlineISSN:
+                report_items[r.journal_id]['Item_ID'].append({
+                    "Type": 'Online_ISSN',
+                    "Value": r.onlineISSN
+                })
 
         for m in ['Total_Item_Requests', 'Unique_Item_Requests']:
             metric_name = m[0].lower() + m[1:].replace('_', '')
@@ -124,7 +126,7 @@ def mount_json_for_reports_tr_j1(result_query_reports_tr_j1, attrs):
                     'Count': str(getattr(r, metric_name))
                 }
             }
-            report_item['Performance'].append(performance_m)
+            report_items[r.journal_id]['Performance'].append(performance_m)
 
-        json_results['Report_Items'].append(report_item)
+        json_results['Report_Items'] = [ri for ri in report_items.values()]
     return json_results

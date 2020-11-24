@@ -124,7 +124,7 @@ def _call_tr_j1(attrs):
         else:
             result_query_metrics = DBSession.execute(DB_CALL_TR_J1_JOURNAL_BY_YM % (attrs.get('begin_date', ''),
                                                                                     attrs.get('end_date', ''),
-                                                                                    attrs.get('issn'), ''))
+                                                                                    attrs.get('issn', '')))
     # Situação em que o filtro ISSN não é utilizado
     else:
         if attrs.get('granularity', '') == 'totals':

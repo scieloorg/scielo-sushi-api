@@ -1,0 +1,74 @@
+[
+  {
+    "pr": {
+      "Report_Name": "Platform Master Report",
+      "Report_ID": "pr",
+      "Release": "5",
+      "Report_Description": "A customizable report summarizing activity across a content provider’s platforms that allows the user to apply filters and select other configuration options.",
+      "Path": "/reports/pr"
+    },
+    "pr_p1": {
+      "Report_Name": "Platform Usage",
+      "Report_ID": "pr_p1",
+      "Release": "5",
+      "Report_Description": "Platform-level usage summarized by Metric_Type.",
+      "Path": "/reports/pr_p1"
+    },
+    "dr": {
+      "Report_Name": "Database Master Report",
+      "Report_ID": "dr",
+      "Release": "5",
+      "Report_Description": "A customizable report detailing activity by database that allows the user to apply filters and select other configuration options.",
+      "Path": "/reports/dr"
+    },
+    "dr_d1": {
+      "Report_Name": "Database Search and Item Usage",
+      "Report_ID": "dr_d1",
+      "Release": "5",
+      "Report_Description": "Reports on key Searches, Investigations and Requests metrics needed to evaluate a database.",
+      "Path": "/reports/dr_d1"
+    },
+    "dr_d2": {
+      "Report_Name": "Database Access Denied",
+      "Report_ID": "dr_d2",
+      "Release": "5",
+      "Report_Description": "Reports on Access Denied activity for databases where users were denied access because simultaneous-use licenses were exceeded or their institution did not have a license for the database.",
+      "Path": "/reports/dr_d2"
+    },
+    "tr": {
+      "Report_Name": "Title Master Report",
+      "Report_ID": "tr",
+      "Release": "5",
+      "Report_Description": "A customizable report detailing activity at the title level (journal) that allows the user to apply filters and select other configuration options.",
+      "Path": "/reports/tr"
+    },
+    "tr_j1": {
+      "Report_Name": "Journal Requests (Excluding OA_Gold)",
+      "Report_ID": "tr_j1",
+      "Release": "5",
+      "Report_Description": "Reports on usage of journal content, excluding Gold Open Access content, as Total_Item_Requests and Unique_Item_Requests. The Unique_Item_Requests provides comparable usage across journal platforms by reducing the inflationary effect that occurs when an HTML full text automatically displays and the user then accesses the PDF version. The Total_Item_Requests shows overall activity.",
+      "Path": "/reports/tr_j1"
+    },
+    "tr_j2": {
+      "Report_Name": "Journal Access Denied",
+      "Report_ID": "tr_j2",
+      "Release": "5",
+      "Report_Description": "Reports on Access Denied activity for journal content where users were denied access because simultaneous-use licenses were exceeded or their institution did not have a license for the title.",
+      "Path": "/reports/tr_j2"
+    },
+    "tr_j3": {
+      "Report_Name": "Journal Usage by Access Type",
+      "Report_ID": "tr_j3",
+      "Release": "5",
+      "Report_Description": "Reports on usage of journal content for all Metric_Types broken down by Access_Type.",
+      "Path": "/reports/tr_j3"
+    },
+    "tr_j4": {
+      "Report_Name": "Journal Requests by YOP (Excluding OA_Gold)",
+      "Report_ID": "tr_j4",
+      "Release": "5",
+      "Report_Description": "Breaks down the usage of journal content, excluding Gold Open Access content, by year of publication (YOP), providing counts for the Metric_Types Total_Item_Requests and Unique_Item_Requests. Provides the details necessary to analyze usage of content in backfiles or covered by perpetual access agreement. Note that COUNTER reports do not provide access model or perpetual access rights details.",
+      "Path": "/reports/tr_j4"
+    }
+  }
+]

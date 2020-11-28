@@ -14,7 +14,7 @@ from .db_calls import (
     DB_CALL_TR_J1_JOURNAL_BY_YM,
 )
 
-from .errors import error_date_is_invalid
+from .errors import *
 from .models import db_session
 from .utils import get_counter_table, handle_str_date
 
@@ -61,14 +61,20 @@ class CounterViews(object):
 
         # required_filters
         customer = self.request.params.get('customer', '')
-        try:
-            params_begin_date = self.request.params.get('begin_date', '')
-            begin_date = handle_str_date(params_begin_date)
 
-            params_end_date = self.request.params.get('end_date', '')
+        params_begin_date = self.request.params.get('begin_date', '')
+        try:
+            begin_date = handle_str_date(params_begin_date)
+        except ValueError or TypeError as e:
+            if 'unconverted data' or 'argument of type' in e:
+                return error_invalid_date_arguments(params_begin_date)
+
+        params_end_date = self.request.params.get('end_date', '')
+        try:
             end_date = handle_str_date(params_end_date, is_end_date=True)
-        except ValueError as e:
-            return error_date_is_invalid(e)
+        except ValueError or TypeError as e:
+            if 'unconverted data' or 'argument of type' in e:
+                return error_invalid_date_arguments(params_end_date)
 
         # TODO: é preciso popular as tabelas counter_customer e counter_institution
 

@@ -76,6 +76,9 @@ class CounterViews(object):
             if 'unconverted data' or 'argument of type' in e:
                 return error_invalid_date_arguments(params_end_date)
 
+        if end_date < begin_date:
+            return error_invalid_date_arguments(params_end_date)
+
         # TODO: é preciso popular as tabelas counter_customer e counter_institution
 
         # optional filters

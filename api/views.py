@@ -14,7 +14,11 @@ from .db_calls import (
     DB_CALL_TR_J1_JOURNAL_BY_YM,
 )
 
-from .models import DBSession, Report, Status, Alert, Member
+from .models import db_session
+
+
+def get_counter_table(request, name):
+    return request.registry.settings.get('counter_tables').get(name)
 
 
 class CounterViews(object):
@@ -27,25 +31,34 @@ class CounterViews(object):
 
     @view_config(route_name='status', renderer='json')
     def status(self):
-        status = DBSession.query(Status).filter_by(status_id=1).one()
-        result_query_alert = DBSession.query(Alert).filter(Alert.is_active == 1)
+        Status = get_counter_table(self.request, 'counter_status')
+        Alert = get_counter_table(self.request, 'counter_alert')
+
+        status = db_session.query(Status).filter_by(status_id=1).one()
+        result_query_alert = db_session.query(Alert).filter(Alert.is_active == 1)
         json_status = mount_json_for_status_alert(status, result_query_alert)
         return json_status
 
     @view_config(route_name='members', renderer='json')
     def members(self):
-        result_query_members = DBSession.query(Member).all()
+        Member = get_counter_table(self.request, 'counter_member')
+
+        result_query_members = db_session.query(Member).all()
         json_members = mount_json_for_members(result_query_members)
         return json_members
 
     @view_config(route_name='reports', renderer='json')
     def reports(self):
-        result_query_reports = DBSession.query(Report).all()
+        Report = get_counter_table(self.request, 'counter_report')
+
+        result_query_reports = db_session.query(Report).all()
         json_counter_reports = mount_json_for_reports(result_query_reports)
         return json_counter_reports
 
     @view_config(route_name='reports_report_id', renderer='json')
     def reports_report_id(self):
+        Report = get_counter_table(self.request, 'counter_report')
+
         report_id = self.request.matchdict.get('report_id', '')
 
         # required_filters
@@ -72,7 +85,7 @@ class CounterViews(object):
         }
 
         try:
-            report_data = DBSession.query(Report).filter_by(report_id=report_id).one()
+            report_data = db_session.query(Report).filter_by(report_id=report_id).one()
         except:
             report_data = {}
         attrs['report_data'] = report_data
@@ -118,20 +131,20 @@ def _call_tr_j1(attrs):
     # Situação em que o filtro ISSN é utilizado
     if attrs.get('issn', ''):
         if attrs.get('granularity', '') == 'totals':
-            result_query_metrics = DBSession.execute(DB_CALL_TR_J1_JOURNAL % (attrs.get('begin_date', ''),
+            result_query_metrics = db_session.execute(DB_CALL_TR_J1_JOURNAL % (attrs.get('begin_date', ''),
                                                                               attrs.get('end_date', ''),
                                                                               attrs.get('issn', '')))
         else:
-            result_query_metrics = DBSession.execute(DB_CALL_TR_J1_JOURNAL_BY_YM % (attrs.get('begin_date', ''),
+            result_query_metrics = db_session.execute(DB_CALL_TR_J1_JOURNAL_BY_YM % (attrs.get('begin_date', ''),
                                                                                     attrs.get('end_date', ''),
                                                                                     attrs.get('issn', '')))
     # Situação em que o filtro ISSN não é utilizado
     else:
         if attrs.get('granularity', '') == 'totals':
-            result_query_metrics = DBSession.execute(DB_CALL_TR_J1 % (attrs.get('begin_date', ''),
+            result_query_metrics = db_session.execute(DB_CALL_TR_J1 % (attrs.get('begin_date', ''),
                                                                       attrs.get('end_date', '')))
         else:
-            result_query_metrics = DBSession.execute(DB_CALL_TR_J1_BY_YM % (attrs.get('begin_date', ''),
+            result_query_metrics = db_session.execute(DB_CALL_TR_J1_BY_YM % (attrs.get('begin_date', ''),
                                                                             attrs.get('end_date', '')))
 
     if result_query_metrics:

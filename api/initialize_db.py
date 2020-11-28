@@ -1,17 +1,17 @@
 import json
 import os
 import sys
-from datetime import datetime
-
 import transaction
-from sqlalchemy.orm import sessionmaker, scoped_session
+
+from datetime import datetime
 from sqlalchemy import engine_from_config
+from zope.sqlalchemy import register
+from sqlalchemy.orm import sessionmaker, scoped_session
 
 from pyramid.paster import (
     get_appsettings,
     setup_logging,
 )
-from zope.sqlalchemy import register
 
 from .sql_declarative import Base, Report, Status, Alert
 

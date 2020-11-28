@@ -1,29 +1,33 @@
-from sqlalchemy import create_engine
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
-from zope.sqlalchemy import register
-
 
 Base = automap_base()
-engine = create_engine('mysql://bn_matomo@172.18.0.3:3306/bitnami_matomo')
-Base.prepare(engine, reflect=True)
+global db_session
 
-Article = Base.classes.counter_article
-ArticleFormat = Base.classes.counter_article_format
-ArticleLanguage = Base.classes.counter_article_language
-ArticleMetric = Base.classes.counter_article_metric
-Journal = Base.classes.counter_journal
-JournalCollection = Base.classes.counter_journal_collection
-Localization = Base.classes.counter_localization
 
-try:
-    Report = Base.classes.counter_report
-    Member = Base.classes.counter_member
-    Institution = Base.classes.counter_institution
-    Status = Base.classes.counter_status
-    Alert = Base.classes.counter_alert
-except AttributeError as e:
-    pass
+def get_counter_tables(engine):
+    Base.prepare(engine, reflect=True)
 
-DBSession = Session(engine)
-register(DBSession)
+    counter_tables_names = ['counter_article',
+                            'counter_article_format',
+                            'counter_article_metric',
+                            'counter_journal',
+                            'counter_journal_collection',
+                            'counter_localization',
+                            'counter_report',
+                            'counter_member',
+                            'counter_institution',
+                            'counter_status',
+                            'counter_alert']
+
+    counter_tables = {}
+
+    for ctn in counter_tables_names:
+        table = getattr(Base.classes, ctn)
+        table_formatted_name = table.__table__.name
+        counter_tables[table_formatted_name] = table
+
+    global db_session
+    db_session = Session(bind=engine)
+
+    return counter_tables

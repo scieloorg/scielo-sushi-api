@@ -66,7 +66,7 @@ class CounterViews(object):
 
         report_id = self.request.matchdict.get('report_id', '')
 
-        # required_filters
+        # required filters
         customer = self.request.params.get('customer', '')
 
         params_begin_date = self.request.params.get('begin_date', '')
@@ -74,17 +74,17 @@ class CounterViews(object):
             begin_date = handle_str_date(params_begin_date)
         except ValueError or TypeError as e:
             if 'unconverted data' or 'argument of type' in e:
-                return error_invalid_date_arguments(params_begin_date)
+                return error_invalid_date_arguments()
 
         params_end_date = self.request.params.get('end_date', '')
         try:
             end_date = handle_str_date(params_end_date, is_end_date=True)
         except ValueError or TypeError as e:
             if 'unconverted data' or 'argument of type' in e:
-                return error_invalid_date_arguments(params_end_date)
+                return error_invalid_date_arguments()
 
         if end_date < begin_date:
-            return error_invalid_date_arguments(params_end_date)
+            return error_invalid_date_arguments()
 
         # TODO: é preciso popular as tabelas counter_customer e counter_institution
 

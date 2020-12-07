@@ -81,7 +81,7 @@ def mount_json_for_reports_tr_j1(result_query_reports_tr_j1, attrs):
             "Name": "Attributes_To_Show",
             "Value": "Data_Type|Access_Method"
         }],
-        "Exceptions": [{}],
+        "Exceptions": [],
         "Report_Items": []
     }
 

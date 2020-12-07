@@ -38,3 +38,12 @@ def error_partial_data():
         'Severity': 'warning',
         'Message': 'Partial Data Returned',
     }
+
+
+def error_invalid_report_filter_value(data):
+    return {
+        'Code': 3060,
+        'Severity': ['warning', 'error'],
+        'Message': 'Request contained one or more filter values that are not supported by the server',
+        'Data': data
+    }

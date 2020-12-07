@@ -8,15 +8,22 @@ from .adapter import (
 )
 
 from .db_calls import (
-    DB_CALL_TR_J1,
-    DB_CALL_TR_J1_BY_YM,
-    DB_CALL_TR_J1_JOURNAL,
-    DB_CALL_TR_J1_JOURNAL_BY_YM,
+    DB_CALL_TR_J1_TOTALS,
+    DB_CALL_TR_J1_MONTHLY,
+    DB_CALL_TR_J1_JOURNAL_TOTALS,
+    DB_CALL_TR_J1_JOURNAL_MONTHLY,
 )
 
 from .errors import *
 from .models import db_session
 from .utils import get_counter_table, handle_str_date
+
+
+VALID_FILTERS = {'granularity',
+                 'customer',
+                 'issn',
+                 'begin_date',
+                 'end_date'}
 
 
 class CounterViews(object):

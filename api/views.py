@@ -20,7 +20,7 @@ from .utils import get_counter_table, handle_str_date
 
 
 VALID_FILTERS = {'granularity',
-                 'customer',
+                 'customer_id',
                  'issn',
                  'begin_date',
                  'end_date'}
@@ -139,6 +139,11 @@ class CounterViews(object):
         if len(json_metrics.get('Report_Items', [])) == 0:
             return error_no_usage_available()
 
+        # Verifica se há parâmetros inválidos na request
+        invalid_filters = _check_filters(self.request.params)
+        if len(invalid_filters) > 0:
+            json_metrics['Exceptions'] = error_invalid_report_filter_value(invalid_filters)
+
         return json_metrics
 
 
@@ -205,3 +210,13 @@ def _call_tr_j3(attrs):
 def _call_tr_j4(attrs):
     # TODO:
     return {}
+
+
+def _check_filters(params):
+    invalid_filters = []
+
+    for p in params:
+        if p not in VALID_FILTERS:
+            invalid_filters.append(p)
+
+    return invalid_filters

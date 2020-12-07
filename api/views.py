@@ -130,6 +130,9 @@ class CounterViews(object):
 
         if report_id == 'tr_j4':
             return _call_tr_j4(attrs)
+        # Caso não existam dados de acesso para o período selecionado
+        if len(json_metrics.get('Report_Items', [])) == 0:
+            return error_no_usage_available()
 
 
 def _call_pr_p1(attrs):

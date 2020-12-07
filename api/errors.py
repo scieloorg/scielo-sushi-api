@@ -1,4 +1,4 @@
-def error_invalid_date_arguments(date):
+def error_invalid_date_arguments():
     return {
         'Code': 3020,
         'Severity': 'error',
@@ -6,15 +6,15 @@ def error_invalid_date_arguments(date):
     }
 
 
-def error_no_usage_avalailable(date):
+def error_no_usage_available():
     return {
         'Code': 3030,
-        'Severity': ['error', 'warning'],
+        'Severity': 'error',
         'Message': 'No Usage Available for Requested Dates',
     }
 
 
-def error_usage_not_ready(date):
+def error_usage_not_ready():
     # TODO: os dados existentes devem ser retornados, porém, no json deve ser incluída uma exceção
     return {
         'Code': 3031,
@@ -23,7 +23,7 @@ def error_usage_not_ready(date):
     }
 
 
-def error_usage_no_longer_available(date):
+def error_usage_no_longer_available():
     # TODO: os dados existentes devem ser retornados, porém, no json deve ser incluída uma exceção
     return {
         'Code': 3032,
@@ -32,7 +32,7 @@ def error_usage_no_longer_available(date):
     }
 
 
-def error_partial_data(date):
+def error_partial_data():
     return {
         'Code': 3050,
         'Severity': 'warning',

@@ -5,6 +5,7 @@ from .adapter import (
     mount_json_for_status_alert,
     mount_json_for_members,
     mount_json_for_reports_tr_j1,
+    mount_json_for_reports_tr_j3,
 )
 
 from .db_calls import (
@@ -12,6 +13,10 @@ from .db_calls import (
     DB_CALL_TR_J1_MONTHLY,
     DB_CALL_TR_J1_JOURNAL_TOTALS,
     DB_CALL_TR_J1_JOURNAL_MONTHLY,
+    DB_CALL_TR_J3_TOTALS,
+    DB_CALL_TR_J3_MONTHLY,
+    DB_CALL_TR_J3_JOURNAL_TOTALS,
+    DB_CALL_TR_J3_JOURNAL_MONTHLY,
 )
 
 from .errors import *
@@ -203,8 +208,38 @@ def _call_tr_j2(attrs):
 
 
 def _call_tr_j3(attrs):
-    # TODO:
-    return {}
+    # Situação em que o filtro ISSN é utilizado
+    if attrs.get('issn', ''):
+        if attrs.get('granularity', '') == 'totals':
+            try:
+                result_query_metrics = db_session.execute(DB_CALL_TR_J3_JOURNAL_TOTALS % (attrs.get('begin_date', ''),
+                                                                                          attrs.get('end_date', ''),
+                                                                                          attrs.get('issn', '')))
+            except:
+                db_session.rollback()
+        else:
+            try:
+                result_query_metrics = db_session.execute(DB_CALL_TR_J3_JOURNAL_MONTHLY % (attrs.get('begin_date', ''),
+                                                                                           attrs.get('end_date', ''),
+                                                                                           attrs.get('issn', '')))
+            except:
+                db_session.rollback()
+    # Situação em que o filtro ISSN não é utilizado
+    else:
+        if attrs.get('granularity', '') == 'totals':
+            try:
+                result_query_metrics = db_session.execute(DB_CALL_TR_J3_TOTALS % (attrs.get('begin_date', ''),
+                                                                                  attrs.get('end_date', '')))
+            except:
+                db_session.rollback()
+        else:
+            try:
+                result_query_metrics = db_session.execute(DB_CALL_TR_J3_MONTHLY % (attrs.get('begin_date', ''),
+                                                                                   attrs.get('end_date', '')))
+            except:
+                db_session.rollback()
+
+    return mount_json_for_reports_tr_j3(result_query_metrics, attrs)
 
 
 def _call_tr_j4(attrs):

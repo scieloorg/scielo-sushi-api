@@ -45,8 +45,11 @@ def compare(report1, report2, print_mode=0):
             diff_values_countage += 1
             diff_values.append((k, v, t2d[k]))
 
-    print('Valores iguais: %d (%.2f %%)' %(equal_values_countage, equal_values_countage/total_keys_t1d * 100))
-    print('Valores distintos: %d (%.2f %%)' % (diff_values_countage, diff_values_countage/total_keys_t1d * 100))
+    try:
+        print('Valores iguais: %d (%.2f %%)' %(equal_values_countage, equal_values_countage/total_keys_t1d * 100))
+        print('Valores distintos: %d (%.2f %%)' % (diff_values_countage, diff_values_countage/total_keys_t1d * 100))
+    except ZeroDivisionError:
+        print('N/A')
 
     sum_v1_diffs = 0
     total_r1_v1 = 0
@@ -58,7 +61,8 @@ def compare(report1, report2, print_mode=0):
 
     if print_mode > 0:
         if print_mode > 1:
-            print('issn\tr1_v1\tr2_v1\tdiff\tdiff_percent')
+            if diff_values:
+                print('issn\tr1_v1\tr2_v1\tdiff\tdiff_percent')
 
         for i in diff_values:
             issn = i[0]
@@ -86,10 +90,13 @@ def compare(report1, report2, print_mode=0):
             total_r1_v2 += r1_v2
             total_r2_v2 += r2_v2
 
-        print('sum_diffs_v1\ttotal_r1_v1\ttotal_r2_v1\tdiff_percent_v1')
-        print('%d\t%d\t%d\t%.2f%%' % (sum_v1_diffs, total_r1_v1, total_r2_v1, sum_v1_diffs/total_r1_v1 * 100))
-        print('sum_diffs_v2\ttotal_r1_v2\ttotal_r2_v2\tdiff_percent_v2')
-        print('%d\t%d\t%d\t%.2f%%' % (sum_v2_diffs, total_r1_v2, total_r2_v2, sum_v2_diffs/total_r1_v2 * 100))
+        try:
+            print('sum_diffs_v1\ttotal_r1_v1\ttotal_r2_v1\tdiff_percent_v1')
+            print('%d\t%d\t%d\t%.2f%%' % (sum_v1_diffs, total_r1_v1, total_r2_v1, sum_v1_diffs/total_r1_v1 * 100))
+            print('sum_diffs_v2\ttotal_r1_v2\ttotal_r2_v2\tdiff_percent_v2')
+            print('%d\t%d\t%d\t%.2f%%' % (sum_v2_diffs, total_r1_v2, total_r2_v2, sum_v2_diffs/total_r1_v2 * 100))
+        except ZeroDivisionError:
+            print('N/A')
 
 
 def main():
@@ -113,7 +120,7 @@ def main():
     parser.add_argument(
         '-d', '--detailed',
         dest='print_mode',
-        choices=[0, 1, 2],
+        choices=['0', '1', '2'],
         default=0,
         help='Nível de detalhamento da impressão: 0: baixo, 1: médio, 2: alto'
     )

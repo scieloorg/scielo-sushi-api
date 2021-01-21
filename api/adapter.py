@@ -88,8 +88,8 @@ def mount_json_for_reports_tr_j1(result_query_reports_tr_j1, attrs):
     report_items = {}
 
     for r in result_query_reports_tr_j1:
-        if r.journal_id not in report_items:
-            report_items[r.journal_id] = {
+        if r.journalID not in report_items:
+            report_items[r.journalID] = {
                 'Title': r.title,
                 'Item_ID': [],
                 'Platform': attrs.get('plataform', ''),
@@ -102,13 +102,13 @@ def mount_json_for_reports_tr_j1(result_query_reports_tr_j1, attrs):
                 'Performance': []}
 
             if r.printISSN:
-                report_items[r.journal_id]['Item_ID'].append({
+                report_items[r.journalID]['Item_ID'].append({
                     "Type": 'Print_ISSN',
                     "Value": r.printISSN
                 })
 
             if r.onlineISSN:
-                report_items[r.journal_id]['Item_ID'].append({
+                report_items[r.journalID]['Item_ID'].append({
                     "Type": 'Online_ISSN',
                     "Value": r.onlineISSN
                 })
@@ -126,7 +126,7 @@ def mount_json_for_reports_tr_j1(result_query_reports_tr_j1, attrs):
                     'Count': str(getattr(r, metric_name))
                 }
             }
-            report_items[r.journal_id]['Performance'].append(performance_m)
+            report_items[r.journalID]['Performance'].append(performance_m)
 
         json_results['Report_Items'] = [ri for ri in report_items.values()]
     return json_results
@@ -165,7 +165,7 @@ def mount_json_for_reports_tr_j3(result_query_reports_tr_j3, attrs):
     report_items = {}
 
     for r in result_query_reports_tr_j3:
-        key = (r.journal_id, r.yop)
+        key = (r.journalID, r.yop)
         if key not in report_items:
             report_items[key] = {
                 'Title': r.title,

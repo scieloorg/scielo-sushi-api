@@ -1,3 +1,5 @@
+import os
+
 from pyramid.view import view_config
 
 from .adapter import (
@@ -24,6 +26,7 @@ from .models import db_session
 from .utils import get_counter_table, handle_str_date
 
 
+COLLECTION = os.environ.get('collection', 'scl')
 VALID_FILTERS = {'granularity',
                  'customer_id',
                  'issn',
@@ -106,7 +109,8 @@ class CounterViews(object):
             'begin_date': begin_date,
             'end_date': end_date,
             'platform': 'Scientific Electronic Library Online',
-            'report_data': ""
+            'report_data': '',
+            'collection': COLLECTION
         }
 
         try:
@@ -174,14 +178,16 @@ def _call_tr_j1(attrs):
             try:
                 result_query_metrics = db_session.execute(DB_CALL_TR_J1_JOURNAL_TOTALS % (attrs.get('begin_date', ''),
                                                                                           attrs.get('end_date', ''),
-                                                                                          attrs.get('issn', '')))
+                                                                                          attrs.get('issn', ''),
+                                                                                          attrs.get('collection', '')))
             except:
                 db_session.rollback()
         else:
             try:
                 result_query_metrics = db_session.execute(DB_CALL_TR_J1_JOURNAL_MONTHLY % (attrs.get('begin_date', ''),
                                                                                            attrs.get('end_date', ''),
-                                                                                           attrs.get('issn', '')))
+                                                                                           attrs.get('issn', ''),
+                                                                                           attrs.get('collection', '')))
             except:
                 db_session.rollback()
     # Situação em que o filtro ISSN não é utilizado
@@ -189,13 +195,15 @@ def _call_tr_j1(attrs):
         if attrs.get('granularity', '') == 'totals':
             try:
                 result_query_metrics = db_session.execute(DB_CALL_TR_J1_TOTALS % (attrs.get('begin_date', ''),
-                                                                                  attrs.get('end_date', '')))
+                                                                                  attrs.get('end_date', ''),
+                                                                                  attrs.get('collection', '')))
             except:
                 db_session.rollback()
         else:
             try:
                 result_query_metrics = db_session.execute(DB_CALL_TR_J1_MONTHLY % (attrs.get('begin_date', ''),
-                                                                                   attrs.get('end_date', '')))
+                                                                                   attrs.get('end_date', ''),
+                                                                                   attrs.get('collection', '')))
             except:
                 db_session.rollback()
 
@@ -214,14 +222,16 @@ def _call_tr_j3(attrs):
             try:
                 result_query_metrics = db_session.execute(DB_CALL_TR_J3_JOURNAL_TOTALS % (attrs.get('begin_date', ''),
                                                                                           attrs.get('end_date', ''),
-                                                                                          attrs.get('issn', '')))
+                                                                                          attrs.get('issn', ''),
+                                                                                          attrs.get('collection', '')))
             except:
                 db_session.rollback()
         else:
             try:
                 result_query_metrics = db_session.execute(DB_CALL_TR_J3_JOURNAL_MONTHLY % (attrs.get('begin_date', ''),
                                                                                            attrs.get('end_date', ''),
-                                                                                           attrs.get('issn', '')))
+                                                                                           attrs.get('issn', ''),
+                                                                                           attrs.get('collection', '')))
             except:
                 db_session.rollback()
     # Situação em que o filtro ISSN não é utilizado
@@ -229,13 +239,15 @@ def _call_tr_j3(attrs):
         if attrs.get('granularity', '') == 'totals':
             try:
                 result_query_metrics = db_session.execute(DB_CALL_TR_J3_TOTALS % (attrs.get('begin_date', ''),
-                                                                                  attrs.get('end_date', '')))
+                                                                                  attrs.get('end_date', ''),
+                                                                                  attrs.get('collection', '')))
             except:
                 db_session.rollback()
         else:
             try:
                 result_query_metrics = db_session.execute(DB_CALL_TR_J3_MONTHLY % (attrs.get('begin_date', ''),
-                                                                                   attrs.get('end_date', '')))
+                                                                                   attrs.get('end_date', ''),
+                                                                                   attrs.get('collection', '')))
             except:
                 db_session.rollback()
 

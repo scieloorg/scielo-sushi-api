@@ -13,12 +13,15 @@ def get_counter_tables(engine):
                             'counter_article_metric',
                             'counter_journal',
                             'counter_journal_collection',
+                            'counter_journal_metric',
                             'counter_localization',
                             'counter_report',
                             'counter_member',
                             'counter_institution',
                             'counter_status',
-                            'counter_alert']
+                            'counter_alert',
+                            'sushi_journal_metric',
+                            'sushi_journal_yop_metric']
 
     counter_tables = {}
 

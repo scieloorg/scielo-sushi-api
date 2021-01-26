@@ -1,5 +1,11 @@
 import calendar
+import re
+
 from datetime import datetime
+
+
+REGEX_DATE_FORMAT = r'\d{4}\-\d{2}($|\-\d{2}$)'
+REGEX_ISSN = r'[0-9]{4}-[0-9]{3}[0-9xX]'
 
 
 def get_counter_table(request, name):
@@ -21,5 +27,22 @@ def handle_str_date(str_date, is_end_date=False):
     elif len(str_date) == len('YYYY-MM-DD'):
         handled_date = datetime.strptime(str_date, '%Y-%m-%d')
 
-    handled_date_str = handled_date.strftime('%Y-%m-%d')
-    return handled_date_str
+    return handled_date.strftime('%Y-%m-%d')
+
+
+def is_valid_date_range(begin_date, end_date):
+    if end_date >= begin_date:
+        return True
+    return False
+
+
+def is_valid_issn(issn):
+    if re.match(pattern=REGEX_ISSN, string=issn):
+        return True
+    return False
+
+
+def is_valid_date_format(date):
+    if re.match(pattern=REGEX_DATE_FORMAT, string=date):
+        return True
+    return False

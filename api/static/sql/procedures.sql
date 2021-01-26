@@ -94,7 +94,7 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE TR_J3_JOURNAL_TOTALS(IN beginDate date, IN endDate date, IN issn varchar(9), IN collection varchar(3))
+CREATE PROCEDURE TR_J4_JOURNAL_TOTALS(IN beginDate date, IN endDate date, IN issn varchar(9), IN collection varchar(3))
 BEGIN
     SELECT cj.id as journalID,
            min(year_month_day) AS beginDate,
@@ -119,7 +119,7 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE TR_J3_JOURNAL_MONTHLY(IN beginDate date, IN endDate date, IN issn varchar(9), IN collection varchar(3))
+CREATE PROCEDURE TR_J4_JOURNAL_MONTHLY(IN beginDate date, IN endDate date, IN issn varchar(9), IN collection varchar(3))
 BEGIN
     SELECT cj.id as journalID,
            cj.online_issn AS onlineISSN,
@@ -147,7 +147,7 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE TR_J3_TOTALS(IN beginDate date, IN endDate date, IN collection varchar(3))
+CREATE PROCEDURE TR_J4_TOTALS(IN beginDate date, IN endDate date, IN collection varchar(3))
 BEGIN
     SELECT cj.id as journalID,
            cj.online_issn AS onlineISSN,
@@ -172,7 +172,7 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE TR_J3_MONTHLY(IN beginDate date, IN endDate date, IN collection varchar(3))
+CREATE PROCEDURE TR_J4_MONTHLY(IN beginDate date, IN endDate date, IN collection varchar(3))
 BEGIN
     SELECT cj.id as journalID,
            SUBSTR(year_month_day, 1, 7) AS yearMonth,
@@ -183,6 +183,7 @@ BEGIN
            cjc.title,
            cjc.publisher_name AS publisherName,
            cjc.uri,
+           yop,
            SUM(total_item_requests) AS totalItemRequests,
            SUM(unique_item_requests) As uniqueItemRequests
     FROM sushi_journal_yop_metric

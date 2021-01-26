@@ -6,6 +6,15 @@ def error_invalid_date_arguments():
     }
 
 
+def error_required_filter_missing(data):
+    return {
+        'Code': 3070,
+        'Severity': 'error',
+        'Message': 'A required filter was not included in the request',
+        'Data': data
+    }
+
+
 def error_no_usage_available():
     return {
         'Code': 3030,
@@ -14,11 +23,11 @@ def error_no_usage_available():
     }
 
 
-def error_usage_not_ready():
+def error_usage_not_ready(severity):
     # TODO: os dados existentes devem ser retornados, porém, no json deve ser incluída uma exceção
     return {
         'Code': 3031,
-        'Severity': ['error', 'warning'],
+        'Severity': severity,
         'Message': 'Usage Not Ready for Requested Dates',
     }
 
@@ -40,10 +49,10 @@ def error_partial_data():
     }
 
 
-def error_invalid_report_filter_value(data):
+def error_invalid_report_filter_value(data, severity):
     return {
         'Code': 3060,
-        'Severity': ['warning', 'error'],
+        'Severity': severity,
         'Message': 'Request contained one or more filter values that are not supported by the server',
         'Data': data
     }

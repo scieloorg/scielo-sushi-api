@@ -20,7 +20,7 @@ from .sql_declarative import Base, Report, Status, Alert
 def usage(argv):
     cmd = os.path.basename(argv[0])
     print('usage: %s <config_uri>\n'
-          '(example: "%s development.ini")' % (cmd, cmd))
+          '(example: "%s config.ini")' % (cmd, cmd))
 
 
 def main(argv=sys.argv):
@@ -68,7 +68,7 @@ def main(argv=sys.argv):
         DBSession.add(status)
 
         alert = Alert()
-        alert.description = "Reports DR, DR_D1, DR_D2, TR_J2 and TR_J3 are currently unavailable."
+        alert.description = "Reports DR, DR_D1, DR_D2, PR, PR_1, TR_J2 and TR_J3 are currently unavailable."
         alert.created = datetime.now().isoformat()
         alert.is_active = True
         DBSession.add(alert)

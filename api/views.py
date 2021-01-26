@@ -23,8 +23,7 @@ from .db_calls import (
 
 from .errors import *
 from .models import db_session
-from .utils import get_counter_table, handle_str_date
-
+from .utils import get_counter_table, handle_str_date, is_valid_date_range, is_valid_issn, is_valid_date_format
 
 COLLECTION = os.environ.get('collection', 'scl')
 VALID_FILTERS = {'granularity',
@@ -74,32 +73,39 @@ class CounterViews(object):
 
         report_id = self.request.matchdict.get('report_id', '')
 
-        # required filters
+        ####################
+        # required filters #
+        ####################
         customer = self.request.params.get('customer', '')
-
         params_begin_date = self.request.params.get('begin_date', '')
-        try:
-            begin_date = handle_str_date(params_begin_date)
-        except ValueError or TypeError as e:
-            if 'unconverted data' or 'argument of type' in e:
-                return error_invalid_date_arguments()
-
         params_end_date = self.request.params.get('end_date', '')
-        try:
-            end_date = handle_str_date(params_end_date, is_end_date=True)
-        except ValueError or TypeError as e:
-            if 'unconverted data' or 'argument of type' in e:
-                return error_invalid_date_arguments()
 
-        if end_date < begin_date:
+        begin_date = _check_date(params_begin_date, 'begin_date')
+        if not isinstance(begin_date, str):
+            return begin_date
+
+        end_date = _check_date(params_end_date, 'end_date')
+        if not isinstance(end_date, str):
+            return end_date
+
+        # Check if date range is valid
+        if not is_valid_date_range(begin_date, end_date):
             return error_invalid_date_arguments()
 
         # TODO: é preciso popular as tabelas counter_customer e counter_institution
 
-        # optional filters
+        ####################
+        # optional filters #
+        ####################
         issn = self.request.params.get('issn', '')
+
+        if 'issn' in self.request.params:
+            if not is_valid_issn(issn):
+                return error_invalid_report_filter_value(issn, severity='error')
+
         granularity = self.request.params.get('granularity', 'monthly')
 
+        # all attributes/parameters
         attrs = {
             'customer': customer,
             'issn': issn,
@@ -151,7 +157,7 @@ class CounterViews(object):
         # Verifica se há parâmetros inválidos na request
         invalid_filters = _check_filters(self.request.params)
         if len(invalid_filters) > 0:
-            json_metrics['Exceptions'] = error_invalid_report_filter_value(invalid_filters)
+            json_metrics['Exceptions'] = error_invalid_report_filter_value(invalid_filters, severity='warning')
 
         return json_metrics
 
@@ -267,3 +273,22 @@ def _check_filters(params):
             invalid_filters.append(p)
 
     return invalid_filters
+
+
+def _check_date(param_date, name):
+    # Check if begin_date was informed
+    if not param_date:
+        return error_required_filter_missing(name)
+
+    # Check if begin_date format is valid
+    if not is_valid_date_format(param_date):
+        return error_invalid_date_arguments()
+
+    # Check if begin_date is a valid date
+    try:
+        str_date = handle_str_date(param_date)
+    except ValueError or TypeError or AttributeError as e:
+        if 'unconverted data' or 'argument of type' or 'parameter date' in e:
+            return error_invalid_date_arguments()
+
+    return str_date

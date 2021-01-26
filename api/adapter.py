@@ -132,7 +132,7 @@ def mount_json_for_reports_tr_j1(result_query_reports_tr_j1, attrs):
     return json_results
 
 
-def mount_json_for_reports_tr_j3(result_query_reports_tr_j3, attrs):
+def mount_json_for_reports_tr_j4(result_query_reports_tr_j4, attrs):
     json_results = {
         "Report_Header": {
             "Created": datetime.now().isoformat(),
@@ -164,7 +164,7 @@ def mount_json_for_reports_tr_j3(result_query_reports_tr_j3, attrs):
 
     report_items = {}
 
-    for r in result_query_reports_tr_j3:
+    for r in result_query_reports_tr_j4:
         key = (r.journalID, r.yop)
         if key not in report_items:
             report_items[key] = {

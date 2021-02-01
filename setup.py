@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 requires = [
@@ -18,7 +18,11 @@ dev_requires = [
 ]
 
 setup(
-    name='api',
+    name='scielo-sushiapi',
+    version='0.1',
+    packages=find_packages(
+        exclude=["*.tests", "*.tests.*", "tests.*", "tests", "docs"]
+    ),
     install_requires=requires,
     extras_require={
         'dev': dev_requires,

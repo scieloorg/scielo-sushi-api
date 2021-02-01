@@ -12,6 +12,7 @@ COPY --from=build /deps/* /deps/
 COPY production.ini /app/config.ini
 COPY start.sh /app/start.sh
 COPY requirements.txt .
+COPY api/static/* /app/static/
 
 RUN apk add --no-cache --virtual .build-deps \
         gcc g++ mariadb-dev \

@@ -18,7 +18,8 @@ dev_requires = [
 ]
 
 setup(
-    name='api',
+    name='scielo-sushiapi',
+    version='0.1',
     install_requires=requires,
     extras_require={
         'dev': dev_requires,

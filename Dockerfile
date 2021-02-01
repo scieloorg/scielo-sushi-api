@@ -33,5 +33,3 @@ ENV MARIADB_STRING_CONNECTION "mysql://user:pass@localhost:port/database"
 ENV APPLICATION_URL "http://127.0.0.1:6543"
 
 USER nobody
-
-CMD ["/app/start.sh"]

@@ -10,7 +10,6 @@ MAINTAINER scielo-dev@googlegroups.com
 
 COPY --from=build /deps/* /deps/
 COPY production.ini /app/config.ini
-COPY start.sh /app/start.sh
 COPY requirements.txt .
 COPY api/static/* /app/static/
 
@@ -22,14 +21,8 @@ RUN apk add --no-cache --virtual .build-deps gcc g++ \
     && apk --purge del .build-deps \
     && rm -rf /deps
 
-RUN chmod +x /app/start.sh
-
 WORKDIR /app
 
 EXPOSE 6543
-
-ENV PYTHONUNBUFFERED 1
-ENV MARIADB_STRING_CONNECTION "mysql://user:pass@localhost:port/database"
-ENV APPLICATION_URL "http://127.0.0.1:6543"
 
 USER nobody

@@ -14,8 +14,8 @@ COPY start.sh /app/start.sh
 COPY requirements.txt .
 COPY api/static/* /app/static/
 
-RUN apk add --no-cache --virtual .build-deps \
-        gcc g++ mariadb-dev \
+RUN apk add --no-cache --virtual .build-deps gcc g++ \
+    && apk add --no-cache mariadb-dev \
     && pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt \
     && pip install --no-index --find-links=file:///deps -U scielo-sushiapi \

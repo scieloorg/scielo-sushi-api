@@ -286,7 +286,10 @@ def _check_date(param_date, name):
 
     # Check if begin_date is a valid date
     try:
-        str_date = handle_str_date(param_date)
+        if name == 'end_date':
+            str_date = handle_str_date(param_date, is_end_date=True)
+        else:
+            str_date = handle_str_date(param_date)
     except ValueError or TypeError or AttributeError as e:
         if 'unconverted data' or 'argument of type' or 'parameter date' in e:
             return error_invalid_date_arguments()

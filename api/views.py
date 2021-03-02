@@ -119,28 +119,7 @@ class CounterViews(object):
 
         attrs['report_data'] = report_data
 
-        json_metrics = {}
-
-        if report_id == 'pr_p1':
-            json_metrics = _call_pr_p1(attrs)
-
-        if report_id == 'dr_d1':
-            json_metrics = _call_dr_d1(attrs)
-
-        if report_id == 'dr_d2':
-            json_metrics = _call_dr_d2(attrs)
-
-        if report_id == 'tr_j1':
-            json_metrics = _call_tr_j1(attrs)
-
-        if report_id == 'tr_j2':
-            json_metrics = _call_tr_j2(attrs)
-
-        if report_id == 'tr_j3':
-            json_metrics = _call_tr_j3(attrs)
-
-        if report_id == 'tr_j4':
-            json_metrics = _call_tr_j4(attrs)
+        json_metrics = _wrapper_call_report(report_id, attrs)
 
         # Caso não existam dados de acesso para o período selecionado
         if len(json_metrics.get('Report_Items', [])) == 0:
@@ -154,107 +133,35 @@ class CounterViews(object):
         return json_metrics
 
 
-def _call_pr_p1(attrs):
-    # TODO:
+def _wrapper_call_report(report_id, attrs):
+    granularity, mode = _get_granularity_and_mode(attrs)
+    procedure_name, params_names = PROCEDURE_DETECTOR_DICT.get(granularity, {}).get(mode, {}).get(report_id, ('', []))
+
+    if procedure_name and params_names:
+        params = []
+
+        for p in params_names:
+            p_value = attrs.get(p)
+            if p_value:
+                params.append(p_value)
+
+        result_query_metrics = db_session.execute(procedure_name % tuple(params))
+        return wrapper_mount_json_for_report(report_id, result_query_metrics, attrs)
+
     return {}
 
 
-def _call_dr_d1(attrs):
-    # TODO:
-    return {}
+def _get_granularity_and_mode(attrs):
+    granularity = attrs.get('granularity', 'totals')
 
-
-def _call_dr_d2(attrs):
-    # TODO:
-    return {}
-
-
-def _call_tr_j1(attrs):
-    # Situação em que o filtro ISSN é utilizado
-    if attrs.get('issn', ''):
-        if attrs.get('granularity', '') == 'totals':
-            try:
-                result_query_metrics = db_session.execute(DB_CALL_TR_J1_JOURNAL_TOTALS % (attrs.get('begin_date', ''),
-                                                                                          attrs.get('end_date', ''),
-                                                                                          attrs.get('issn', ''),
-                                                                                          attrs.get('collection', '')))
-            except:
-                db_session.rollback()
-        else:
-            try:
-                result_query_metrics = db_session.execute(DB_CALL_TR_J1_JOURNAL_MONTHLY % (attrs.get('begin_date', ''),
-                                                                                           attrs.get('end_date', ''),
-                                                                                           attrs.get('issn', ''),
-                                                                                           attrs.get('collection', '')))
-            except:
-                db_session.rollback()
-    # Situação em que o filtro ISSN não é utilizado
+    if attrs['issn'] != '':
+        mode = 'issn'
+    elif attrs['pid'] != '':
+        mode = 'pid'
     else:
-        if attrs.get('granularity', '') == 'totals':
-            try:
-                result_query_metrics = db_session.execute(DB_CALL_TR_J1_TOTALS % (attrs.get('begin_date', ''),
-                                                                                  attrs.get('end_date', ''),
-                                                                                  attrs.get('collection', '')))
-            except:
-                db_session.rollback()
-        else:
-            try:
-                result_query_metrics = db_session.execute(DB_CALL_TR_J1_MONTHLY % (attrs.get('begin_date', ''),
-                                                                                   attrs.get('end_date', ''),
-                                                                                   attrs.get('collection', '')))
-            except:
-                db_session.rollback()
+        mode = 'global'
 
-    return mount_json_for_reports_tr_j1(result_query_metrics, attrs)
-
-
-def _call_tr_j2(attrs):
-    # TODO:
-    return {}
-
-
-def _call_tr_j3(attrs):
-    # TODO:
-    return {}
-
-
-def _call_tr_j4(attrs):
-    # Situação em que o filtro ISSN é utilizado
-    if attrs.get('issn', ''):
-        if attrs.get('granularity', '') == 'totals':
-            try:
-                result_query_metrics = db_session.execute(DB_CALL_TR_J4_JOURNAL_TOTALS % (attrs.get('begin_date', ''),
-                                                                                          attrs.get('end_date', ''),
-                                                                                          attrs.get('issn', ''),
-                                                                                          attrs.get('collection', '')))
-            except:
-                db_session.rollback()
-        else:
-            try:
-                result_query_metrics = db_session.execute(DB_CALL_TR_J4_JOURNAL_MONTHLY % (attrs.get('begin_date', ''),
-                                                                                           attrs.get('end_date', ''),
-                                                                                           attrs.get('issn', ''),
-                                                                                           attrs.get('collection', '')))
-            except:
-                db_session.rollback()
-    # Situação em que o filtro ISSN não é utilizado
-    else:
-        if attrs.get('granularity', '') == 'totals':
-            try:
-                result_query_metrics = db_session.execute(DB_CALL_TR_J4_TOTALS % (attrs.get('begin_date', ''),
-                                                                                  attrs.get('end_date', ''),
-                                                                                  attrs.get('collection', '')))
-            except:
-                db_session.rollback()
-        else:
-            try:
-                result_query_metrics = db_session.execute(DB_CALL_TR_J4_MONTHLY % (attrs.get('begin_date', ''),
-                                                                                   attrs.get('end_date', ''),
-                                                                                   attrs.get('collection', '')))
-            except:
-                db_session.rollback()
-
-    return mount_json_for_reports_tr_j4(result_query_metrics, attrs)
+    return granularity, mode
 
 
 def _check_filters(params):

@@ -18,6 +18,7 @@ COLLECTION = os.environ.get('collection', 'scl')
 VALID_FILTERS = {'granularity',
                  'customer_id',
                  'issn',
+                 'pid',
                  'begin_date',
                  'end_date'}
 
@@ -87,6 +88,7 @@ class CounterViews(object):
         # optional filters #
         ####################
         issn = self.request.params.get('issn', '')
+        pid = self.request.params.get('pid', '')
 
         if 'issn' in self.request.params:
             if not is_valid_issn(issn):
@@ -98,6 +100,7 @@ class CounterViews(object):
         attrs = {
             'customer': customer,
             'issn': issn,
+            'pid': pid,
             'granularity': granularity,
             'institution': '',
             'institution_id': '',

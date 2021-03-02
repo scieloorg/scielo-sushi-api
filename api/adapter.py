@@ -1,6 +1,15 @@
 from datetime import datetime
 
 
+def wrapper_mount_json_for_report(report_id, result_query, attrs):
+    if report_id == 'ir_a1':
+        return mount_json_for_reports_ir_a1(result_query, attrs)
+    if report_id == 'tr_j1':
+        return mount_json_for_reports_tr_j1(result_query, attrs)
+    if report_id == 'tr_j4':
+        return mount_json_for_reports_tr_j4(result_query, attrs)
+
+
 def mount_json_for_reports(result_query):
     json_results = []
 
@@ -92,7 +101,7 @@ def mount_json_for_reports_tr_j1(result_query_reports_tr_j1, attrs):
             report_items[r.journalID] = {
                 'Title': r.title,
                 'Item_ID': [],
-                'Platform': attrs.get('plataform', ''),
+                'Platform': attrs.get('platform', ''),
                 'Publisher': r.publisherName,
                 'Publisher_ID': [],
                 'Data_Type': 'Journal',
@@ -170,7 +179,7 @@ def mount_json_for_reports_tr_j4(result_query_reports_tr_j4, attrs):
             report_items[key] = {
                 'Title': r.title,
                 'Item_ID': [],
-                'Platform': attrs.get('plataform', ''),
+                'Platform': attrs.get('platform', ''),
                 'Publisher': r.publisherName,
                 'Publisher_ID': [],
                 'YOP': r.yop,
@@ -191,6 +200,87 @@ def mount_json_for_reports_tr_j4(result_query_reports_tr_j4, attrs):
                     "Type": 'Online_ISSN',
                     "Value": r.onlineISSN
                 })
+
+        for m in ['Total_Item_Requests', 'Unique_Item_Requests']:
+            metric_name = m[0].lower() + m[1:].replace('_', '')
+
+            performance_m = {
+                'Period': {
+                    'Begin_Date': str(r.beginDate),
+                    'End_Date': str(r.endDate)
+                },
+                'Instance': {
+                    'Metric_Type': m,
+                    'Count': str(getattr(r, metric_name))
+                }
+            }
+            report_items[key]['Performance'].append(performance_m)
+
+        json_results['Report_Items'] = [ri for ri in report_items.values()]
+    return json_results
+
+
+def mount_json_for_reports_ir_a1(result_query_reports_ir_a1, attrs):
+    json_results = {
+        "Report_Header": {
+            "Created": datetime.now().isoformat(),
+            "Created_By": "Scientific Electronic Library Online SUSHI API",
+            "Customer_ID": attrs.get('customer', ''),
+            "Report_ID": attrs.get('report_data', {}).report_id,
+            "Release": attrs.get('report_data', {}).release,
+            "Report_Name": attrs.get('report_data', {}).name,
+            "Institution_Name": attrs.get('institution_name', ''),
+            "Institution_ID": [{
+                "Type": "ISNI",
+                "Value": attrs.get('institution_id', '')
+            }],
+        },
+        "Report_Filters": [{
+            "Name": "Begin_Date",
+            "Value": attrs.get('begin_date', '')
+        }, {
+            "Name": "End_Date",
+            "Value": attrs.get('end_date', '')
+        }],
+        "Report_Attributes": [{
+            "Name": "Attributes_To_Show",
+            "Value": "Data_Type|Access_Method"
+        }],
+        "Exceptions": [],
+        "Report_Items": []
+    }
+
+    report_items = {}
+
+    for r in result_query_reports_ir_a1:
+        key = '-'.join([r.collection, r.pid])
+
+        if key not in report_items:
+            report_items[key] = {
+                'Item': r.pid,
+                'Publisher': r.publisherName,
+                'Publisher_ID': [],
+                'Platform': attrs.get('platform', ''),
+                'Authors': '',
+                'Publication_Date': '',
+                'Article_Version': '',
+                'DOI': '',
+                'Proprietary_ID': '',
+                'Print_ISSN': '',
+                'Online_ISSN': '',
+                'URI': '',
+                'Parent_Title': r.title,
+                'Parent_DOI': '',
+                'Parent_Proprietary_ID': '',
+                'Parent_Print_ISSN': r.printISSN,
+                'Parent_Online_ISSN': r.onlineISSN,
+                'Parent_URI': '',
+                'Parent_Data_Type': 'Journal',
+                'Item_ID': [],
+                'Data_Type': 'Article',
+                'Access_Type': 'Open Access',
+                'Access_Method': 'Regular',
+                'Performance': []}
 
         for m in ['Total_Item_Requests', 'Unique_Item_Requests']:
             metric_name = m[0].lower() + m[1:].replace('_', '')

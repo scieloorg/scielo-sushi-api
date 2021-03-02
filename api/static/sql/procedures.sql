@@ -197,3 +197,173 @@ BEGIN
              yearMonth;
 END $$
 DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE IR_A1_JOURNAL_TOTALS(IN beginDate date, IN endDate date, IN issn varchar(9), IN collection_acronym varchar(3))
+BEGIN
+    SELECT
+           cj.online_issn AS onlineISSN,
+           cj.print_issn AS printISSN,
+           cjc.title,
+           cjc.publisher_name AS publisherName,
+           cjc.uri,
+           ca.collection,
+           ca.pid,
+           ca.yop,
+           MIN(year_month_day) AS beginDate,
+           MAX(year_month_day) AS endDate,
+           SUM(total_item_requests) AS totalItemRequests,
+           SUM(unique_item_requests) AS uniqueItemRequests
+    FROM sushi_article_metric
+             JOIN counter_article ca on sushi_article_metric.idarticle_sam = ca.id
+             JOIN counter_journal cj on ca.idjournal_a = cj.id
+             JOIN counter_journal_collection cjc on cj.id = cjc.idjournal_jc
+    WHERE ca.collection = collection_acronym AND
+          (issn = online_issn OR issn = print_issn OR issn = pid_issn) AND
+          (year_month_day between beginDate AND endDate) AND
+          (online_issn <> '' OR print_issn <> '')
+    GROUP BY ca.pid;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE IR_A1_JOURNAL_MONTHLY(IN beginDate date, IN endDate date, IN issn varchar(9), IN collection_acronym varchar(3))
+BEGIN
+    SELECT
+           cj.id as journalID,
+           cj.online_issn AS onlineISSN,
+           cj.print_issn AS printISSN,
+           cjc.title,
+           cjc.publisher_name AS publisherName,
+           cjc.uri,
+           ca.collection,
+           ca.pid,
+           ca.yop,
+           SUBSTR(year_month_day, 1, 7) AS yearMonth,
+           MIN(year_month_day) AS beginDate,
+           MAX(year_month_day) AS endDate,
+           SUM(total_item_requests) AS totalItemRequests,
+           SUM(unique_item_requests) AS uniqueItemRequests
+    FROM sushi_article_metric
+             JOIN counter_article ca on sushi_article_metric.idarticle_sam = ca.id
+             JOIN counter_journal cj on ca.idjournal_a = cj.id
+             JOIN counter_journal_collection cjc on cj.id = cjc.idjournal_jc
+    WHERE ca.collection = collection_acronym AND
+          (issn = online_issn OR issn = print_issn OR issn = pid_issn) AND
+          (year_month_day between beginDate AND endDate) AND
+          (online_issn <> '' OR print_issn <> '')
+    GROUP BY ca.pid, yearMonth;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE IR_A1_ARTICLE_TOTALS(IN beginDate date, IN endDate date, IN pid varchar(23), IN collection_acronym varchar(3))
+BEGIN
+    SELECT
+           cj.online_issn AS onlineISSN,
+           cj.print_issn AS printISSN,
+           cjc.title,
+           cjc.publisher_name AS publisherName,
+           cjc.uri,
+           ca.collection,
+           ca.pid,
+           ca.yop,
+           MIN(year_month_day) AS beginDate,
+           MAX(year_month_day) AS endDate,
+           SUM(total_item_requests) AS totalItemRequests,
+           SUM(unique_item_requests) AS uniqueItemRequests
+    FROM sushi_article_metric
+             JOIN counter_article ca on sushi_article_metric.idarticle_sam = ca.id
+             JOIN counter_journal cj on ca.idjournal_a = cj.id
+             JOIN counter_journal_collection cjc on cj.id = cjc.idjournal_jc
+    WHERE ca.collection = collection_acronym AND
+          pid = ca.pid AND
+          (year_month_day between beginDate AND endDate) AND
+          (online_issn <> '' OR print_issn <> '');
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE IR_A1_ARTICLE_MONTHLY(IN beginDate date, IN endDate date, IN pid varchar(23), IN collection_acronym varchar(3))
+BEGIN
+    SELECT
+           cj.online_issn AS onlineISSN,
+           cj.print_issn AS printISSN,
+           cjc.title,
+           cjc.publisher_name AS publisherName,
+           cjc.uri,
+           ca.collection,
+           ca.pid,
+           ca.yop,
+           SUBSTR(year_month_day, 1, 7) AS yearMonth,
+           MIN(year_month_day) AS beginDate,
+           MAX(year_month_day) AS endDate,
+           SUM(total_item_requests) AS totalItemRequests,
+           SUM(unique_item_requests) AS uniqueItemRequests
+    FROM sushi_article_metric
+             JOIN counter_article ca on sushi_article_metric.idarticle_sam = ca.id
+             JOIN counter_journal cj on ca.idjournal_a = cj.id
+             JOIN counter_journal_collection cjc on cj.id = cjc.idjournal_jc
+    WHERE ca.collection = collection_acronym AND
+          pid = ca.pid AND
+          (year_month_day between beginDate AND endDate) AND
+          (online_issn <> '' OR print_issn <> '')
+    GROUP BY yearMonth;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE IR_A1_MONTHLY(IN beginDate date, IN endDate date, IN collection_acronym varchar(3))
+BEGIN
+    SELECT
+           cj.online_issn AS onlineISSN,
+           cj.print_issn AS printISSN,
+           cjc.title,
+           cjc.publisher_name AS publisherName,
+           cjc.uri,
+           ca.collection,
+           ca.pid,
+           ca.yop,
+           SUBSTR(year_month_day, 1, 7) AS yearMonth,
+           MIN(year_month_day) AS beginDate,
+           MAX(year_month_day) AS endDate,
+           SUM(total_item_requests) AS totalItemRequests,
+           SUM(unique_item_requests) AS uniqueItemRequests
+    FROM sushi_article_metric
+             JOIN counter_article ca on sushi_article_metric.idarticle_sam = ca.id
+             JOIN counter_journal cj on ca.idjournal_a = cj.id
+             JOIN counter_journal_collection cjc on cj.id = cjc.idjournal_jc
+    WHERE ca.collection = collection_acronym AND
+          (year_month_day between beginDate AND endDate) AND
+          (online_issn <> '' OR print_issn <> '')
+    GROUP BY ca.pid, yearMonth;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE IR_A1_TOTALS(IN beginDate date, IN endDate date, IN collection_acronym varchar(3))
+BEGIN
+    SELECT
+           cj.online_issn AS onlineISSN,
+           cj.print_issn AS printISSN,
+           cjc.title,
+           cjc.publisher_name AS publisherName,
+           cjc.uri,
+           ca.collection,
+           ca.pid,
+           ca.yop,
+           MIN(year_month_day) AS beginDate,
+           MAX(year_month_day) AS endDate,
+           SUM(total_item_requests) AS totalItemRequests,
+           SUM(unique_item_requests) AS uniqueItemRequests
+    FROM sushi_article_metric
+             JOIN counter_article ca on sushi_article_metric.idarticle_sam = ca.id
+             JOIN counter_journal cj on ca.idjournal_a = cj.id
+             JOIN counter_journal_collection cjc on cj.id = cjc.idjournal_jc
+    WHERE ca.collection = collection_acronym AND
+          (year_month_day between beginDate AND endDate) AND
+          (online_issn <> '' OR print_issn <> '')
+    GROUP BY ca.pid;
+END $$
+DELIMITER ;
+

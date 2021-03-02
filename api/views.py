@@ -6,21 +6,10 @@ from .adapter import (
     mount_json_for_reports,
     mount_json_for_status_alert,
     mount_json_for_members,
-    mount_json_for_reports_tr_j1,
-    mount_json_for_reports_tr_j4,
+    wrapper_mount_json_for_report
 )
 
-from .db_calls import (
-    DB_CALL_TR_J1_TOTALS,
-    DB_CALL_TR_J1_MONTHLY,
-    DB_CALL_TR_J1_JOURNAL_TOTALS,
-    DB_CALL_TR_J1_JOURNAL_MONTHLY,
-    DB_CALL_TR_J4_TOTALS,
-    DB_CALL_TR_J4_MONTHLY,
-    DB_CALL_TR_J4_JOURNAL_TOTALS,
-    DB_CALL_TR_J4_JOURNAL_MONTHLY,
-)
-
+from .db_calls import PROCEDURE_DETECTOR_DICT
 from .errors import *
 from .models import db_session
 from .utils import get_counter_table, handle_str_date, is_valid_date_range, is_valid_issn, is_valid_date_format

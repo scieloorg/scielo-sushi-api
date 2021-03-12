@@ -20,6 +20,7 @@ def get_counter_tables(engine):
                             'counter_institution',
                             'counter_status',
                             'counter_alert',
+                            'sushi_article_metric',
                             'sushi_journal_metric',
                             'sushi_journal_yop_metric']
 

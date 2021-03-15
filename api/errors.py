@@ -41,11 +41,12 @@ def error_usage_no_longer_available():
     }
 
 
-def error_partial_data():
+def error_partial_data(unavailable_dates):
     return {
         'Code': 3050,
         'Severity': 'warning',
         'Message': 'Partial Data Returned',
+        'Data': 'Unavailable dates: {0}'.format(','.join(unavailable_dates))
     }
 
 

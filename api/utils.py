@@ -8,10 +8,6 @@ REGEX_DATE_FORMAT = r'\d{4}\-\d{2}($|\-\d{2}$)'
 REGEX_ISSN = r'[0-9]{4}-[0-9]{3}[0-9xX]'
 
 
-def get_counter_table(request, name):
-    return request.registry.settings.get('counter_tables').get(name)
-
-
 def handle_str_date(str_date, is_end_date=False):
     handled_date = None
 

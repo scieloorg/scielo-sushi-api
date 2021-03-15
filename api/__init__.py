@@ -1,7 +1,7 @@
 from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
 from os import environ
-from .models import get_counter_tables
+from .models import DBSession, Base
 
 
 def main(global_config, **settings):
@@ -12,12 +12,11 @@ def main(global_config, **settings):
     settings.update({'application.url': application_url_value})
 
     config = Configurator(settings=settings)
+    config.include('pyramid_debugtoolbar')
 
-    engine = engine_from_config(settings, 'sqlalchemy.')
-    counter_tables = get_counter_tables(engine)
-
-    settings = config.registry.settings
-    settings['counter_tables'] = counter_tables
+    engine = engine_from_config(settings, 'sqlalchemy.', pool_recycle=1800)
+    DBSession.configure(bind=engine)
+    Base.metadata.bind = engine
 
     config.add_route('home', '/')
     config.add_route('status', '/status')

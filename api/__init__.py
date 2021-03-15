@@ -12,7 +12,6 @@ def main(global_config, **settings):
     settings.update({'application.url': application_url_value})
 
     config = Configurator(settings=settings)
-    config.include('pyramid_debugtoolbar')
 
     engine = engine_from_config(settings, 'sqlalchemy.', pool_recycle=1800)
     DBSession.configure(bind=engine)

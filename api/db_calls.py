@@ -13,6 +13,12 @@ DB_CALL_IR_A1_JOURNAL_MONTHLY = 'CALL IR_A1_JOURNAL_MONTHLY("%s", "%s", "%s", "%
 DB_CALL_IR_A1_TOTALS = 'CALL IR_A1_TOTALS("%s", "%s", "%s")'
 DB_CALL_IR_A1_MONTHLY = 'CALL IR_A1_MONTHLY("%s", "%s", "%s")'
 
+REPORT_ID_STATUS_COLUMN_DICT = {
+    'ir_a1': 'status_sushi_article_metric',
+    'tr_j1': 'status_sushi_journal_metric',
+    'tr_j4': 'status_sushi_journal_yop_metric'
+}
+
 PROCEDURE_DETECTOR_DICT = {
     'totals': {
         'pid': {

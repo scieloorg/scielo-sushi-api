@@ -2,6 +2,7 @@ from sqlalchemy import Column, ForeignKey, BOOLEAN
 from sqlalchemy.dialects.mysql import INTEGER, VARCHAR, DATETIME
 from sqlalchemy.ext.declarative import declarative_base
 
+
 Base = declarative_base()
 
 

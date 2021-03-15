@@ -1,6 +1,7 @@
 import os
 
 from pyramid.view import view_config
+from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
 from .adapter import (
     mount_json_for_reports,
@@ -11,8 +12,10 @@ from .adapter import (
 
 from .db_calls import PROCEDURE_DETECTOR_DICT
 from .errors import *
-from .models import db_session
-from .utils import get_counter_table, handle_str_date, is_valid_date_range, is_valid_issn, is_valid_date_format
+from .models import DBSession
+from .sql_declarative import Status, Alert, Member, Report
+from .utils import handle_str_date, is_valid_date_range, is_valid_issn, is_valid_date_format
+
 
 COLLECTION = os.environ.get('collection', 'scl')
 VALID_FILTERS = {'granularity',
@@ -33,34 +36,25 @@ class CounterViews(object):
 
     @view_config(route_name='status', renderer='json')
     def status(self):
-        Status = get_counter_table(self.request, 'counter_status')
-        Alert = get_counter_table(self.request, 'counter_alert')
-
-        status = db_session.query(Status).filter_by(status_id=1).one()
-        result_query_alert = db_session.query(Alert).filter(Alert.is_active == 1)
+        status = DBSession.query(Status).order_by(Status.status_id.desc()).first()
+        result_query_alert = DBSession.query(Alert).filter(Alert.is_active == 1)
         json_status = mount_json_for_status_alert(status, result_query_alert)
         return json_status
 
     @view_config(route_name='members', renderer='json')
     def members(self):
-        Member = get_counter_table(self.request, 'counter_member')
-
-        result_query_members = db_session.query(Member).all()
+        result_query_members = DBSession.query(Member).all()
         json_members = mount_json_for_members(result_query_members)
         return json_members
 
     @view_config(route_name='reports', renderer='json')
     def reports(self):
-        Report = get_counter_table(self.request, 'counter_report')
-
-        result_query_reports = db_session.query(Report).all()
+        result_query_reports = DBSession.query(Report).all()
         json_counter_reports = mount_json_for_reports(result_query_reports)
         return json_counter_reports
 
     @view_config(route_name='reports_report_id', renderer='json')
     def reports_report_id(self):
-        Report = get_counter_table(self.request, 'counter_report')
-
         report_id = self.request.matchdict.get('report_id', '')
 
         ####################
@@ -112,9 +106,8 @@ class CounterViews(object):
         }
 
         try:
-            report_data = db_session.query(Report).filter_by(report_id=report_id).one()
-        except:
-            db_session.rollback()
+            report_data = DBSession.query(Report).filter_by(report_id=report_id).one()
+        except NoResultFound or MultipleResultsFound:
             report_data = {}
 
         attrs['report_data'] = report_data
@@ -145,7 +138,7 @@ def _wrapper_call_report(report_id, attrs):
             if p_value:
                 params.append(p_value)
 
-        result_query_metrics = db_session.execute(procedure_name % tuple(params))
+        result_query_metrics = DBSession.execute(procedure_name % tuple(params))
         return wrapper_mount_json_for_report(report_id, result_query_metrics, attrs)
 
     return {}

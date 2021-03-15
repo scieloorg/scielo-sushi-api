@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, BOOLEAN
+from sqlalchemy import Column, ForeignKey, BOOLEAN, UniqueConstraint, Date
 from sqlalchemy.dialects.mysql import INTEGER, VARCHAR, DATETIME
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -53,3 +53,20 @@ class Alert(Base):
     created = Column(DATETIME, nullable=False)
     description = Column(VARCHAR(1024))
     is_active = Column(BOOLEAN, nullable=False)
+
+
+class DateStatus(Base):
+    __tablename__ = 'control_date_status'
+    __table_args__ = (UniqueConstraint('collection', 'date', name='uni_collection_date'), )
+
+    id = Column(INTEGER(unsigned=True), primary_key=True, autoincrement=True)
+
+    date = Column(Date, nullable=False, index=True)
+    collection = Column(VARCHAR(3), nullable=False)
+    status = Column(INTEGER, default=0)
+
+    status_counter_article_metric = Column(BOOLEAN, default=False)
+    status_counter_journal_metric = Column(BOOLEAN, default=False)
+    status_sushi_article_metric = Column(BOOLEAN, default=False)
+    status_sushi_journal_metric = Column(BOOLEAN, default=False)
+    status_sushi_journal_yop_metric = Column(BOOLEAN, default=False)

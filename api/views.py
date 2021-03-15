@@ -12,6 +12,7 @@ from .adapter import (
 
 from .db_calls import PROCEDURE_DETECTOR_DICT
 from .errors import *
+from .lib.database import get_dates_not_ready
 from .models import DBSession
 from .sql_declarative import Status, Alert, Member, Report
 from .utils import handle_str_date, is_valid_date_range, is_valid_issn, is_valid_date_format
@@ -118,12 +119,28 @@ class CounterViews(object):
         if len(json_metrics.get('Report_Items', [])) == 0:
             return error_no_usage_available()
 
-        # Verifica se há parâmetros inválidos na request
-        invalid_filters = _check_filters(self.request.params)
-        if len(invalid_filters) > 0:
-            json_metrics['Exceptions'] = error_invalid_report_filter_value(invalid_filters, severity='warning')
+        # Obtém exceções
+        exceptions = check_exceptions(self.request.params, begin_date, end_date, report_id)
+        if exceptions:
+            json_metrics['Exceptions'] = exceptions
 
         return json_metrics
+
+
+def check_exceptions(params, begin_date, end_date, report_id):
+    exceptions = []
+
+    # Verifica se há parâmetros inválidos na request
+    invalid_filters = _check_filters(params)
+    if len(invalid_filters) > 0:
+        exceptions.append(error_invalid_report_filter_value(invalid_filters, severity='warning'))
+
+    # Verifica se há datas com dados ausentes nas tabelas sushi
+    not_ready_dates = get_dates_not_ready(begin_date, end_date, COLLECTION, report_id)
+    if len(not_ready_dates) > 0:
+        exceptions.append(error_usage_not_ready('warning', not_ready_dates))
+
+    return exceptions
 
 
 def _wrapper_call_report(report_id, attrs):

@@ -12,7 +12,7 @@ from .adapter import (
 
 from .db_calls import PROCEDURE_DETECTOR_DICT
 from .errors import *
-from .lib.database import get_dates_unavailable
+from .lib.database import get_dates_not_ready
 from .models import DBSession
 from .sql_declarative import Status, Alert, Member, Report
 from .utils import handle_str_date, is_valid_date_range, is_valid_issn, is_valid_date_format
@@ -136,9 +136,9 @@ def check_exceptions(params, begin_date, end_date, report_id):
         exceptions.append(error_invalid_report_filter_value(invalid_filters, severity='warning'))
 
     # Verifica se há datas com dados ausentes nas tabelas sushi
-    unavailable_dates = get_dates_unavailable(begin_date, end_date, COLLECTION, report_id)
-    if len(unavailable_dates) > 0:
-        exceptions.append(error_partial_data(unavailable_dates))
+    not_ready_dates = get_dates_not_ready(begin_date, end_date, COLLECTION, report_id)
+    if len(not_ready_dates) > 0:
+        exceptions.append(error_usage_not_ready('warning', not_ready_dates))
 
     return exceptions
 

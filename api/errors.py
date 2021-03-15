@@ -23,12 +23,12 @@ def error_no_usage_available():
     }
 
 
-def error_usage_not_ready(severity):
-    # TODO: os dados existentes devem ser retornados, porém, no json deve ser incluída uma exceção
+def error_usage_not_ready(severity, not_ready_dates):
     return {
         'Code': 3031,
         'Severity': severity,
         'Message': 'Usage Not Ready for Requested Dates',
+        'Data': not_ready_dates
     }
 
 
@@ -41,12 +41,11 @@ def error_usage_no_longer_available():
     }
 
 
-def error_partial_data(unavailable_dates):
+def error_partial_data():
     return {
-        'Code': 3050,
+        'Code': 3040,
         'Severity': 'warning',
         'Message': 'Partial Data Returned',
-        'Data': 'Unavailable dates: {0}'.format(','.join(unavailable_dates))
     }
 
 

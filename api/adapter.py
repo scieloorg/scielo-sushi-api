@@ -137,7 +137,7 @@ def mount_json_for_reports_tr_j1(result_query_reports_tr_j1, attrs):
             }
             report_items[r.journalID]['Performance'].append(performance_m)
 
-        json_results['Report_Items'] = [ri for ri in report_items.values()]
+        json_results['Report_Items'] = [ri for ri in report_items.values() if ri['Title']]
     return json_results
 
 
@@ -216,7 +216,7 @@ def mount_json_for_reports_tr_j4(result_query_reports_tr_j4, attrs):
             }
             report_items[key]['Performance'].append(performance_m)
 
-        json_results['Report_Items'] = [ri for ri in report_items.values()]
+        json_results['Report_Items'] = [ri for ri in report_items.values() if ri['Title']]
     return json_results
 
 
@@ -297,5 +297,5 @@ def mount_json_for_reports_ir_a1(result_query_reports_ir_a1, attrs):
             }
             report_items[key]['Performance'].append(performance_m)
 
-        json_results['Report_Items'] = [ri for ri in report_items.values()]
+        json_results['Report_Items'] = [ri for ri in report_items.values() if ri['Item']]
     return json_results

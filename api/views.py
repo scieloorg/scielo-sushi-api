@@ -16,15 +16,17 @@ from .lib.database import get_dates_not_ready
 from .models import DBSession
 from .sql_declarative import Status, Alert, Member, Report
 from .utils import handle_str_date, is_valid_date_range, is_valid_issn, is_valid_date_format
+from .values import collection_acronym_to_collection_name
 
 
-COLLECTION = os.environ.get('collection', 'scl')
+COLLECTION = os.environ.get('COLLECTION', 'scl')
 VALID_FILTERS = {'granularity',
                  'customer_id',
                  'issn',
                  'pid',
                  'begin_date',
-                 'end_date'}
+                 'end_date',
+                 'collection'}
 
 
 class CounterViews(object):
@@ -82,6 +84,7 @@ class CounterViews(object):
         ####################
         # optional filters #
         ####################
+        collection = self.request.params.get('collection', COLLECTION)
         issn = self.request.params.get('issn', '')
         pid = self.request.params.get('pid', '')
 
@@ -101,9 +104,9 @@ class CounterViews(object):
             'institution_id': '',
             'begin_date': begin_date,
             'end_date': end_date,
-            'platform': 'Scientific Electronic Library Online',
+            'platform': 'Scientific Electronic Library Online - {0}'.format(collection_acronym_to_collection_name.get(collection, collection)),
             'report_data': '',
-            'collection': COLLECTION
+            'collection': collection
         }
 
         try:
@@ -120,14 +123,14 @@ class CounterViews(object):
             return error_no_usage_available()
 
         # Obtém exceções
-        exceptions = check_exceptions(self.request.params, begin_date, end_date, report_id)
+        exceptions = check_exceptions(self.request.params, begin_date, end_date, report_id, collection)
         if exceptions:
             json_metrics['Exceptions'] = exceptions
 
         return json_metrics
 
 
-def check_exceptions(params, begin_date, end_date, report_id):
+def check_exceptions(params, begin_date, end_date, report_id, collection):
     exceptions = []
 
     # Verifica se há parâmetros inválidos na request
@@ -136,7 +139,7 @@ def check_exceptions(params, begin_date, end_date, report_id):
         exceptions.append(error_invalid_report_filter_value(invalid_filters, severity='warning'))
 
     # Verifica se há datas com dados ausentes nas tabelas sushi
-    not_ready_dates = get_dates_not_ready(begin_date, end_date, COLLECTION, report_id)
+    not_ready_dates = get_dates_not_ready(begin_date, end_date, collection, report_id)
     if len(not_ready_dates) > 0:
         exceptions.append(error_usage_not_ready('warning', not_ready_dates))
 

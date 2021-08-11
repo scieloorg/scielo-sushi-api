@@ -14,7 +14,8 @@ BEGIN
     FROM sushi_journal_metric
              JOIN counter_journal cj on sushi_journal_metric.idjournal_sjm = cj.id
              JOIN counter_journal_collection cjc ON sushi_journal_metric.idjournal_sjm = cjc.idjournal_jc
-    WHERE sushi_journal_metric.collection = collection AND
+    WHERE (cjc.collection = collection) AND
+        (sushi_journal_metric.collection = collection) AND
         (year_month_day between beginDate AND endDate) AND
         (issn = cj.online_issn OR issn = cj.print_issn OR issn = cj.pid_issn) AND
         (online_issn <> '' OR print_issn <> '');
@@ -38,7 +39,8 @@ BEGIN
     FROM sushi_journal_metric
              JOIN counter_journal cj on sushi_journal_metric.idjournal_sjm = cj.id
              JOIN counter_journal_collection cjc ON sushi_journal_metric.idjournal_sjm = cjc.idjournal_jc
-    WHERE sushi_journal_metric.collection = collection AND
+    WHERE (cjc.collection = collection) AND
+        (sushi_journal_metric.collection = collection) AND
         (year_month_day between beginDate AND endDate) AND
         (issn = online_issn OR issn = print_issn OR issn = pid_issn) AND
         (online_issn <> '' OR print_issn <> '')
@@ -62,7 +64,8 @@ BEGIN
     FROM sushi_journal_metric
              JOIN counter_journal cj on sushi_journal_metric.idjournal_sjm = cj.id
              JOIN counter_journal_collection cjc ON cj.id = cjc.idjournal_jc
-    WHERE (sushi_journal_metric.collection = collection) AND
+    WHERE (cjc.collection = collection) AND
+        (sushi_journal_metric.collection = collection) AND
         (year_month_day between beginDate AND endDate) AND
         (online_issn <> '' OR print_issn <> '')
     GROUP BY cj.id;
@@ -86,7 +89,8 @@ BEGIN
     FROM sushi_journal_metric
              JOIN counter_journal cj on sushi_journal_metric.idjournal_sjm = cj.id
              JOIN counter_journal_collection cjc ON cj.id = cjc.idjournal_jc
-    WHERE (sushi_journal_metric.collection = collection) AND
+    WHERE (cjc.collection = collection) AND
+        (sushi_journal_metric.collection = collection AND)
         (year_month_day between beginDate AND endDate) AND
         (online_issn <> '' OR print_issn <> '')
     GROUP BY cj.id, yearMonth;
@@ -110,7 +114,8 @@ BEGIN
     FROM sushi_journal_yop_metric
              JOIN counter_journal cj on sushi_journal_yop_metric.idjournal_sjym = cj.id
              JOIN counter_journal_collection cjc ON cj.id = cjc.idjournal_jc
-    WHERE sushi_journal_yop_metric.collection = collection AND
+    WHERE (cjc.collection = collection) AND
+        (sushi_journal_yop_metric.collection = collection) AND
         (year_month_day between beginDate AND endDate) AND
         (issn = online_issn OR issn = print_issn OR issn = pid_issn) AND
         (online_issn <> '' OR print_issn <> '')
@@ -137,7 +142,8 @@ BEGIN
     FROM sushi_journal_yop_metric
              JOIN counter_journal cj on sushi_journal_yop_metric.idjournal_sjym = cj.id
              JOIN counter_journal_collection cjc ON cj.id = cjc.idjournal_jc
-    WHERE sushi_journal_yop_metric.collection = collection AND
+    WHERE (cjc.collection = collection) AND
+        (sushi_journal_yop_metric.collection = collection) AND
         (year_month_day between beginDate AND endDate) AND
         (issn = online_issn OR issn = print_issn OR issn = pid_issn) AND
         (online_issn <> '' OR print_issn <> '')
@@ -163,7 +169,8 @@ BEGIN
     FROM sushi_journal_yop_metric
              JOIN counter_journal cj on sushi_journal_yop_metric.idjournal_sjym = cj.id
              JOIN counter_journal_collection cjc ON cj.id = cjc.idjournal_jc
-    WHERE (sushi_journal_yop_metric.collection = collection) AND
+    WHERE (cjc.collection = collection) AND
+        (sushi_journal_yop_metric.collection = collection) AND
         (year_month_day between beginDate AND endDate) AND
         (online_issn <> '' OR print_issn <> '')
     GROUP BY cj.id,
@@ -189,7 +196,8 @@ BEGIN
     FROM sushi_journal_yop_metric
              JOIN counter_journal cj on sushi_journal_yop_metric.idjournal_sjym = cj.id
              JOIN counter_journal_collection cjc ON cj.id = cjc.idjournal_jc
-    WHERE (sushi_journal_yop_metric.collection = collection) AND
+    WHERE (cjc.collection = collection) AND
+        (sushi_journal_yop_metric.collection = collection) AND
         (year_month_day between beginDate AND endDate) AND
         (online_issn <> '' OR print_issn <> '')
     GROUP BY cj.id,
@@ -218,7 +226,7 @@ BEGIN
              JOIN counter_article ca on sushi_article_metric.idarticle_sam = ca.id
              JOIN counter_journal cj on ca.idjournal_a = cj.id
              JOIN counter_journal_collection cjc on cj.id = cjc.idjournal_jc
-    WHERE ca.collection = collection_acronym AND
+    WHERE (ca.collection = collection_acronym) AND
           (issn = online_issn OR issn = print_issn OR issn = pid_issn) AND
           (year_month_day between beginDate AND endDate) AND
           (online_issn <> '' OR print_issn <> '')
@@ -248,7 +256,7 @@ BEGIN
              JOIN counter_article ca on sushi_article_metric.idarticle_sam = ca.id
              JOIN counter_journal cj on ca.idjournal_a = cj.id
              JOIN counter_journal_collection cjc on cj.id = cjc.idjournal_jc
-    WHERE ca.collection = collection_acronym AND
+    WHERE (ca.collection = collection_acronym) AND
           (issn = online_issn OR issn = print_issn OR issn = pid_issn) AND
           (year_month_day between beginDate AND endDate) AND
           (online_issn <> '' OR print_issn <> '')
@@ -276,8 +284,8 @@ BEGIN
              JOIN counter_article ca on sushi_article_metric.idarticle_sam = ca.id
              JOIN counter_journal cj on ca.idjournal_a = cj.id
              JOIN counter_journal_collection cjc on cj.id = cjc.idjournal_jc
-    WHERE ca.collection = collection_acronym AND
-          pid = ca.pid AND
+    WHERE (ca.collection = collection_acronym) AND
+          (pid = ca.pid) AND
           (year_month_day between beginDate AND endDate) AND
           (online_issn <> '' OR print_issn <> '');
 END $$
@@ -304,8 +312,8 @@ BEGIN
              JOIN counter_article ca on sushi_article_metric.idarticle_sam = ca.id
              JOIN counter_journal cj on ca.idjournal_a = cj.id
              JOIN counter_journal_collection cjc on cj.id = cjc.idjournal_jc
-    WHERE ca.collection = collection_acronym AND
-          pid = ca.pid AND
+    WHERE (ca.collection = collection_acronym) AND
+          (pid = ca.pid) AND
           (year_month_day between beginDate AND endDate) AND
           (online_issn <> '' OR print_issn <> '')
     GROUP BY yearMonth;
@@ -333,7 +341,7 @@ BEGIN
              JOIN counter_article ca on sushi_article_metric.idarticle_sam = ca.id
              JOIN counter_journal cj on ca.idjournal_a = cj.id
              JOIN counter_journal_collection cjc on cj.id = cjc.idjournal_jc
-    WHERE ca.collection = collection_acronym AND
+    WHERE (ca.collection = collection_acronym) AND
           (year_month_day between beginDate AND endDate) AND
           (online_issn <> '' OR print_issn <> '')
     GROUP BY ca.pid, yearMonth;
@@ -360,10 +368,9 @@ BEGIN
              JOIN counter_article ca on sushi_article_metric.idarticle_sam = ca.id
              JOIN counter_journal cj on ca.idjournal_a = cj.id
              JOIN counter_journal_collection cjc on cj.id = cjc.idjournal_jc
-    WHERE ca.collection = collection_acronym AND
+    WHERE (ca.collection = collection_acronym) AND
           (year_month_day between beginDate AND endDate) AND
           (online_issn <> '' OR print_issn <> '')
     GROUP BY ca.pid;
 END $$
 DELIMITER ;
-

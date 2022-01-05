@@ -30,7 +30,7 @@ def main(argv=sys.argv):
     setup_logging(config_uri)
     settings = get_appsettings(config_uri)
 
-    sqlalchemy_url_value = environ.get('MARIADB_STRING_CONNECTION', 'mysql://root:pass@172.17.0.3:3306/matomo')
+    sqlalchemy_url_value = environ.get('MARIADB_STRING_CONNECTION', 'mysql://root:pass@localhost:port/database')
     settings.update({'sqlalchemy.url': sqlalchemy_url_value})
 
     application_url_value = environ.get('APPLICATION_URL', 'http://127.0.0.1:6543')

@@ -14,6 +14,13 @@
       "Report_Description": "Platform-level usage summarized by Metric_Type.",
       "Path": "/reports/pr_p1"
     },
+    "cr_j1": {
+      "Report_Name": "Collection Usage",
+      "Report_ID": "cr_j1",
+      "Release": "5",
+      "Report_Description": "Collection-level usage summarized by Metric_Type.",
+      "Path": "/reports/cr_j1"
+    },
     "dr": {
       "Report_Name": "Database Master Report",
       "Report_ID": "dr",

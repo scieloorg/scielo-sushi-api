@@ -8,6 +8,8 @@ def wrapper_mount_json_for_report(report_id, result_query, attrs):
         return mount_json_for_reports_tr_j1(result_query, attrs)
     if report_id == 'tr_j4':
         return mount_json_for_reports_tr_j4(result_query, attrs)
+    if report_id == 'cr_j1':
+        return mount_json_for_reports_cr_j1(result_query, attrs)
 
 
 def mount_json_for_reports(result_query):

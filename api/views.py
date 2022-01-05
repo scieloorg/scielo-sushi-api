@@ -10,7 +10,7 @@ from .adapter import (
     wrapper_mount_json_for_report
 )
 
-from .db_calls import PROCEDURE_DETECTOR_DICT
+from .db_calls import PROCEDURE_DETECTOR_DICT, V2_PROCEDURE_DETECTOR_DICT
 from .errors import *
 from .lib.database import get_dates_not_ready
 from .models import DBSession
@@ -20,13 +20,16 @@ from .values import collection_acronym_to_collection_name
 
 
 COLLECTION = os.environ.get('COLLECTION', 'scl')
-VALID_FILTERS = {'granularity',
-                 'customer_id',
-                 'issn',
-                 'pid',
-                 'begin_date',
-                 'end_date',
-                 'collection'}
+VALID_FILTERS = {
+    'granularity',
+    'customer_id',
+    'issn',
+    'pid',
+    'begin_date',
+    'end_date',
+    'collection',
+    'api',
+}
 
 
 class CounterViews(object):
@@ -79,7 +82,7 @@ class CounterViews(object):
         if not is_valid_date_range(begin_date, end_date):
             return error_invalid_date_arguments()
 
-        # TODO: é preciso popular as tabelas counter_customer e counter_institution
+        api_version = self.request.params.get('api', '')
 
         ####################
         # optional filters #
@@ -106,7 +109,8 @@ class CounterViews(object):
             'end_date': end_date,
             'platform': 'Scientific Electronic Library Online - {0}'.format(collection_acronym_to_collection_name.get(collection, collection)),
             'report_data': '',
-            'collection': collection
+            'collection': clean_field(collection),
+            'api': clean_field(api_version),
         }
 
         try:
@@ -148,7 +152,10 @@ def check_exceptions(params, begin_date, end_date, report_id, collection):
 
 def _wrapper_call_report(report_id, attrs):
     granularity, mode = _get_granularity_and_mode(attrs)
-    procedure_name, params_names = PROCEDURE_DETECTOR_DICT.get(granularity, {}).get(mode, {}).get(report_id, ('', []))
+    if attrs['api'] == 'v2':
+        procedure_name, params_names = V2_PROCEDURE_DETECTOR_DICT.get(granularity, {}).get(mode, {}).get(report_id, ('', []))
+    else:
+        procedure_name, params_names = PROCEDURE_DETECTOR_DICT.get(granularity, {}).get(mode, {}).get(report_id, ('', []))
 
     if procedure_name and params_names:
         params = []

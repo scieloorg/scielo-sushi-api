@@ -15,7 +15,7 @@ from .errors import *
 from .lib.database import get_dates_not_ready
 from .models import DBSession
 from .sql_declarative import Status, Alert, Member, Report
-from .utils import handle_str_date, is_valid_date_range, is_valid_issn, is_valid_date_format
+from .utils import handle_str_date, is_valid_date_range, is_valid_issn, is_valid_date_format, clean_field
 from .values import collection_acronym_to_collection_name
 
 
@@ -113,6 +113,8 @@ class CounterViews(object):
             'api': clean_field(api_version),
         }
 
+        _set_collection_extra(report_id, attrs)
+
         try:
             report_data = DBSession.query(Report).filter_by(report_id=report_id).one()
         except NoResultFound or MultipleResultsFound:
@@ -123,7 +125,7 @@ class CounterViews(object):
         json_metrics = _wrapper_call_report(report_id, attrs)
 
         # Caso não existam dados de acesso para o período selecionado
-        if len(json_metrics.get('Report_Items', [])) == 0:
+        if is_empty_report(json_metrics.get('Report_Items', [])):
             return error_no_usage_available()
 
         # Obtém exceções
@@ -150,6 +152,23 @@ def check_exceptions(params, begin_date, end_date, report_id, collection):
     return exceptions
 
 
+def is_empty_report(report_items):
+    if len(report_items) == 0:
+        return True
+
+    for item in report_items:
+        for performance in item.get('Performance', []):
+            try:
+                count = int(performance.get('Instance', {}).get('Count', 0))
+            except ValueError:
+                count = 0
+
+            if count > 0:
+                return False
+
+    return True
+
+
 def _wrapper_call_report(report_id, attrs):
     granularity, mode = _get_granularity_and_mode(attrs)
     if attrs['api'] == 'v2':
@@ -164,6 +183,8 @@ def _wrapper_call_report(report_id, attrs):
             p_value = attrs.get(p)
             if p_value:
                 params.append(p_value)
+            if not p_value and p == 'collection_extra':
+                params.append('')
 
         result_query_metrics = DBSession.execute(procedure_name % tuple(params))
         return wrapper_mount_json_for_report(report_id, result_query_metrics, attrs)
@@ -182,6 +203,16 @@ def _get_granularity_and_mode(attrs):
         mode = 'global'
 
     return granularity, mode
+
+
+def _set_collection_extra(report_id, attrs):
+    if report_id == 'cr_j1':
+        if attrs['collection'] == 'scl':
+            attrs.update({'collection_extra': 'nbr'})
+        if attrs['collection'] == 'nbr':
+            attrs.update({'collection_extra': 'scl'})
+    else:
+        attrs.update({'collection_extra': ''})
 
 
 def _check_filters(params):

@@ -71,6 +71,7 @@ V2_PROCEDURE_DETECTOR_DICT = {
         },
         'global': {
             'tr_j1': (DB_CALL_V2_TR_J1_TOTALS, ['begin_date', 'end_date', 'collection']),
+            'cr_j1': (DB_CALL_V2_CR_J1_TOTALS, ['begin_date', 'end_date', 'collection', 'collection_extra']),
         }
     },
     'monthly': {
@@ -79,6 +80,7 @@ V2_PROCEDURE_DETECTOR_DICT = {
         },
         'global': {
             'tr_j1': (DB_CALL_V2_TR_J1_MONTHLY, ['begin_date', 'end_date', 'collection']),
+            'cr_j1': (DB_CALL_V2_CR_J1_MONTHLY, ['begin_date', 'end_date', 'collection', 'collection_extra']),
         }
     }
 }

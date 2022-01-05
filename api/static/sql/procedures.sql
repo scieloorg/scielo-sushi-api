@@ -413,3 +413,45 @@ BEGIN
 	WHERE cjc.collection = collection;
 END $$
 DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE V2_TR_J1_JOURNAL_MONTHLY(IN beginDate date, IN endDate date, IN issn varchar(9), IN collection varchar(3))
+BEGIN
+	SELECT 
+		T.journalID,
+		T.onlineISSN,
+		T.printISSN,
+		cjc.title,
+		cjc.publisher_name as publisherName,
+		cjc.uri,
+		T.yearMonth,
+		T.beginDate,
+		T.endDate,
+		T.totalItemRequests,
+		T.uniqueItemRequests,
+		cjc.collection
+		FROM (
+            SELECT cj.id as journalID,
+                cj.online_issn AS onlineISSN,
+                cj.print_issn AS printISSN,
+                SUBSTR(sushi_journal_metric.year_month_day, 1, 7) AS yearMonth,
+                MIN(year_month_day) AS beginDate,
+                MAX(year_month_day) AS endDate,
+                SUM(total_item_requests) AS totalItemRequests,
+                SUM(unique_item_requests) AS uniqueItemRequests,
+                sushi_journal_metric.collection
+            FROM sushi_journal_metric
+                JOIN counter_journal cj on sushi_journal_metric.idjournal_sjm = cj.id
+            WHERE
+                (year_month_day between beginDate AND endDate) AND
+                (issn = cj.online_issn OR issn = cj.print_issn OR issn = cj.pid_issn) AND
+                (online_issn <> '' OR print_issn <> '')
+            GROUP BY
+                journalID,
+                yearMonth
+	    ) AS T
+	JOIN counter_journal cj ON cj.id = T.journalID
+	JOIN counter_journal_collection cjc ON cj.id = cjc.idjournal_jc
+	WHERE cjc.collection = collection;
+END $$
+DELIMITER ;

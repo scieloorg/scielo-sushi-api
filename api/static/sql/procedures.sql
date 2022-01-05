@@ -534,3 +534,20 @@ BEGIN
 	WHERE cjc.collection = collection;
 END $$
 DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE V2_CR_J1_TOTALS(IN beginDate date, IN endDate date, IN collection varchar(3), IN collection_extra varchar(3))
+BEGIN
+    SELECT
+        MIN(year_month_day) AS beginDate,
+        MAX(year_month_day) AS endDate,
+        SUM(total_item_requests) AS totalItemRequests,
+        SUM(unique_item_requests) AS uniqueItemRequests
+    FROM sushi_journal_metric sjm
+        JOIN counter_journal cj on sjm.idjournal_sjm = cj.id
+    WHERE
+    	(sjm.collection in (collection , collection_extra)) AND
+	    (year_month_day between beginDate AND endDate) AND
+    	(cj.online_issn <> '' OR cj.print_issn <> '');
+END $$
+DELIMITER ;

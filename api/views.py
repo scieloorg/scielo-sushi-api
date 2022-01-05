@@ -113,6 +113,8 @@ class CounterViews(object):
             'api': clean_field(api_version),
         }
 
+        _set_collection_extra(report_id, attrs)
+
         try:
             report_data = DBSession.query(Report).filter_by(report_id=report_id).one()
         except NoResultFound or MultipleResultsFound:
@@ -181,6 +183,8 @@ def _wrapper_call_report(report_id, attrs):
             p_value = attrs.get(p)
             if p_value:
                 params.append(p_value)
+            if not p_value and p == 'collection_extra':
+                params.append('')
 
         result_query_metrics = DBSession.execute(procedure_name % tuple(params))
         return wrapper_mount_json_for_report(report_id, result_query_metrics, attrs)
@@ -199,6 +203,16 @@ def _get_granularity_and_mode(attrs):
         mode = 'global'
 
     return granularity, mode
+
+
+def _set_collection_extra(report_id, attrs):
+    if report_id == 'cr_j1':
+        if attrs['collection'] == 'scl':
+            attrs.update({'collection_extra': 'nbr'})
+        if attrs['collection'] == 'nbr':
+            attrs.update({'collection_extra': 'scl'})
+    else:
+        attrs.update({'collection_extra': ''})
 
 
 def _check_filters(params):

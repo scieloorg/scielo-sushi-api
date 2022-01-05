@@ -42,3 +42,11 @@ def is_valid_date_format(date):
     if re.match(pattern=REGEX_DATE_FORMAT, string=date):
         return True
     return False
+
+
+def clean_field(field):
+    els = []
+    for c in field:
+        if c not in ('\"', '\'', '\n', '\t', ' '):
+            els.append(c)
+    return ''.join(els)

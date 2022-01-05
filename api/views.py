@@ -15,7 +15,7 @@ from .errors import *
 from .lib.database import get_dates_not_ready
 from .models import DBSession
 from .sql_declarative import Status, Alert, Member, Report
-from .utils import handle_str_date, is_valid_date_range, is_valid_issn, is_valid_date_format
+from .utils import handle_str_date, is_valid_date_range, is_valid_issn, is_valid_date_format, clean_field
 from .values import collection_acronym_to_collection_name
 
 

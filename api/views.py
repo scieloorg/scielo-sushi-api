@@ -123,7 +123,7 @@ class CounterViews(object):
         json_metrics = _wrapper_call_report(report_id, attrs)
 
         # Caso não existam dados de acesso para o período selecionado
-        if len(json_metrics.get('Report_Items', [])) == 0:
+        if is_empty_report(json_metrics.get('Report_Items', [])):
             return error_no_usage_available()
 
         # Obtém exceções
@@ -148,6 +148,23 @@ def check_exceptions(params, begin_date, end_date, report_id, collection):
         exceptions.append(error_usage_not_ready('warning', not_ready_dates))
 
     return exceptions
+
+
+def is_empty_report(report_items):
+    if len(report_items) == 0:
+        return True
+
+    for item in report_items:
+        for performance in item.get('Performance', []):
+            try:
+                count = int(performance.get('Instance', {}).get('Count', 0))
+            except ValueError:
+                count = 0
+
+            if count > 0:
+                return False
+
+    return True
 
 
 def _wrapper_call_report(report_id, attrs):

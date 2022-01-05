@@ -43,7 +43,7 @@ def main(argv=sys.argv):
     Base.metadata.create_all(engine)
     DBSession.configure(bind=engine)
 
-    file_counter_report = os.path.join(os.getcwd(), '/app/static/counter_report.json')
+    file_counter_report = os.path.join(os.getcwd(), 'app/static/counter_report.json')
     with transaction.manager:
         with open(file_counter_report) as f:
             application_url = settings.get('application.url')

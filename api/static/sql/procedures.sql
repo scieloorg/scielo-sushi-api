@@ -410,7 +410,10 @@ BEGIN
 	    ) AS T
 	JOIN counter_journal cj ON cj.id = T.journalID
 	JOIN counter_journal_collection cjc ON cj.id = cjc.idjournal_jc
-	WHERE cjc.collection = collection;
+	WHERE cjc.collection = collection
+    ORDER BY
+        journalID ASC,
+        beginDate ASC;
 END $$
 DELIMITER ;
 
@@ -452,7 +455,10 @@ BEGIN
 	    ) AS T
 	JOIN counter_journal cj ON cj.id = T.journalID
 	JOIN counter_journal_collection cjc ON cj.id = cjc.idjournal_jc
-	WHERE cjc.collection = collection;
+	WHERE cjc.collection = collection
+    ORDER BY
+        journalID ASC,
+        yearMonth ASC;
 END $$
 DELIMITER ;
 
@@ -490,7 +496,10 @@ BEGIN
 	    ) AS T
 	JOIN counter_journal cj ON cj.id = T.journalID
 	JOIN counter_journal_collection cjc ON cj.id = cjc.idjournal_jc
-	WHERE cjc.collection = collection;
+	WHERE cjc.collection = collection
+    ORDER BY
+        journalID ASC,
+        beginDate ASC;
 END $$
 DELIMITER ;
 
@@ -531,7 +540,10 @@ BEGIN
 	    ) AS T
 	JOIN counter_journal cj ON cj.id = T.journalID
 	JOIN counter_journal_collection cjc ON cj.id = cjc.idjournal_jc
-	WHERE cjc.collection = collection;
+	WHERE cjc.collection = collection
+    ORDER BY
+        journalID ASC,
+        yearMonth ASC;
 END $$
 DELIMITER ;
 
@@ -548,7 +560,9 @@ BEGIN
     WHERE
     	(sjm.collection in (collection , collection_extra)) AND
 	    (year_month_day between beginDate AND endDate) AND
-    	(cj.online_issn <> '' OR cj.print_issn <> '');
+    	(cj.online_issn <> '' OR cj.print_issn <> '')
+    ORDER BY
+        beginDate ASC;
 END $$
 DELIMITER ;
 
@@ -568,6 +582,8 @@ BEGIN
         (year_month_day between beginDate AND endDate) AND
         (online_issn <> '' OR print_issn <> '')
     GROUP BY 
-    	yearMonth;
+    	yearMonth
+    ORDER BY
+        yearMonth ASC;
 END $$
 DELIMITER ;

@@ -6,12 +6,18 @@ SciELO SUSHI API
 ## Instalation and Running
 _Build_
 ```shell script
-docker build --tag scielo-sushi-api:latest .
+docker build . --tag scieloorg/scielo-sushi-api:0.5
 ```
 
 _Run_
 ```
-docker run -d -p 6543:6543 --name scielo-sushi-api --env MARIADB_STRING_CONNECTION="mysql://user:pass@localhost:port/database" --env APPLICATION_URL="http://127.0.0.1:6543" scielo-sushi-api
+docker run -d \
+    -p 6543:6543 \
+    --name scielo-sushi-api \
+    --env MARIADB_STRING_CONNECTION="mysql://user:pass@localhost:port/database" \
+    --env APPLICATION_URL="http://127.0.0.1:6543" \
+    scieloorg/scielo-sushi-api \
+    pserve /app/config.ini
 ```
 
 ## Routes

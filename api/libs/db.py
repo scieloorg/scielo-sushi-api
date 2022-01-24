@@ -20,6 +20,10 @@ def get_alert(is_active):
 def get_reports():
     return DBSession.query(Report).all()
 
+
+def get_members():
+    return DBSession.query(Member).all()
+
 def get_dates_not_ready(begin_date, end_date, collection, report_id):
     status_column = values.REPORT_ID_TO_COLUMN_STATUS.get(report_id, '')
     if status_column:

@@ -14,6 +14,13 @@ def error_required_filter_missing(data):
         'Data': data
     }
 
+def error_report_not_supported():
+    return {
+        'Code': 3000,
+        'Severity': 'error',
+        'Message': 'Report Not Supported',
+    }
+
 
 def error_no_usage_available():
     return {

@@ -36,3 +36,24 @@ def clean_granularity(granularity):
         return 'monthly'
     return granularity
 
+
+def clean_parameters(required_params, optional_params):
+    cleaned_collection_acronym = clean_collection_acronym(optional_params.get('collection'))
+
+    cleaned_params = {
+        'customer': clean_field(required_params.get('customer', '')),
+        'issn': clean_field(optional_params.get('issn', '')),
+        'pid': clean_field(optional_params.get('pid', '')),
+        'granularity': clean_granularity('granularity'),
+        'institution': clean_field(optional_params.get('institution', '')),
+        'institution_id': clean_field(optional_params.get('institution_id', '')),
+        'begin_date': required_params.get('begin_date'),
+        'end_date': required_params.get('end_date'),
+        'platform': 'Scientific Electronic Library Online - ' + clean_collection_name(cleaned_collection_acronym),
+        'report_data': '',
+        'collection':  cleaned_collection_acronym,
+        'api': clean_api(optional_params.get('api', '')),
+    }
+
+    return cleaned_params
+

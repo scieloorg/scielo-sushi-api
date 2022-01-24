@@ -30,3 +30,9 @@ def clean_collection_name(collection):
         collection_name = values.COLLECTION_ACRONYM_TO_COLLECTION_NAME['scl']
     return collection_name
 
+
+def clean_granularity(granularity):
+    if granularity not in ('monthly', 'totals'):
+        return 'monthly'
+    return granularity
+

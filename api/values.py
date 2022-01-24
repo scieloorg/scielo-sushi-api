@@ -40,6 +40,10 @@ COLLECTION_ACRONYM_TO_COLLECTION_NAME = {
 URI_REQUIRED_PARAMETERS = set(['begin_date', 'customer', 'end_date',])
 URI_OPTIONAL_PARAMETERS = set(['api', 'collection', 'customer', 'fmt', 'granularity', 'issn', 'pid',])
 URI_SUPPORTED_PARAMETERS = URI_REQUIRED_PARAMETERS.union(URI_OPTIONAL_PARAMETERS)
+
+REGEX_DATE_FORMAT = r'\d{4}\-\d{2}($|\-\d{2}$)'
+REGEX_ISSN = r'[0-9]{4}-[0-9]{3}[0-9xX]$'
+
 DB_CALL_TR_J1_TOTALS = 'CALL TR_J1_TOTALS("%s", "%s", "%s")'
 DB_CALL_TR_J1_MONTHLY = 'CALL TR_J1_MONTHLY("%s", "%s", "%s")'
 

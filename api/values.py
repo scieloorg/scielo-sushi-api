@@ -138,3 +138,57 @@ V2_GRANULARITY_MODE_REPORT_TO_PROCEDURE_AND_PARAMETERS = {
         }
     }
 }
+
+TSV_REPORT_DEFAULT_HEADERS = [
+    'Report_Name',
+    'Report_ID',
+    'Release',
+    'Institution_Name',
+    'Institution_ID',
+    'Metric_Types',
+    'Report_Filters',
+    'Report_Attributes',
+    'Exceptions',
+    'Reporting_Period',
+    'Created',
+    'Created_By',
+    '',
+]
+
+TSV_REPORT_DEFAULT_ROWS = [
+    'Title',
+    'Publisher',
+    'Publisher_ID',
+    'Platform',
+    'DOI',
+    'Proprietary_ID',
+    'Print_ISSN',
+    'Online_ISSN',
+    'URI',
+    'Metric_Type',
+]
+
+TSV_REPORT_IR_ROWS = [
+    'Item',
+    'Publisher',
+    'Publisher_ID',
+    'Platform',
+    'Authors',
+    'Publication_Date',
+    'Article_Version',
+    'DOI',
+    'Proprietary_ID',
+    'Print_ISSN',
+    'Online_ISSN',
+    'URI',
+    'Parent_Title',
+    'Parent_Authors',
+    'Parent_Article_Version',
+    'Parent_DOI',
+    'Parent_Proprietary_ID',
+    'Parent_Print_ISSN',
+    'Parent_Online_ISSN',
+    'Parent_URI',
+    'Access_Type',
+    'Metric_Type',
+]

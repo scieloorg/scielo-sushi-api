@@ -395,3 +395,23 @@ def tsv_report_wrapper(request, report_id, result_query, params, exceptions):
     if report_id == 'tr_j4':
         return _tsv_report_tr_j4(result_query, params, exceptions)
 
+
+def _tsv_header(params, exceptions, data_type='Journal'):
+    headers = {}
+    for h in values.TSV_REPORT_DEFAULT_HEADERS:
+        headers[h] = ''
+
+    headers['Report_Name'] = params.get('report_db_params', {}).name
+    headers['Report_ID'] = params.get('report_db_params', {}).report_id
+    headers['Release'] = str(params.get('report_db_params', {}).release)
+    headers['Metric_Types'] = 'Total Item Requests; Unique Item Requests'
+    headers['Report_Filters'] = f'Data_Type={data_type}; Access_Type=Controlled; Access_Method=Regular'
+    headers['Exceptions'] = utils.format_error_messages(exceptions)
+    headers['Created'] = datetime.now().isoformat()
+    headers['Created_By'] = 'Scientific Electronic Library Online SUSHI API'
+
+    bd = params.get('begin_date', '')
+    ed = params.get('end_date', '')
+    headers['Reporting_Period'] = f'Begin_Date={bd}; End_Date={ed}'
+
+    return headers

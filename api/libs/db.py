@@ -24,6 +24,11 @@ def get_reports():
 def get_members():
     return DBSession.query(Member).all()
 
+
+def get_report_by_id(report_id):
+    return DBSession.query(Report).filter_by(report_id=report_id).one()
+
+
 def get_dates_not_ready(begin_date, end_date, collection, report_id):
     status_column = values.REPORT_ID_TO_COLUMN_STATUS.get(report_id, '')
     if status_column:

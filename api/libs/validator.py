@@ -53,7 +53,7 @@ def validate_parameters(params, expected_params_list=[]):
     validation_results = {'errors': []}
 
     for p in expected_params_list:
-        if p not in params:
+        if p not in params and p != 'customer':
             validation_results['errors'].append((p, errors.error_required_filter_missing(p)))
 
     for p_name, p_value in params.items():

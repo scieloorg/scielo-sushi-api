@@ -23,3 +23,10 @@ def clean_collection_acronym(collection):
         return 'scl'
     return collection
 
+
+def clean_collection_name(collection):
+    collection_name = values.COLLECTION_ACRONYM_TO_COLLECTION_NAME.get(collection)
+    if not collection_name:
+        collection_name = values.COLLECTION_ACRONYM_TO_COLLECTION_NAME['scl']
+    return collection_name
+

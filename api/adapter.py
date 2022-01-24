@@ -466,3 +466,69 @@ def _tsv_report_cr_j1(result_query, params, exceptions):
 
     return output
 
+
+def _tsv_report_ir_a1(result_query, params, exceptions):
+    result = {'headers': _tsv_header(params, exceptions, data_type='Article')}
+
+    article2values = {}
+    yms = ['Reporting_Period_Total']
+
+    for ri in result_query:
+        journal_id = ri.onlineISSN or ri.printISSN or ri.journalID
+        article_key = (journal_id, ri.title, ri.publisherName, ri.printISSN, ri.onlineISSN, ri.uri, ri.pid, ri.yop)
+
+        if article_key not in article2values:
+            article2values[article_key] = {'Reporting_Period_Total': (0, 0)}
+
+        year_month = ri.beginDate.strftime('%b-%Y')
+        if year_month not in yms:
+            yms.append(year_month)
+        if year_month not in article2values[article_key]:
+            article2values[article_key][year_month] = 0
+
+        tir = getattr(ri, 'totalItemRequests')
+        uir = getattr(ri, 'uniqueItemRequests')
+
+        article2values[article_key][year_month] = (tir, uir)
+        article2values[article_key]['Reporting_Period_Total'] = tuple(map(sum, zip(article2values[article_key]['Reporting_Period_Total'], (tir, uir))))
+
+    output = {'rows': []}
+    for k in values.TSV_REPORT_DEFAULT_HEADERS:
+        output['rows'].append([k, result['headers'][k]])
+
+    output['rows'].append(values.TSV_REPORT_IR_ROWS + yms)
+
+    for i in article2values:
+        for j, metric_name in enumerate(['Total_Item_Requests', 'Unique_Item_Requests']):
+            line = [
+                i[6],
+                i[2],
+                '',
+                'SciELO SUSHI API',
+                '',
+                i[7],
+                '',
+                '',
+                '',
+                i[3],
+                i[4],
+                '',
+                i[1],
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                i[5],
+                '',
+                metric_name
+            ]
+
+            for ym in yms:
+                ym_v = str(article2values[i].get(ym, (0, 0))[j])
+                line.append(ym_v)
+
+            output['rows'].append(line)
+
+    return output

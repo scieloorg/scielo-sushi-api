@@ -17,6 +17,8 @@ def main(global_config, **settings):
     DBSession.configure(bind=engine)
     Base.metadata.bind = engine
 
+    config.add_renderer('tsv', 'api.renderers.TSVRenderer')
+
     config.add_route('home', '/')
     config.add_route('status', '/status')
     config.add_route('members', '/members')

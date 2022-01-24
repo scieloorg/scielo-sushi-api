@@ -63,3 +63,12 @@ def error_invalid_report_filter_value(data, severity):
         'Message': 'Request contained one or more filter values that are not supported by the server',
         'Data': data
     }
+
+
+def error_parameter_not_recognized_in_this_context(data):
+    return {
+        'Code': 3050,
+        'Severity': 'warning',
+        'Message': 'Parameter Not Recognized in this Context',
+        'Data': data,
+    }

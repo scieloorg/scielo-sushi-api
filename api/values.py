@@ -168,6 +168,20 @@ TSV_REPORT_DEFAULT_ROWS = [
     'Metric_Type',
 ]
 
+TSV_REPORT_TR_J4_ROWS = [
+    'Title',
+    'Publisher',
+    'Publisher_ID',
+    'Platform',
+    'DOI',
+    'Proprietary_ID',
+    'Print_ISSN',
+    'Online_ISSN',
+    'URI',
+    'YOP',
+    'Metric_Type',
+]
+
 TSV_REPORT_IR_ROWS = [
     'Item',
     'Publisher',

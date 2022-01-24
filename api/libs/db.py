@@ -1,11 +1,10 @@
-from api.db_calls import REPORT_ID_STATUS_COLUMN_DICT
-from api.models import DBSession
-from api.sql_declarative import DateStatus
+from api import values
+from api.models.sql_declarative import Alert, DateStatus, Member, Report, Status
+from api.models.sql_automap import DBSession
 from sqlalchemy import and_
 
-
 def get_dates_not_ready(begin_date, end_date, collection, report_id):
-    status_column = REPORT_ID_STATUS_COLUMN_DICT.get(report_id, '')
+    status_column = values.REPORT_ID_TO_COLUMN_STATUS.get(report_id, '')
     if status_column:
         not_read_dates = DBSession.query(DateStatus).filter(and_(DateStatus.collection == collection,
                                                                  getattr(DateStatus, status_column) == 0,

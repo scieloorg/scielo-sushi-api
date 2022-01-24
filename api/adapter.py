@@ -415,3 +415,54 @@ def _tsv_header(params, exceptions, data_type='Journal'):
     headers['Reporting_Period'] = f'Begin_Date={bd}; End_Date={ed}'
 
     return headers
+
+
+def _tsv_report_cr_j1(result_query, params, exceptions):
+    result = {'headers': _tsv_header(params, exceptions, data_type='Collection')}
+
+    collection2values = {'Reporting_Period_Total': (0, 0)}
+    yms = ['Reporting_Period_Total']
+
+    for ri in result_query:
+        ri_key = ri.yearMonth
+
+        if ri_key not in collection2values:
+            collection2values[ri_key] = (0, 0)
+
+        if ri.yearMonth not in yms:
+            yms.append(ri.yearMonth)
+
+        tir = getattr(ri, 'totalItemRequests')
+        uir = getattr(ri, 'uniqueItemRequests')
+
+        collection2values[ri_key] = (tir, uir)
+        collection2values['Reporting_Period_Total'] = tuple(map(sum, zip(collection2values['Reporting_Period_Total'], (tir, uir))))
+
+    output = {'rows': []}
+    for k in values.TSV_REPORT_DEFAULT_HEADERS:
+        output['rows'].append([k, result['headers'][k]])
+
+    output['rows'].append(values.TSV_REPORT_DEFAULT_ROWS + yms)
+
+    for j, metric_name in enumerate(['Total_Item_Requests', 'Unique_Item_Requests']):
+        line = [
+            params.get('platform'),
+            '',
+            '',
+            'SciELO SUSHI API',
+            '',
+            '',
+            '',
+            '',
+            '',
+            metric_name
+        ]
+
+        for ym in yms:
+            ym_v = str(collection2values.get(ym, (0, 0))[j])
+            line.append(ym_v)
+
+        output['rows'].append(line)
+
+    return output
+

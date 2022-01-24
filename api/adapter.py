@@ -377,3 +377,21 @@ def _json_cr_j1(result_query_reports_cr_j1, params, exceptions):
 
         json_results['Report_Items'] = [ri for ri in report_items.values() if ri['Title']]
     return json_results
+
+
+def tsv_report_wrapper(request, report_id, result_query, params, exceptions):
+    filename = '_'.join(['report', report_id]) + '.tsv'
+    request.response.content_disposition = 'attachment;filename=' + filename
+
+    if report_id == 'ir_a1':
+        return _tsv_report_ir_a1(result_query, params, exceptions)
+
+    if report_id == 'cr_j1':
+        return _tsv_report_cr_j1(result_query, params, exceptions)
+
+    if report_id == 'tr_j1':
+        return _tsv_report_tr_j1(result_query, params, exceptions)
+
+    if report_id == 'tr_j4':
+        return _tsv_report_tr_j4(result_query, params, exceptions)
+

@@ -17,16 +17,3 @@ class CounterViewTests(unittest.TestCase):
         inst = CounterViews(request)
         response = inst.home()
         self.assertEqual('200', response.get('status', ''))
-
-
-class CounterFunctionalTests(unittest.TestCase):
-    def setUp(self):
-        from api import main
-        app = main({})
-        from webtest import TestApp
-
-        self.testapp = TestApp(app)
-
-    def test_home(self):
-        res = self.testapp.get('/', status=200)
-        self.assertIn(b'status', res.body)

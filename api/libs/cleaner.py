@@ -16,3 +16,10 @@ def clean_api(api):
     if api not in ('v2',):
         return 'v1'
     return api
+
+
+def clean_collection_acronym(collection):
+    if not collection or collection not in values.COLLECTION_ACRONYM_TO_COLLECTION_NAME.keys():
+        return 'scl'
+    return collection
+

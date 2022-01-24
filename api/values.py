@@ -36,6 +36,10 @@ COLLECTION_ACRONYM_TO_COLLECTION_NAME = {
     'dat': 'Data',
     'nbr': 'SciELO Brasil'
 }
+
+URI_REQUIRED_PARAMETERS = set(['begin_date', 'customer', 'end_date',])
+URI_OPTIONAL_PARAMETERS = set(['api', 'collection', 'customer', 'fmt', 'granularity', 'issn', 'pid',])
+URI_SUPPORTED_PARAMETERS = URI_REQUIRED_PARAMETERS.union(URI_OPTIONAL_PARAMETERS)
 DB_CALL_TR_J1_TOTALS = 'CALL TR_J1_TOTALS("%s", "%s", "%s")'
 DB_CALL_TR_J1_MONTHLY = 'CALL TR_J1_MONTHLY("%s", "%s", "%s")'
 

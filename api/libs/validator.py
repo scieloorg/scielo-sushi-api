@@ -21,3 +21,12 @@ def is_valid_date_format(date):
         return True
     return False
 
+
+def is_valid_pid(pid):
+    if pid.startswith('S'):
+        if len(pid) == 23:
+            return True
+        else:
+            return False
+    return True
+

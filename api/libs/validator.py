@@ -14,3 +14,10 @@ def is_valid_issn(issn):
     if re.match(pattern=values.REGEX_ISSN, string=issn):
         return True
     return False
+
+
+def is_valid_date_format(date):
+    if re.match(pattern=values.REGEX_DATE_FORMAT, string=date):
+        return True
+    return False
+

@@ -30,3 +30,21 @@ def is_valid_pid(pid):
             return False
     return True
 
+
+def validate_date_format(param_date, name):
+    if not param_date:
+        return errors.error_required_filter_missing(name)
+
+    if not is_valid_date_format(param_date):
+        return errors.error_invalid_date_arguments()
+
+    try:
+        if name == 'end_date':
+            return cleaner.handle_str_date(param_date, is_end_date=True)
+        else:
+            return cleaner.handle_str_date(param_date)
+
+    except ValueError or TypeError or AttributeError as e:
+        if 'unconverted data' or 'argument of type' or 'parameter date' in e:
+            return errors.error_invalid_date_arguments()
+

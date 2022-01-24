@@ -1,7 +1,7 @@
 from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
 from os import environ
-from .models import DBSession, Base
+from api.models.sql_automap import DBSession, Base
 
 
 def main(global_config, **settings):

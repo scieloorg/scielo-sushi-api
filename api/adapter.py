@@ -1,15 +1,27 @@
+from api import utils, values
 from datetime import datetime
 
 
-def wrapper_mount_json_for_report(report_id, result_query, attrs):
+
+def generate_output(request, fmt, report_id, data, params, exceptions):
+    if fmt == 'tsv':
+        return tsv_report_wrapper(request, report_id, data, params, exceptions)
+
+    return json_report_wrapper(report_id, data, params, exceptions)
+
+
+def json_report_wrapper(report_id, result_query, params, exceptions):
     if report_id == 'ir_a1':
-        return mount_json_for_reports_ir_a1(result_query, attrs)
-    if report_id == 'tr_j1':
-        return mount_json_for_reports_tr_j1(result_query, attrs)
-    if report_id == 'tr_j4':
-        return mount_json_for_reports_tr_j4(result_query, attrs)
+        return _json_ir_a1(result_query, params, exceptions)
+
     if report_id == 'cr_j1':
-        return mount_json_for_reports_cr_j1(result_query, attrs)
+        return _json_cr_j1(result_query, params, exceptions)
+
+    if report_id == 'tr_j1':
+        return _json_tr_j1(result_query, params, exceptions)
+
+    if report_id == 'tr_j4':
+        return _json_tr_j4(result_query, params, exceptions)
 
 
 def mount_json_for_reports(result_query):
@@ -66,33 +78,33 @@ def mount_json_for_members(result_query_members):
     return json_results
 
 
-def mount_json_for_reports_tr_j1(result_query_reports_tr_j1, attrs):
+def _json_tr_j1(result_query_reports_tr_j1, params, exceptions):
     json_results = {
         "Report_Header": {
             "Created": datetime.now().isoformat(),
             "Created_By": "Scientific Electronic Library Online SUSHI API",
-            "Customer_ID": attrs.get('customer', ''),
-            "Report_ID": attrs.get('report_data', {}).report_id,
-            "Release": attrs.get('report_data', {}).release,
-            "Report_Name": attrs.get('report_data', {}).name,
-            "Institution_Name": attrs.get('institution_name', ''),
+            "Customer_ID": params.get('customer', ''),
+            "Report_ID": params.get('report_db_params', {}).report_id,
+            "Release": params.get('report_db_params', {}).release,
+            "Report_Name": params.get('report_db_params', {}).name,
+            "Institution_Name": params.get('institution_name', ''),
             "Institution_ID": [{
                 "Type": "ISNI",
-                "Value": attrs.get('institution_id', '')
+                "Value": params.get('institution_id', '')
             }],
         },
         "Report_Filters": [{
             "Name": "Begin_Date",
-            "Value": attrs.get('begin_date', '')
+            "Value": params.get('begin_date', '')
         }, {
             "Name": "End_Date",
-            "Value": attrs.get('end_date', '')
+            "Value": params.get('end_date', '')
         }],
         "Report_Attributes": [{
             "Name": "Attributes_To_Show",
             "Value": "Data_Type|Access_Method"
         }],
-        "Exceptions": [],
+        "Exceptions": exceptions,
         "Report_Items": []
     }
 
@@ -103,7 +115,7 @@ def mount_json_for_reports_tr_j1(result_query_reports_tr_j1, attrs):
             report_items[r.journalID] = {
                 'Title': r.title,
                 'Item_ID': [],
-                'Platform': attrs.get('platform', ''),
+                'Platform': params.get('platform', ''),
                 'Publisher': r.publisherName,
                 'Publisher_ID': [],
                 'Data_Type': 'Journal',
@@ -143,33 +155,33 @@ def mount_json_for_reports_tr_j1(result_query_reports_tr_j1, attrs):
     return json_results
 
 
-def mount_json_for_reports_tr_j4(result_query_reports_tr_j4, attrs):
+def _json_tr_j4(result_query_reports_tr_j4, params, exceptions):
     json_results = {
         "Report_Header": {
             "Created": datetime.now().isoformat(),
             "Created_By": "Scientific Electronic Library Online SUSHI API",
-            "Customer_ID": attrs.get('customer', ''),
-            "Report_ID": attrs.get('report_data', {}).report_id,
-            "Release": attrs.get('report_data', {}).release,
-            "Report_Name": attrs.get('report_data', {}).name,
-            "Institution_Name": attrs.get('institution_name', ''),
+            "Customer_ID": params.get('customer', ''),
+            "Report_ID": params.get('report_db_params', {}).report_id,
+            "Release": params.get('report_db_params', {}).release,
+            "Report_Name": params.get('report_db_params', {}).name,
+            "Institution_Name": params.get('institution_name', ''),
             "Institution_ID": [{
                 "Type": "ISNI",
-                "Value": attrs.get('institution_id', '')
+                "Value": params.get('institution_id', '')
             }],
         },
         "Report_Filters": [{
             "Name": "Begin_Date",
-            "Value": attrs.get('begin_date', '')
+            "Value": params.get('begin_date', '')
         }, {
             "Name": "End_Date",
-            "Value": attrs.get('end_date', '')
+            "Value": params.get('end_date', '')
         }],
         "Report_Attributes": [{
             "Name": "Attributes_To_Show",
             "Value": "Data_Type|Access_Method"
         }],
-        "Exceptions": [],
+        "Exceptions": exceptions,
         "Report_Items": []
     }
 
@@ -181,7 +193,7 @@ def mount_json_for_reports_tr_j4(result_query_reports_tr_j4, attrs):
             report_items[key] = {
                 'Title': r.title,
                 'Item_ID': [],
-                'Platform': attrs.get('platform', ''),
+                'Platform': params.get('platform', ''),
                 'Publisher': r.publisherName,
                 'Publisher_ID': [],
                 'YOP': r.yop,
@@ -222,33 +234,33 @@ def mount_json_for_reports_tr_j4(result_query_reports_tr_j4, attrs):
     return json_results
 
 
-def mount_json_for_reports_ir_a1(result_query_reports_ir_a1, attrs):
+def _json_ir_a1(result_query_reports_ir_a1, params, exceptions):
     json_results = {
         "Report_Header": {
             "Created": datetime.now().isoformat(),
             "Created_By": "Scientific Electronic Library Online SUSHI API",
-            "Customer_ID": attrs.get('customer', ''),
-            "Report_ID": attrs.get('report_data', {}).report_id,
-            "Release": attrs.get('report_data', {}).release,
-            "Report_Name": attrs.get('report_data', {}).name,
-            "Institution_Name": attrs.get('institution_name', ''),
+            "Customer_ID": params.get('customer', ''),
+            "Report_ID": params.get('report_db_params', {}).report_id,
+            "Release": params.get('report_db_params', {}).release,
+            "Report_Name": params.get('report_db_params', {}).name,
+            "Institution_Name": params.get('institution_name', ''),
             "Institution_ID": [{
                 "Type": "ISNI",
-                "Value": attrs.get('institution_id', '')
+                "Value": params.get('institution_id', '')
             }],
         },
         "Report_Filters": [{
             "Name": "Begin_Date",
-            "Value": attrs.get('begin_date', '')
+            "Value": params.get('begin_date', '')
         }, {
             "Name": "End_Date",
-            "Value": attrs.get('end_date', '')
+            "Value": params.get('end_date', '')
         }],
         "Report_Attributes": [{
             "Name": "Attributes_To_Show",
             "Value": "Data_Type|Access_Method"
         }],
-        "Exceptions": [],
+        "Exceptions": exceptions,
         "Report_Items": []
     }
 
@@ -262,7 +274,7 @@ def mount_json_for_reports_ir_a1(result_query_reports_ir_a1, attrs):
                 'Item': r.pid,
                 'Publisher': r.publisherName,
                 'Publisher_ID': [],
-                'Platform': attrs.get('platform', ''),
+                'Platform': params.get('platform', ''),
                 'Authors': '',
                 'Publication_Date': '',
                 'Article_Version': '',
@@ -303,45 +315,45 @@ def mount_json_for_reports_ir_a1(result_query_reports_ir_a1, attrs):
     return json_results
 
 
-def mount_json_for_reports_cr_j1(result_query_reports_cr_j1, attrs):
+def _json_cr_j1(result_query_reports_cr_j1, params, exceptions):
     json_results = {
         "Report_Header": {
             "Created": datetime.now().isoformat(),
             "Created_By": "Scientific Electronic Library Online SUSHI API",
-            "Customer_ID": attrs.get('customer', ''),
-            "Report_ID": attrs.get('report_data', {}).report_id,
-            "Release": attrs.get('report_data', {}).release,
-            "Report_Name": attrs.get('report_data', {}).name,
-            "Institution_Name": attrs.get('institution_name', ''),
+            "Customer_ID": params.get('customer', ''),
+            "Report_ID": params.get('report_db_params', {}).report_id,
+            "Release": params.get('report_db_params', {}).release,
+            "Report_Name": params.get('report_db_params', {}).name,
+            "Institution_Name": params.get('institution_name', ''),
             "Institution_ID": [{
                 "Type": "ISNI",
-                "Value": attrs.get('institution_id', '')
+                "Value": params.get('institution_id', '')
             }],
         },
         "Report_Filters": [{
             "Name": "Begin_Date",
-            "Value": attrs.get('begin_date', '')
+            "Value": params.get('begin_date', '')
         }, {
             "Name": "End_Date",
-            "Value": attrs.get('end_date', '')
+            "Value": params.get('end_date', '')
         }],
         "Report_Attributes": [{
             "Name": "Attributes_To_Show",
             "Value": "Data_Type|Access_Method"
         }],
-        "Exceptions": [],
+        "Exceptions": exceptions,
         "Report_Items": []
     }
 
     report_items = {}
 
     for r in result_query_reports_cr_j1:
-        r_collection_acronym = attrs.get('collection')
+        r_collection_acronym = params.get('collection')
         if r_collection_acronym not in report_items:
             report_items[r_collection_acronym] = {
                 'Title': r_collection_acronym,
                 'Item_ID': [],
-                'Platform': attrs.get('platform', ''),
+                'Platform': params.get('platform', ''),
                 'Data_Type': 'Collection',
                 'Section_Type': 'Journal',
                 'Access_Type': 'Open Access',

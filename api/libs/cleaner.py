@@ -57,3 +57,20 @@ def clean_parameters(required_params, optional_params):
 
     return cleaned_params
 
+
+def handle_str_date(str_date, is_end_date=False):
+    handled_date = None
+
+    if len(str_date) == len('YYYY-MM'):
+        date = datetime.strptime(str_date, '%Y-%m')
+
+        if not is_end_date:
+            handled_date = date
+        else:
+            month_last_day = calendar.monthrange(date.year, date.month)[-1]
+            handled_date = date.replace(day=month_last_day)
+
+    elif len(str_date) == len('YYYY-MM-DD'):
+        handled_date = datetime.strptime(str_date, '%Y-%m-%d')
+
+    return handled_date.strftime('%Y-%m-%d')

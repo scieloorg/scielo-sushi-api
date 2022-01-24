@@ -1,4 +1,4 @@
-collection_acronym_to_collection_name = {
+COLLECTION_ACRONYM_TO_COLLECTION_NAME = {
     'arg': 'Argentina',
     'chl': 'Chile',
     'col': 'Colômbia',
@@ -6,7 +6,7 @@ collection_acronym_to_collection_name = {
     'esp': 'Espanha',
     'mex': 'México',
     'prt': 'Portugal',
-    'boo': 'SciELO Livros',
+    'boo': 'Livros',
     'scl': 'Brasil',
     'ssp': 'Saúde Pública',
     'sss': 'Social Sciences',
@@ -32,9 +32,9 @@ collection_acronym_to_collection_name = {
     'ses': 'Portal de Revistas - SES',
     'ecu': 'Equador',
     'rvt': 'RevTur',
-    'pre': 'SciELO Preprints',
-    'dat': 'SciELO Data',
-    'nbr': 'SciELO New Site'
+    'pre': 'Preprints',
+    'dat': 'Data',
+    'nbr': 'SciELO Brasil'
 }
 DB_CALL_TR_J1_TOTALS = 'CALL TR_J1_TOTALS("%s", "%s", "%s")'
 DB_CALL_TR_J1_MONTHLY = 'CALL TR_J1_MONTHLY("%s", "%s", "%s")'

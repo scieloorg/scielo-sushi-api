@@ -2,7 +2,6 @@ from api import utils, values
 from datetime import datetime
 
 
-
 def generate_output(request, fmt, report_id, data, params, exceptions):
     if fmt == 'tsv':
         return tsv_report_wrapper(request, report_id, data, params, exceptions)

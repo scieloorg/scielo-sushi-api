@@ -44,7 +44,7 @@ def clean_parameters(required_params, optional_params):
         'customer': clean_field(required_params.get('customer', '')),
         'issn': clean_field(optional_params.get('issn', '')),
         'pid': clean_field(optional_params.get('pid', '')),
-        'granularity': clean_granularity('granularity'),
+        'granularity': clean_granularity(optional_params.get('granularity', '')),
         'institution': clean_field(optional_params.get('institution', '')),
         'institution_id': clean_field(optional_params.get('institution_id', '')),
         'begin_date': required_params.get('begin_date'),

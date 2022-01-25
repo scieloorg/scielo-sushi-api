@@ -194,6 +194,20 @@ TSV_REPORT_TR_J4_ROWS = [
     'Metric_Type',
 ]
 
+TSV_REPORT_LR_J1_ROWS = [
+    'Title',
+    'Publisher',
+    'Publisher_ID',
+    'Platform',
+    'DOI',
+    'Proprietary_ID',
+    'Print_ISSN',
+    'Online_ISSN',
+    'URI',
+    'Article_Language',
+    'Metric_Type',
+]
+
 TSV_REPORT_IR_ROWS = [
     'Item',
     'Publisher',

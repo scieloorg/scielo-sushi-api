@@ -34,6 +34,8 @@ URL | Description |
 | `/status` or `/` | Current status of the SciELO SUSHI API service. |
 | `/reports` | Returns a list of reports supported by the SciELO SUSHI API service. |
 | `/members` | Returns the list of members. |
+| `/reports/cr_j1` | Collection-level usage summarized by Metric_Type. |
+| `/reports/ir_a1` | Item Reports provide a summary of activity related to content at the item level and provide a means of evaluating the impact an item has for an institution’s patrons. |
 | `/reports/tr_j1` | Returns COUNTER 'Journal Requests (Excluding OA_Gold)' [TR_J1], a Standard View of Title Master Report. Reports on usage of non-Gold Open Access journal content as “Total_Item_Requests” and “Unique_Item_Requests”. |
 | `/reports/tr_j4` | This resource returns "Journal Requests by YOP (Excluding OA_Gold)" [TR_J4], a Standard View of Title Master Report. Breaks down the usage of non-Gold Open Access journal content by year of publication (YOP) providing counts for the metric types "Total_Item_Requests" and "Unique_Item_Requests". |
 

@@ -68,8 +68,14 @@ DB_CALL_IR_A1_MONTHLY = 'CALL IR_A1_MONTHLY("%s", "%s", "%s")'
 DB_CALL_V2_TR_J1_JOURNAL_TOTALS = 'CALL V2_TR_J1_JOURNAL_TOTALS("%s", "%s", "%s", "%s")'
 DB_CALL_V2_TR_J1_JOURNAL_MONTHLY = 'CALL V2_TR_J1_JOURNAL_MONTHLY("%s", "%s", "%s", "%s")'
 
+DB_CALL_V2_LR_J1_JOURNAL_TOTALS = 'CALL V2_LR_J1_JOURNAL_TOTALS("%s", "%s", "%s", "%s", "%s")'
+DB_CALL_V2_LR_J1_JOURNAL_MONTHLY = 'CALL V2_LR_J1_JOURNAL_MONTHLY("%s", "%s", "%s", "%s", "%s")'
+
 DB_CALL_V2_TR_J1_TOTALS = 'CALL V2_TR_J1_TOTALS("%s", "%s", "%s")'
 DB_CALL_V2_TR_J1_MONTHLY = 'CALL V2_TR_J1_MONTHLY("%s", "%s", "%s")'
+
+DB_CALL_V2_LR_J1_TOTALS = 'CALL V2_LR_J1_TOTALS("%s", "%s", "%s", "%s")'
+DB_CALL_V2_LR_J1_MONTHLY = 'CALL V2_LR_J1_MONTHLY("%s", "%s", "%s", "%s")'
 
 DB_CALL_V2_CR_J1_TOTALS = 'CALL V2_CR_J1_TOTALS("%s", "%s", "%s", "%s")'
 DB_CALL_V2_CR_J1_MONTHLY = 'CALL V2_CR_J1_MONTHLY("%s", "%s", "%s", "%s")'
@@ -79,6 +85,7 @@ REPORT_ID_TO_COLUMN_STATUS = {
     'ir_a1': 'status_sushi_article_metric',
     'tr_j1': 'status_sushi_journal_metric',
     'tr_j4': 'status_sushi_journal_yop_metric',
+    'lr_j1': 'status_aggr_journal_language_year_month_metric',
 }
 
 GRANULARITY_MODE_REPORT_TO_PROCEDURE_AND_PARAMETERS = {
@@ -121,20 +128,25 @@ GRANULARITY_MODE_REPORT_TO_PROCEDURE_AND_PARAMETERS = {
 V2_GRANULARITY_MODE_REPORT_TO_PROCEDURE_AND_PARAMETERS = {
     'totals': {
         'issn': {
+            'lr_j1': (DB_CALL_V2_LR_J1_JOURNAL_TOTALS, ['begin_date', 'end_date', 'issn', 'collection', 'collection_extra']),
             'tr_j1': (DB_CALL_V2_TR_J1_JOURNAL_TOTALS, ['begin_date', 'end_date', 'issn', 'collection']),
         },
         'global': {
-            'tr_j1': (DB_CALL_V2_TR_J1_TOTALS, ['begin_date', 'end_date', 'collection']),
             'cr_j1': (DB_CALL_V2_CR_J1_TOTALS, ['begin_date', 'end_date', 'collection', 'collection_extra']),
+            'lr_j1': (DB_CALL_V2_LR_J1_TOTALS, ['begin_date', 'end_date', 'collection', 'collection_extra']),
+            'tr_j1': (DB_CALL_V2_TR_J1_TOTALS, ['begin_date', 'end_date', 'collection']),
         }
     },
     'monthly': {
         'issn': {
+            'lr_j1': (DB_CALL_V2_LR_J1_JOURNAL_MONTHLY, ['begin_date', 'end_date', 'issn', 'collection', 'collection_extra']),
             'tr_j1': (DB_CALL_V2_TR_J1_JOURNAL_MONTHLY, ['begin_date', 'end_date', 'issn', 'collection']),
+
         },
         'global': {
-            'tr_j1': (DB_CALL_V2_TR_J1_MONTHLY, ['begin_date', 'end_date', 'collection']),
             'cr_j1': (DB_CALL_V2_CR_J1_MONTHLY, ['begin_date', 'end_date', 'collection', 'collection_extra']),
+            'lr_j1': (DB_CALL_V2_LR_J1_MONTHLY, ['begin_date', 'end_date', 'collection', 'collection_extra']),
+            'tr_j1': (DB_CALL_V2_TR_J1_MONTHLY, ['begin_date', 'end_date', 'collection']),
         }
     }
 }

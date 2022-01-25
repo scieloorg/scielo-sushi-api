@@ -2,7 +2,6 @@ from api import utils, values
 from datetime import datetime
 
 
-
 def generate_output(request, fmt, report_id, data, params, exceptions):
     if fmt == 'tsv':
         return tsv_report_wrapper(request, report_id, data, params, exceptions)
@@ -424,18 +423,20 @@ def _tsv_report_cr_j1(result_query, params, exceptions):
     yms = ['Reporting_Period_Total']
 
     for ri in result_query:
-        ri_key = ri.yearMonth
-
-        if ri_key not in collection2values:
-            collection2values[ri_key] = (0, 0)
-
-        if ri.yearMonth not in yms:
-            yms.append(ri.yearMonth)
-
         tir = getattr(ri, 'totalItemRequests')
         uir = getattr(ri, 'uniqueItemRequests')
 
-        collection2values[ri_key] = (tir, uir)
+        if params['granularity'] == 'monthly':
+            ri_key = ri.yearMonth
+
+            if ri_key not in collection2values:
+                collection2values[ri_key] = (0, 0)
+
+            if ri.yearMonth not in yms:
+                yms.append(ri.yearMonth)
+
+            collection2values[ri_key] = (tir, uir)
+
         collection2values['Reporting_Period_Total'] = tuple(map(sum, zip(collection2values['Reporting_Period_Total'], (tir, uir))))
 
     output = {'rows': []}
@@ -481,7 +482,7 @@ def _tsv_report_ir_a1(result_query, params, exceptions):
             article2values[article_key] = {'Reporting_Period_Total': (0, 0)}
 
         year_month = ri.beginDate.strftime('%b-%Y')
-        if year_month not in yms:
+        if year_month not in yms and params['granularity'] == 'monthly':
             yms.append(year_month)
         if year_month not in article2values[article_key]:
             article2values[article_key][year_month] = 0
@@ -547,7 +548,7 @@ def _tsv_report_tr_j1(result_query, params, exceptions):
             journal2values[journal_key] = {'Reporting_Period_Total': (0, 0)}
 
         year_month = ri.beginDate.strftime('%b-%Y')
-        if year_month not in yms:
+        if year_month not in yms and params['granularity'] == 'monthly':
             yms.append(year_month)
         if year_month not in journal2values[journal_key]:
             journal2values[journal_key][year_month] = 0
@@ -601,7 +602,7 @@ def _tsv_report_tr_j4(result_query, params, exceptions):
             journal2values[journal_key] = {'Reporting_Period_Total': (0, 0)}
 
         year_month = ri.beginDate.strftime('%b-%Y')
-        if year_month not in yms:
+        if year_month not in yms and params['granularity'] == 'monthly':
             yms.append(year_month)
         if year_month not in journal2values[journal_key]:
             journal2values[journal_key][year_month] = 0

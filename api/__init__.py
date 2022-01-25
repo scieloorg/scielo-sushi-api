@@ -1,11 +1,11 @@
 from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
 from os import environ
-from .models import DBSession, Base
+from api.models.sql_automap import DBSession, Base
 
 
 def main(global_config, **settings):
-    sqlalchemy_url_value = environ.get('MARIADB_STRING_CONNECTION', 'mysql://root:pass@172.17.0.3:3306/matomo')
+    sqlalchemy_url_value = environ.get('STR_CONNECTION', 'mysql://root:pass@172.17.0.3:3306/matomo')
     settings.update({'sqlalchemy.url': sqlalchemy_url_value})
 
     application_url_value = environ.get('APPLICATION_URL', 'http://127.0.0.1:6543')
@@ -16,6 +16,8 @@ def main(global_config, **settings):
     engine = engine_from_config(settings, 'sqlalchemy.', pool_recycle=1800)
     DBSession.configure(bind=engine)
     Base.metadata.bind = engine
+
+    config.add_renderer('tsv', 'api.renderers.TSVRenderer')
 
     config.add_route('home', '/')
     config.add_route('status', '/status')

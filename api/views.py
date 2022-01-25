@@ -1,40 +1,19 @@
-import os
-
 from pyramid.view import view_config
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
-
-from .adapter import (
-    mount_json_for_reports,
-    mount_json_for_status_alert,
-    mount_json_for_members,
-    wrapper_mount_json_for_report
-)
-
-from .db_calls import PROCEDURE_DETECTOR_DICT, V2_PROCEDURE_DETECTOR_DICT
-from .errors import *
-from .lib.database import get_dates_not_ready
-from .models import DBSession
-from .sql_declarative import Status, Alert, Member, Report
-from .utils import handle_str_date, is_valid_date_range, is_valid_issn, is_valid_date_format, clean_field
-from .values import collection_acronym_to_collection_name
-
-
-COLLECTION = os.environ.get('COLLECTION', 'scl')
-VALID_FILTERS = {
-    'granularity',
-    'customer_id',
-    'issn',
-    'pid',
-    'begin_date',
-    'end_date',
-    'collection',
-    'api',
-}
+from api import adapter, errors, utils, values
+from api.libs import cleaner, db, validator
 
 
 class CounterViews(object):
     def __init__(self, request):
         self.request = request
+
+    def _override_render(self):
+        fmt = self.request.GET.get('fmt', 'json')
+        if fmt == 'tsv':
+            self.request.override_renderer = 'tsv'
+        else:
+            self.request.override_renderer = 'json'
 
     @view_config(route_name='home', renderer='json')
     def home(self):
@@ -42,204 +21,70 @@ class CounterViews(object):
 
     @view_config(route_name='status', renderer='json')
     def status(self):
-        status = DBSession.query(Status).order_by(Status.status_id.desc()).first()
-        result_query_alert = DBSession.query(Alert).filter(Alert.is_active == 1)
-        json_status = mount_json_for_status_alert(status, result_query_alert)
-        return json_status
+        res_status = db.get_status()
+        res_alert = db.get_alert(is_active = 1)
+
+        return adapter.mount_json_for_status_alert(res_status, res_alert)
 
     @view_config(route_name='members', renderer='json')
     def members(self):
-        result_query_members = DBSession.query(Member).all()
-        json_members = mount_json_for_members(result_query_members)
-        return json_members
+        res_members = db.get_members()
+
+        return adapter.mount_json_for_members(res_members)
 
     @view_config(route_name='reports', renderer='json')
     def reports(self):
-        result_query_reports = DBSession.query(Report).all()
-        json_counter_reports = mount_json_for_reports(result_query_reports)
-        return json_counter_reports
+        res_reports = db.get_reports()
+
+        return adapter.mount_json_for_reports(res_reports)
 
     @view_config(route_name='reports_report_id', renderer='json')
     def reports_report_id(self):
         report_id = self.request.matchdict.get('report_id', '')
 
-        ####################
-        # required filters #
-        ####################
-        customer = self.request.params.get('customer', '')
-        params_begin_date = self.request.params.get('begin_date', '')
-        params_end_date = self.request.params.get('end_date', '')
+        required_params = utils.extract_parameters(self.request, values.URI_REQUIRED_PARAMETERS)
+        optional_params = utils.extract_parameters(self.request, values.URI_OPTIONAL_PARAMETERS)
 
-        begin_date = _check_date(params_begin_date, 'begin_date')
-        if not isinstance(begin_date, str):
-            return begin_date
+        rp_validation_results = validator.validate_parameters(required_params, values.URI_REQUIRED_PARAMETERS)
+        if len(rp_validation_results['errors']) > 0:
+            return rp_validation_results['errors']
 
-        end_date = _check_date(params_end_date, 'end_date')
-        if not isinstance(end_date, str):
-            return end_date
+        op_validation_results = validator.validate_parameters(optional_params)
+        if len(op_validation_results['errors']) > 0:
+            return op_validation_results['errors']
 
-        # Check if date range is valid
-        if not is_valid_date_range(begin_date, end_date):
-            return error_invalid_date_arguments()
-
-        api_version = self.request.params.get('api', '')
-
-        ####################
-        # optional filters #
-        ####################
-        collection = self.request.params.get('collection', COLLECTION)
-        issn = self.request.params.get('issn', '')
-        pid = self.request.params.get('pid', '')
-
-        if 'issn' in self.request.params:
-            if not is_valid_issn(issn):
-                return error_invalid_report_filter_value(issn, severity='error')
-
-        granularity = self.request.params.get('granularity', 'monthly')
-
-        # all attributes/parameters
-        attrs = {
-            'customer': customer,
-            'issn': issn,
-            'pid': pid,
-            'granularity': granularity,
-            'institution': '',
-            'institution_id': '',
-            'begin_date': begin_date,
-            'end_date': end_date,
-            'platform': 'Scientific Electronic Library Online - {0}'.format(collection_acronym_to_collection_name.get(collection, collection)),
-            'report_data': '',
-            'collection': clean_field(collection),
-            'api': clean_field(api_version),
-        }
-
-        _set_collection_extra(report_id, attrs)
+        cleaned_params = cleaner.clean_parameters(rp_validation_results, op_validation_results)
+        utils.set_collection_extra(report_id, cleaned_params)
 
         try:
-            report_data = DBSession.query(Report).filter_by(report_id=report_id).one()
+            report_db_params = db.get_report_by_id(report_id=report_id)
         except NoResultFound or MultipleResultsFound:
-            report_data = {}
+            report_db_params = {}
+        cleaned_params['report_db_params'] = report_db_params
 
-        attrs['report_data'] = report_data
+        report_exceptions = utils.check_exceptions(report_id, self.request.GET.keys(), cleaned_params)
+        report_query = utils.wrapper_call_report(report_id, cleaned_params)
 
-        json_metrics = _wrapper_call_report(report_id, attrs)
+        if report_query is None:
+            return errors.error_report_not_supported()
 
-        # Caso não existam dados de acesso para o período selecionado
-        if is_empty_report(json_metrics.get('Report_Items', [])):
-            return error_no_usage_available()
+        result_proxy = db.call_procedure(report_query)
 
-        # Obtém exceções
-        exceptions = check_exceptions(self.request.params, begin_date, end_date, report_id, collection)
-        if exceptions:
-            json_metrics['Exceptions'] = exceptions
+        data = utils.extract_report_data(result_proxy)
 
-        return json_metrics
+        if data is None:
+            return errors.error_report_not_supported()
 
+        if utils.is_empty_report(data):
+            return errors.error_no_usage_available()
 
-def check_exceptions(params, begin_date, end_date, report_id, collection):
-    exceptions = []
+        self._override_render()
 
-    # Verifica se há parâmetros inválidos na request
-    invalid_filters = _check_filters(params)
-    if len(invalid_filters) > 0:
-        exceptions.append(error_invalid_report_filter_value(invalid_filters, severity='warning'))
-
-    # Verifica se há datas com dados ausentes nas tabelas sushi
-    not_ready_dates = get_dates_not_ready(begin_date, end_date, collection, report_id)
-    if len(not_ready_dates) > 0:
-        exceptions.append(error_usage_not_ready('warning', not_ready_dates))
-
-    return exceptions
-
-
-def is_empty_report(report_items):
-    if len(report_items) == 0:
-        return True
-
-    for item in report_items:
-        for performance in item.get('Performance', []):
-            try:
-                count = int(performance.get('Instance', {}).get('Count', 0))
-            except ValueError:
-                count = 0
-
-            if count > 0:
-                return False
-
-    return True
-
-
-def _wrapper_call_report(report_id, attrs):
-    granularity, mode = _get_granularity_and_mode(attrs)
-    if attrs['api'] == 'v2':
-        procedure_name, params_names = V2_PROCEDURE_DETECTOR_DICT.get(granularity, {}).get(mode, {}).get(report_id, ('', []))
-    else:
-        procedure_name, params_names = PROCEDURE_DETECTOR_DICT.get(granularity, {}).get(mode, {}).get(report_id, ('', []))
-
-    if procedure_name and params_names:
-        params = []
-
-        for p in params_names:
-            p_value = attrs.get(p)
-            if p_value:
-                params.append(p_value)
-            if not p_value and p == 'collection_extra':
-                params.append('')
-
-        result_query_metrics = DBSession.execute(procedure_name % tuple(params))
-        return wrapper_mount_json_for_report(report_id, result_query_metrics, attrs)
-
-    return {}
-
-
-def _get_granularity_and_mode(attrs):
-    granularity = attrs.get('granularity', 'totals')
-
-    if attrs['issn'] != '':
-        mode = 'issn'
-    elif attrs['pid'] != '':
-        mode = 'pid'
-    else:
-        mode = 'global'
-
-    return granularity, mode
-
-
-def _set_collection_extra(report_id, attrs):
-    if report_id == 'cr_j1':
-        if attrs['collection'] == 'scl':
-            attrs.update({'collection_extra': 'nbr'})
-        if attrs['collection'] == 'nbr':
-            attrs.update({'collection_extra': 'scl'})
-    else:
-        attrs.update({'collection_extra': ''})
-
-
-def _check_filters(params):
-    invalid_filters = []
-
-    for p in params:
-        if p not in VALID_FILTERS:
-            invalid_filters.append(p)
-
-    return invalid_filters
-
-
-def _check_date(param_date, name):
-    # Check if begin_date was informed
-    if not param_date:
-        return error_required_filter_missing(name)
-
-    # Check if begin_date format is valid
-    if not is_valid_date_format(param_date):
-        return error_invalid_date_arguments()
-
-    # Check if begin_date is a valid date
-    try:
-        if name == 'end_date':
-            return handle_str_date(param_date, is_end_date=True)
-        else:
-            return handle_str_date(param_date)
-    except ValueError or TypeError or AttributeError as e:
-        if 'unconverted data' or 'argument of type' or 'parameter date' in e:
-            return error_invalid_date_arguments()
+        return adapter.generate_output(
+            request=self.request,
+            fmt=self.request.GET.get('fmt'),
+            report_id=report_id,
+            data=data,
+            params=cleaned_params,
+            exceptions=report_exceptions,
+        )

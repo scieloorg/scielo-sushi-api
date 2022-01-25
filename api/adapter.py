@@ -1,15 +1,27 @@
+from api import utils, values
 from datetime import datetime
 
 
-def wrapper_mount_json_for_report(report_id, result_query, attrs):
+
+def generate_output(request, fmt, report_id, data, params, exceptions):
+    if fmt == 'tsv':
+        return tsv_report_wrapper(request, report_id, data, params, exceptions)
+
+    return json_report_wrapper(report_id, data, params, exceptions)
+
+
+def json_report_wrapper(report_id, result_query, params, exceptions):
     if report_id == 'ir_a1':
-        return mount_json_for_reports_ir_a1(result_query, attrs)
-    if report_id == 'tr_j1':
-        return mount_json_for_reports_tr_j1(result_query, attrs)
-    if report_id == 'tr_j4':
-        return mount_json_for_reports_tr_j4(result_query, attrs)
+        return _json_ir_a1(result_query, params, exceptions)
+
     if report_id == 'cr_j1':
-        return mount_json_for_reports_cr_j1(result_query, attrs)
+        return _json_cr_j1(result_query, params, exceptions)
+
+    if report_id == 'tr_j1':
+        return _json_tr_j1(result_query, params, exceptions)
+
+    if report_id == 'tr_j4':
+        return _json_tr_j4(result_query, params, exceptions)
 
 
 def mount_json_for_reports(result_query):
@@ -66,33 +78,33 @@ def mount_json_for_members(result_query_members):
     return json_results
 
 
-def mount_json_for_reports_tr_j1(result_query_reports_tr_j1, attrs):
+def _json_tr_j1(result_query_reports_tr_j1, params, exceptions):
     json_results = {
         "Report_Header": {
             "Created": datetime.now().isoformat(),
             "Created_By": "Scientific Electronic Library Online SUSHI API",
-            "Customer_ID": attrs.get('customer', ''),
-            "Report_ID": attrs.get('report_data', {}).report_id,
-            "Release": attrs.get('report_data', {}).release,
-            "Report_Name": attrs.get('report_data', {}).name,
-            "Institution_Name": attrs.get('institution_name', ''),
+            "Customer_ID": params.get('customer', ''),
+            "Report_ID": params.get('report_db_params', {}).report_id,
+            "Release": params.get('report_db_params', {}).release,
+            "Report_Name": params.get('report_db_params', {}).name,
+            "Institution_Name": params.get('institution_name', ''),
             "Institution_ID": [{
                 "Type": "ISNI",
-                "Value": attrs.get('institution_id', '')
+                "Value": params.get('institution_id', '')
             }],
         },
         "Report_Filters": [{
             "Name": "Begin_Date",
-            "Value": attrs.get('begin_date', '')
+            "Value": params.get('begin_date', '')
         }, {
             "Name": "End_Date",
-            "Value": attrs.get('end_date', '')
+            "Value": params.get('end_date', '')
         }],
         "Report_Attributes": [{
             "Name": "Attributes_To_Show",
             "Value": "Data_Type|Access_Method"
         }],
-        "Exceptions": [],
+        "Exceptions": exceptions,
         "Report_Items": []
     }
 
@@ -103,7 +115,7 @@ def mount_json_for_reports_tr_j1(result_query_reports_tr_j1, attrs):
             report_items[r.journalID] = {
                 'Title': r.title,
                 'Item_ID': [],
-                'Platform': attrs.get('platform', ''),
+                'Platform': params.get('platform', ''),
                 'Publisher': r.publisherName,
                 'Publisher_ID': [],
                 'Data_Type': 'Journal',
@@ -143,33 +155,33 @@ def mount_json_for_reports_tr_j1(result_query_reports_tr_j1, attrs):
     return json_results
 
 
-def mount_json_for_reports_tr_j4(result_query_reports_tr_j4, attrs):
+def _json_tr_j4(result_query_reports_tr_j4, params, exceptions):
     json_results = {
         "Report_Header": {
             "Created": datetime.now().isoformat(),
             "Created_By": "Scientific Electronic Library Online SUSHI API",
-            "Customer_ID": attrs.get('customer', ''),
-            "Report_ID": attrs.get('report_data', {}).report_id,
-            "Release": attrs.get('report_data', {}).release,
-            "Report_Name": attrs.get('report_data', {}).name,
-            "Institution_Name": attrs.get('institution_name', ''),
+            "Customer_ID": params.get('customer', ''),
+            "Report_ID": params.get('report_db_params', {}).report_id,
+            "Release": params.get('report_db_params', {}).release,
+            "Report_Name": params.get('report_db_params', {}).name,
+            "Institution_Name": params.get('institution_name', ''),
             "Institution_ID": [{
                 "Type": "ISNI",
-                "Value": attrs.get('institution_id', '')
+                "Value": params.get('institution_id', '')
             }],
         },
         "Report_Filters": [{
             "Name": "Begin_Date",
-            "Value": attrs.get('begin_date', '')
+            "Value": params.get('begin_date', '')
         }, {
             "Name": "End_Date",
-            "Value": attrs.get('end_date', '')
+            "Value": params.get('end_date', '')
         }],
         "Report_Attributes": [{
             "Name": "Attributes_To_Show",
             "Value": "Data_Type|Access_Method"
         }],
-        "Exceptions": [],
+        "Exceptions": exceptions,
         "Report_Items": []
     }
 
@@ -181,7 +193,7 @@ def mount_json_for_reports_tr_j4(result_query_reports_tr_j4, attrs):
             report_items[key] = {
                 'Title': r.title,
                 'Item_ID': [],
-                'Platform': attrs.get('platform', ''),
+                'Platform': params.get('platform', ''),
                 'Publisher': r.publisherName,
                 'Publisher_ID': [],
                 'YOP': r.yop,
@@ -222,33 +234,33 @@ def mount_json_for_reports_tr_j4(result_query_reports_tr_j4, attrs):
     return json_results
 
 
-def mount_json_for_reports_ir_a1(result_query_reports_ir_a1, attrs):
+def _json_ir_a1(result_query_reports_ir_a1, params, exceptions):
     json_results = {
         "Report_Header": {
             "Created": datetime.now().isoformat(),
             "Created_By": "Scientific Electronic Library Online SUSHI API",
-            "Customer_ID": attrs.get('customer', ''),
-            "Report_ID": attrs.get('report_data', {}).report_id,
-            "Release": attrs.get('report_data', {}).release,
-            "Report_Name": attrs.get('report_data', {}).name,
-            "Institution_Name": attrs.get('institution_name', ''),
+            "Customer_ID": params.get('customer', ''),
+            "Report_ID": params.get('report_db_params', {}).report_id,
+            "Release": params.get('report_db_params', {}).release,
+            "Report_Name": params.get('report_db_params', {}).name,
+            "Institution_Name": params.get('institution_name', ''),
             "Institution_ID": [{
                 "Type": "ISNI",
-                "Value": attrs.get('institution_id', '')
+                "Value": params.get('institution_id', '')
             }],
         },
         "Report_Filters": [{
             "Name": "Begin_Date",
-            "Value": attrs.get('begin_date', '')
+            "Value": params.get('begin_date', '')
         }, {
             "Name": "End_Date",
-            "Value": attrs.get('end_date', '')
+            "Value": params.get('end_date', '')
         }],
         "Report_Attributes": [{
             "Name": "Attributes_To_Show",
             "Value": "Data_Type|Access_Method"
         }],
-        "Exceptions": [],
+        "Exceptions": exceptions,
         "Report_Items": []
     }
 
@@ -262,7 +274,7 @@ def mount_json_for_reports_ir_a1(result_query_reports_ir_a1, attrs):
                 'Item': r.pid,
                 'Publisher': r.publisherName,
                 'Publisher_ID': [],
-                'Platform': attrs.get('platform', ''),
+                'Platform': params.get('platform', ''),
                 'Authors': '',
                 'Publication_Date': '',
                 'Article_Version': '',
@@ -303,45 +315,45 @@ def mount_json_for_reports_ir_a1(result_query_reports_ir_a1, attrs):
     return json_results
 
 
-def mount_json_for_reports_cr_j1(result_query_reports_cr_j1, attrs):
+def _json_cr_j1(result_query_reports_cr_j1, params, exceptions):
     json_results = {
         "Report_Header": {
             "Created": datetime.now().isoformat(),
             "Created_By": "Scientific Electronic Library Online SUSHI API",
-            "Customer_ID": attrs.get('customer', ''),
-            "Report_ID": attrs.get('report_data', {}).report_id,
-            "Release": attrs.get('report_data', {}).release,
-            "Report_Name": attrs.get('report_data', {}).name,
-            "Institution_Name": attrs.get('institution_name', ''),
+            "Customer_ID": params.get('customer', ''),
+            "Report_ID": params.get('report_db_params', {}).report_id,
+            "Release": params.get('report_db_params', {}).release,
+            "Report_Name": params.get('report_db_params', {}).name,
+            "Institution_Name": params.get('institution_name', ''),
             "Institution_ID": [{
                 "Type": "ISNI",
-                "Value": attrs.get('institution_id', '')
+                "Value": params.get('institution_id', '')
             }],
         },
         "Report_Filters": [{
             "Name": "Begin_Date",
-            "Value": attrs.get('begin_date', '')
+            "Value": params.get('begin_date', '')
         }, {
             "Name": "End_Date",
-            "Value": attrs.get('end_date', '')
+            "Value": params.get('end_date', '')
         }],
         "Report_Attributes": [{
             "Name": "Attributes_To_Show",
             "Value": "Data_Type|Access_Method"
         }],
-        "Exceptions": [],
+        "Exceptions": exceptions,
         "Report_Items": []
     }
 
     report_items = {}
 
     for r in result_query_reports_cr_j1:
-        r_collection_acronym = attrs.get('collection')
+        r_collection_acronym = params.get('collection')
         if r_collection_acronym not in report_items:
             report_items[r_collection_acronym] = {
                 'Title': r_collection_acronym,
                 'Item_ID': [],
-                'Platform': attrs.get('platform', ''),
+                'Platform': params.get('platform', ''),
                 'Data_Type': 'Collection',
                 'Section_Type': 'Journal',
                 'Access_Type': 'Open Access',
@@ -365,3 +377,267 @@ def mount_json_for_reports_cr_j1(result_query_reports_cr_j1, attrs):
 
         json_results['Report_Items'] = [ri for ri in report_items.values() if ri['Title']]
     return json_results
+
+
+def tsv_report_wrapper(request, report_id, result_query, params, exceptions):
+    filename = '_'.join(['report', report_id]) + '.tsv'
+    request.response.content_disposition = 'attachment;filename=' + filename
+
+    if report_id == 'ir_a1':
+        return _tsv_report_ir_a1(result_query, params, exceptions)
+
+    if report_id == 'cr_j1':
+        return _tsv_report_cr_j1(result_query, params, exceptions)
+
+    if report_id == 'tr_j1':
+        return _tsv_report_tr_j1(result_query, params, exceptions)
+
+    if report_id == 'tr_j4':
+        return _tsv_report_tr_j4(result_query, params, exceptions)
+
+
+def _tsv_header(params, exceptions, data_type='Journal'):
+    headers = {}
+    for h in values.TSV_REPORT_DEFAULT_HEADERS:
+        headers[h] = ''
+
+    headers['Report_Name'] = params.get('report_db_params', {}).name
+    headers['Report_ID'] = params.get('report_db_params', {}).report_id
+    headers['Release'] = str(params.get('report_db_params', {}).release)
+    headers['Metric_Types'] = 'Total Item Requests; Unique Item Requests'
+    headers['Report_Filters'] = f'Data_Type={data_type}; Access_Type=Controlled; Access_Method=Regular'
+    headers['Exceptions'] = utils.format_error_messages(exceptions)
+    headers['Created'] = datetime.now().isoformat()
+    headers['Created_By'] = 'Scientific Electronic Library Online SUSHI API'
+
+    bd = params.get('begin_date', '')
+    ed = params.get('end_date', '')
+    headers['Reporting_Period'] = f'Begin_Date={bd}; End_Date={ed}'
+
+    return headers
+
+
+def _tsv_report_cr_j1(result_query, params, exceptions):
+    result = {'headers': _tsv_header(params, exceptions, data_type='Collection')}
+
+    collection2values = {'Reporting_Period_Total': (0, 0)}
+    yms = ['Reporting_Period_Total']
+
+    for ri in result_query:
+        ri_key = ri.yearMonth
+
+        if ri_key not in collection2values:
+            collection2values[ri_key] = (0, 0)
+
+        if ri.yearMonth not in yms:
+            yms.append(ri.yearMonth)
+
+        tir = getattr(ri, 'totalItemRequests')
+        uir = getattr(ri, 'uniqueItemRequests')
+
+        collection2values[ri_key] = (tir, uir)
+        collection2values['Reporting_Period_Total'] = tuple(map(sum, zip(collection2values['Reporting_Period_Total'], (tir, uir))))
+
+    output = {'rows': []}
+    for k in values.TSV_REPORT_DEFAULT_HEADERS:
+        output['rows'].append([k, result['headers'][k]])
+
+    output['rows'].append(values.TSV_REPORT_DEFAULT_ROWS + yms)
+
+    for j, metric_name in enumerate(['Total_Item_Requests', 'Unique_Item_Requests']):
+        line = [
+            params.get('platform'),
+            '',
+            '',
+            'SciELO SUSHI API',
+            '',
+            '',
+            '',
+            '',
+            '',
+            metric_name
+        ]
+
+        for ym in yms:
+            ym_v = str(collection2values.get(ym, (0, 0))[j])
+            line.append(ym_v)
+
+        output['rows'].append(line)
+
+    return output
+
+
+def _tsv_report_ir_a1(result_query, params, exceptions):
+    result = {'headers': _tsv_header(params, exceptions, data_type='Article')}
+
+    article2values = {}
+    yms = ['Reporting_Period_Total']
+
+    for ri in result_query:
+        journal_id = ri.onlineISSN or ri.printISSN or ri.journalID
+        article_key = (journal_id, ri.title, ri.publisherName, ri.printISSN, ri.onlineISSN, ri.uri, ri.pid, ri.yop)
+
+        if article_key not in article2values:
+            article2values[article_key] = {'Reporting_Period_Total': (0, 0)}
+
+        year_month = ri.beginDate.strftime('%b-%Y')
+        if year_month not in yms:
+            yms.append(year_month)
+        if year_month not in article2values[article_key]:
+            article2values[article_key][year_month] = 0
+
+        tir = getattr(ri, 'totalItemRequests')
+        uir = getattr(ri, 'uniqueItemRequests')
+
+        article2values[article_key][year_month] = (tir, uir)
+        article2values[article_key]['Reporting_Period_Total'] = tuple(map(sum, zip(article2values[article_key]['Reporting_Period_Total'], (tir, uir))))
+
+    output = {'rows': []}
+    for k in values.TSV_REPORT_DEFAULT_HEADERS:
+        output['rows'].append([k, result['headers'][k]])
+
+    output['rows'].append(values.TSV_REPORT_IR_ROWS + yms)
+
+    for i in article2values:
+        for j, metric_name in enumerate(['Total_Item_Requests', 'Unique_Item_Requests']):
+            line = [
+                i[6],
+                i[2],
+                '',
+                'SciELO SUSHI API',
+                '',
+                i[7],
+                '',
+                '',
+                '',
+                i[3],
+                i[4],
+                '',
+                i[1],
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                i[5],
+                '',
+                metric_name
+            ]
+
+            for ym in yms:
+                ym_v = str(article2values[i].get(ym, (0, 0))[j])
+                line.append(ym_v)
+
+            output['rows'].append(line)
+
+    return output
+
+
+def _tsv_report_tr_j1(result_query, params, exceptions):
+    result = {'headers': _tsv_header(params, exceptions)}
+
+    journal2values = {}
+    yms = ['Reporting_Period_Total']
+
+    for ri in result_query:
+        journal_key = (ri.journalID, ri.title, ri.publisherName, ri.printISSN, ri.onlineISSN, ri.uri)
+
+        if journal_key not in journal2values:
+            journal2values[journal_key] = {'Reporting_Period_Total': (0, 0)}
+
+        year_month = ri.beginDate.strftime('%b-%Y')
+        if year_month not in yms:
+            yms.append(year_month)
+        if year_month not in journal2values[journal_key]:
+            journal2values[journal_key][year_month] = 0
+
+        tir = getattr(ri, 'totalItemRequests')
+        uir = getattr(ri, 'uniqueItemRequests')
+
+        journal2values[journal_key][year_month] = (tir, uir)
+        journal2values[journal_key]['Reporting_Period_Total'] = tuple(map(sum, zip(journal2values[journal_key]['Reporting_Period_Total'], (tir, uir))))
+
+    output = {'rows': []}
+    for k in values.TSV_REPORT_DEFAULT_HEADERS:
+        output['rows'].append([k, result['headers'][k]])
+
+    output['rows'].append(values.TSV_REPORT_DEFAULT_ROWS + yms)
+
+    for i in journal2values:
+        for j, metric_name in enumerate(['Total_Item_Requests', 'Unique_Item_Requests']):
+            line = [
+                i[1],
+                i[2],
+                '',
+                'SciELO SUSHI API',
+                '',
+                '',
+                i[3],
+                i[4],
+                i[5],
+                metric_name
+            ]
+
+            for ym in yms:
+                ym_v = str(journal2values[i].get(ym, (0, 0))[j])
+                line.append(ym_v)
+
+            output['rows'].append(line)
+
+    return output
+
+
+def _tsv_report_tr_j4(result_query, params, exceptions):
+    result = {'headers': _tsv_header(params, exceptions)}
+
+    journal2values = {}
+    yms = ['Reporting_Period_Total']
+
+    for ri in result_query:
+        journal_key = (ri.journalID, ri.title, ri.publisherName, ri.printISSN, ri.onlineISSN, ri.uri, ri.yop)
+
+        if journal_key not in journal2values:
+            journal2values[journal_key] = {'Reporting_Period_Total': (0, 0)}
+
+        year_month = ri.beginDate.strftime('%b-%Y')
+        if year_month not in yms:
+            yms.append(year_month)
+        if year_month not in journal2values[journal_key]:
+            journal2values[journal_key][year_month] = 0
+
+        tir = getattr(ri, 'totalItemRequests')
+        uir = getattr(ri, 'uniqueItemRequests')
+
+        journal2values[journal_key][year_month] = (tir, uir)
+        journal2values[journal_key]['Reporting_Period_Total'] = tuple(map(sum, zip(journal2values[journal_key]['Reporting_Period_Total'], (tir, uir))))
+
+    output = {'rows': []}
+    for k in values.TSV_REPORT_DEFAULT_HEADERS:
+        output['rows'].append([k, result['headers'][k]])
+
+    output['rows'].append(values.TSV_REPORT_TR_J4_ROWS + yms)
+
+    for i in journal2values:
+        for j, metric_name in enumerate(['Total_Item_Requests', 'Unique_Item_Requests']):
+            line = [
+                i[1],
+                i[2],
+                '',
+                'SciELO SUSHI API',
+                '',
+                '',
+                i[3],
+                i[4],
+                i[5],
+                i[6],
+                metric_name
+            ]
+
+            for ym in yms:
+                ym_v = str(journal2values[i].get(ym, (0, 0))[j])
+                line.append(ym_v)
+
+            output['rows'].append(line)
+
+    return output

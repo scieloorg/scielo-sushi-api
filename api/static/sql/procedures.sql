@@ -25,7 +25,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE TR_J1_JOURNAL_MONTHLY(IN beginDate date, IN endDate date, IN issn varchar(9), IN collection varchar(3))
 BEGIN
-    SELECT sushi_journal_metric.id as journalID,
+    SELECT cj.id as journalID,
            cj.online_issn AS onlineISSN,
            cj.print_issn AS printISSN,
            cjc.title,
@@ -90,7 +90,7 @@ BEGIN
              JOIN counter_journal cj on sushi_journal_metric.idjournal_sjm = cj.id
              JOIN counter_journal_collection cjc ON cj.id = cjc.idjournal_jc
     WHERE (cjc.collection = collection) AND
-        (sushi_journal_metric.collection = collection AND)
+        (sushi_journal_metric.collection = collection) AND
         (year_month_day between beginDate AND endDate) AND
         (online_issn <> '' OR print_issn <> '')
     GROUP BY cj.id, yearMonth;
@@ -378,7 +378,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE V2_TR_J1_JOURNAL_TOTALS(IN beginDate date, IN endDate date, IN issn varchar(9), IN collection varchar(3))
 BEGIN
-	SELECT 
+	SELECT
 		T.journalID,
 		T.onlineISSN,
 		T.printISSN,
@@ -420,7 +420,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE V2_TR_J1_JOURNAL_MONTHLY(IN beginDate date, IN endDate date, IN issn varchar(9), IN collection varchar(3))
 BEGIN
-	SELECT 
+	SELECT
 		T.journalID,
 		T.onlineISSN,
 		T.printISSN,
@@ -465,7 +465,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE V2_TR_J1_TOTALS(IN beginDate date, IN endDate date, IN collection varchar(3))
 BEGIN
-	SELECT 
+	SELECT
 		T.journalID,
 		T.onlineISSN,
 		T.printISSN,
@@ -506,7 +506,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE V2_TR_J1_MONTHLY(IN beginDate date, IN endDate date, IN collection varchar(3))
 BEGIN
-	SELECT 
+	SELECT
 		T.journalID,
 		T.onlineISSN,
 		T.printISSN,
@@ -569,7 +569,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE V2_CR_J1_MONTHLY(IN beginDate date, IN endDate date, IN collection varchar(3), IN collection_extra varchar(3))
 BEGIN
-    SELECT 
+    SELECT
         SUBSTR(sjm.year_month_day, 1, 7) AS yearMonth,
         MIN(year_month_day) AS beginDate,
         MAX(year_month_day) AS endDate,
@@ -581,7 +581,7 @@ BEGIN
     	(sjm.collection in (collection, collection_extra)) AND
         (year_month_day between beginDate AND endDate) AND
         (online_issn <> '' OR print_issn <> '')
-    GROUP BY 
+    GROUP BY
     	yearMonth
     ORDER BY
         yearMonth ASC;

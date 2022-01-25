@@ -14,6 +14,13 @@ def error_required_filter_missing(data):
         'Data': data
     }
 
+def error_report_not_supported():
+    return {
+        'Code': 3000,
+        'Severity': 'error',
+        'Message': 'Report Not Supported',
+    }
+
 
 def error_no_usage_available():
     return {
@@ -55,4 +62,13 @@ def error_invalid_report_filter_value(data, severity):
         'Severity': severity,
         'Message': 'Request contained one or more filter values that are not supported by the server',
         'Data': data
+    }
+
+
+def error_parameter_not_recognized_in_this_context(data):
+    return {
+        'Code': 3050,
+        'Severity': 'warning',
+        'Message': 'Parameter Not Recognized in this Context',
+        'Data': data,
     }

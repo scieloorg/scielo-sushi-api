@@ -14,11 +14,18 @@ _Run_
 docker run -d \
     -p 6543:6543 \
     --name scielo-sushi-api \
-    --env MARIADB_STRING_CONNECTION="mysql://user:pass@localhost:port/database" \
+    --env STR_CONNECTION="mysql://user:pass@localhost:port/database" \
     --env APPLICATION_URL="http://127.0.0.1:6543" \
     scieloorg/scielo-sushi-api \
     pserve /app/config.ini
 ```
+
+_Environment variables_
+| Variable | Description |
+|-------- | ----------- |
+| `APPLICATION_URL` | Application address |
+| `STR_CONNECTION` | Database string connection |
+
 
 ## Routes
 
@@ -32,9 +39,9 @@ URL | Description |
 
 
 ### Parameters (for `tr` reports only)
-| Name | Description | 
+| Name | Description |
 |------|-------------|
 | `begin_date` | Usage start date in the form o YYYY-MM or YYYY-MM-DD. |
 | `end_date` | Usage end date in the form o YYYY-MM or YYYY-MM-DD. |
 | `granularity` | Optional Report Attribute. Include this parameter to allow usage to be retrieved with a granularity of 'month' (default if omitted) or 'totals'. |
-| `issn` | ISSN of a Journal. | 
+| `issn` | ISSN of a Journal. |

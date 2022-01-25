@@ -40,10 +40,14 @@ URL | Description |
 | `/reports/tr_j4` | This resource returns "Journal Requests by YOP (Excluding OA_Gold)" [TR_J4], a Standard View of Title Master Report. Breaks down the usage of non-Gold Open Access journal content by year of publication (YOP) providing counts for the metric types "Total_Item_Requests" and "Unique_Item_Requests". |
 
 
-### Parameters (for `tr` reports only)
-| Name | Description |
-|------|-------------|
-| `begin_date` | Usage start date in the form o YYYY-MM or YYYY-MM-DD. |
-| `end_date` | Usage end date in the form o YYYY-MM or YYYY-MM-DD. |
-| `granularity` | Optional Report Attribute. Include this parameter to allow usage to be retrieved with a granularity of 'month' (default if omitted) or 'totals'. |
-| `issn` | ISSN of a Journal. |
+### Parameters
+| Name | Reports | Description |
+|------|---------|-------------|
+| `api` | `tr_j1`, and `cr_j1` | Version of the API. It could be `api=v2` for reports `tr_j1` and `cr_j1` or `v1` for all the reports. |
+| `begin_date` | `all` | Usage start date in the form o YYYY-MM or YYYY-MM-DD. |
+| `collection`  | `all` | Collection. |
+| `fmt` | `all` | Output format: `tsv` or `json` (default). |
+| `end_date` | `all` | Usage end date in the form o YYYY-MM or YYYY-MM-DD. |
+| `granularity` | `all` | Optional Report Attribute. Include this parameter to allow usage to be retrieved with a granularity of 'month' (default if omitted) or 'totals'. |
+| `issn` | `ir_a1`, `tr_j1`, and `tr_j4` | ISSN of a Journal. |
+| `pid` | `ir_a1` | PID of an article. |

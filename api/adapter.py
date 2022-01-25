@@ -480,7 +480,7 @@ def _tsv_report_ir_a1(result_query, params, exceptions):
             article2values[article_key] = {'Reporting_Period_Total': (0, 0)}
 
         year_month = ri.beginDate.strftime('%b-%Y')
-        if year_month not in yms:
+        if year_month not in yms and params['granularity'] == 'monthly':
             yms.append(year_month)
         if year_month not in article2values[article_key]:
             article2values[article_key][year_month] = 0
@@ -546,7 +546,7 @@ def _tsv_report_tr_j1(result_query, params, exceptions):
             journal2values[journal_key] = {'Reporting_Period_Total': (0, 0)}
 
         year_month = ri.beginDate.strftime('%b-%Y')
-        if year_month not in yms:
+        if year_month not in yms and params['granularity'] == 'monthly':
             yms.append(year_month)
         if year_month not in journal2values[journal_key]:
             journal2values[journal_key][year_month] = 0
@@ -600,7 +600,7 @@ def _tsv_report_tr_j4(result_query, params, exceptions):
             journal2values[journal_key] = {'Reporting_Period_Total': (0, 0)}
 
         year_month = ri.beginDate.strftime('%b-%Y')
-        if year_month not in yms:
+        if year_month not in yms and params['granularity'] == 'monthly':
             yms.append(year_month)
         if year_month not in journal2values[journal_key]:
             journal2values[journal_key][year_month] = 0

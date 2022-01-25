@@ -127,6 +127,10 @@ def wrapper_call_report(report_id, params):
     else:
         procedure_name, params_names = values.GRANULARITY_MODE_REPORT_TO_PROCEDURE_AND_PARAMETERS.get(granularity, {}).get(mode, {}).get(report_id, ('', []))
 
+    if report_id in ('lr_j1',):
+        params['begin_date'] = cleaner.handle_str_date(params['begin_date'], year_month_only=True)
+        params['end_date'] = cleaner.handle_str_date(params['end_date'], year_month_only=True)
+
     if procedure_name and params_names:
         procedure_params = []
 

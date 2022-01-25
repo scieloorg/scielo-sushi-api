@@ -80,3 +80,15 @@ def handle_str_date(str_date, is_end_date=False, year_month_only=False, str_form
         return handled_date.strftime('%Y-%m-%d')
 
     return handled_date.strftime('%Y-%m')
+
+
+def get_start_and_last_days(year_month):
+    try:
+        start_date = datetime.strptime(year_month, '%Y-%m')
+
+        last_day = calendar.monthrange(start_date.year, start_date.month)[-1]
+        end_date = datetime(start_date.year, start_date.month, last_day)
+
+        return start_date.strftime('%Y-%m-%d'), end_date.strftime('%Y-%m-%d')
+    except Exception as e:
+        return

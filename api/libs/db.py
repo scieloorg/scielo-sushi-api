@@ -1,5 +1,5 @@
 from api import values
-from api.models.sql_declarative import Alert, DateStatus, Member, Report, Status
+from api.models.sql_declarative import Alert, AggrStatus, DateStatus, Member, Report, Status
 from api.models.sql_automap import DBSession
 from sqlalchemy import and_
 
@@ -31,11 +31,19 @@ def get_report_by_id(report_id):
 
 def get_dates_not_ready(begin_date, end_date, collection, report_id):
     status_column = values.REPORT_ID_TO_COLUMN_STATUS.get(report_id, '')
-    if status_column:
-        not_read_dates = DBSession.query(DateStatus).filter(and_(DateStatus.collection == collection,
-                                                                 getattr(DateStatus, status_column) == 0,
-                                                                 DateStatus.date.between(begin_date, end_date))).all()
-    else:
-        return []
+
+    if report_id in ('cr_j1', 'ir_a1', 'tr_j1', 'tr_j4'):
+        if status_column:
+            not_read_dates = DBSession.query(DateStatus).filter(and_(DateStatus.collection == collection,
+                                                                     getattr(DateStatus, status_column) == 0,
+                                                                     DateStatus.date.between(begin_date, end_date))).all()
+        else:
+            return []
+
+    elif report_id in ('lr_j1',):
+        if status_column:
+            not_read_dates = DBSession.query(AggrStatus).filter(and_(AggrStatus.collection == collection,
+                                                                     getattr(AggrStatus, status_column) == 0,
+                                                                     AggrStatus.date.between(begin_date, end_date))).all()
 
     return sorted([d.date.strftime('%Y-%m-%d') for d in not_read_dates])

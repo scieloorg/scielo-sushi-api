@@ -1,5 +1,5 @@
 from api import errors, values
-from api.libs import db
+from api.libs import cleaner, db
 
 
 def check_exceptions(report_id, params_names, cleaned_params):
@@ -108,7 +108,7 @@ def format_error_messages(exceptions: list):
 
 
 def set_collection_extra(report_id, attrs):
-    if report_id in ('cr_j1',):
+    if report_id in ('cr_j1', 'lr_j1'):
         if attrs['collection'] == 'scl':
             attrs.update({'collection_extra': 'nbr'})
 
@@ -126,6 +126,10 @@ def wrapper_call_report(report_id, params):
         procedure_name, params_names = values.V2_GRANULARITY_MODE_REPORT_TO_PROCEDURE_AND_PARAMETERS.get(granularity, {}).get(mode, {}).get(report_id, ('', []))
     else:
         procedure_name, params_names = values.GRANULARITY_MODE_REPORT_TO_PROCEDURE_AND_PARAMETERS.get(granularity, {}).get(mode, {}).get(report_id, ('', []))
+
+    if report_id in ('lr_j1',):
+        params['begin_date'] = cleaner.handle_str_date(params['begin_date'], year_month_only=True)
+        params['end_date'] = cleaner.handle_str_date(params['end_date'], year_month_only=True)
 
     if procedure_name and params_names:
         procedure_params = []

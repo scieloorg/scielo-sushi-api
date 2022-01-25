@@ -22,6 +22,9 @@ def json_report_wrapper(report_id, result_query, params, exceptions):
     if report_id == 'tr_j4':
         return _json_tr_j4(result_query, params, exceptions)
 
+    if report_id == 'lr_j1':
+        return _json_lr_j1(result_query, params, exceptions)
+
 
 def mount_json_for_reports(result_query):
     json_results = []
@@ -393,6 +396,9 @@ def tsv_report_wrapper(request, report_id, result_query, params, exceptions):
 
     if report_id == 'tr_j4':
         return _tsv_report_tr_j4(result_query, params, exceptions)
+
+    if report_id == 'lr_j1':
+        return _tsv_report_lr_j1(result_query, params, exceptions)
 
 
 def _tsv_header(params, exceptions, data_type='Journal'):

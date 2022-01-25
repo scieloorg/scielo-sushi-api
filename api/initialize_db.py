@@ -14,7 +14,7 @@ from pyramid.paster import (
     setup_logging,
 )
 
-from .sql_declarative import Base, Report, Status, Alert
+from models.sql_declarative import Base, Report, Status, Alert
 
 
 def usage(argv):
@@ -30,7 +30,7 @@ def main(argv=sys.argv):
     setup_logging(config_uri)
     settings = get_appsettings(config_uri)
 
-    sqlalchemy_url_value = environ.get('MARIADB_STRING_CONNECTION', 'mysql://root:pass@localhost:port/database')
+    sqlalchemy_url_value = environ.get('STR_CONNECTION', 'mysql://user:pass@localhost:port/database')
     settings.update({'sqlalchemy.url': sqlalchemy_url_value})
 
     application_url_value = environ.get('APPLICATION_URL', 'http://127.0.0.1:6543')
@@ -43,7 +43,7 @@ def main(argv=sys.argv):
     Base.metadata.create_all(engine)
     DBSession.configure(bind=engine)
 
-    file_counter_report = os.path.join(os.getcwd(), 'app/static/counter_report.json')
+    file_counter_report = os.path.join(os.getcwd(), 'api/static/counter_report.json')
     with transaction.manager:
         with open(file_counter_report) as f:
             application_url = settings.get('application.url')

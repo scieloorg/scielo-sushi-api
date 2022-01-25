@@ -1,5 +1,5 @@
 from api import values
-from api.models.sql_declarative import Alert, DateStatus, Member, Report, Status
+from api.models.sql_declarative import Alert, AggrStatus, DateStatus, Member, Report, Status
 from api.models.sql_automap import DBSession
 from sqlalchemy import and_
 

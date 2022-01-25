@@ -1,5 +1,5 @@
 from api import errors, values
-from api.libs import db
+from api.libs import cleaner, db
 
 
 def check_exceptions(report_id, params_names, cleaned_params):

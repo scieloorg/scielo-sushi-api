@@ -423,18 +423,20 @@ def _tsv_report_cr_j1(result_query, params, exceptions):
     yms = ['Reporting_Period_Total']
 
     for ri in result_query:
-        ri_key = ri.yearMonth
-
-        if ri_key not in collection2values:
-            collection2values[ri_key] = (0, 0)
-
-        if ri.yearMonth not in yms:
-            yms.append(ri.yearMonth)
-
         tir = getattr(ri, 'totalItemRequests')
         uir = getattr(ri, 'uniqueItemRequests')
 
-        collection2values[ri_key] = (tir, uir)
+        if params['granularity'] == 'monthly':
+            ri_key = ri.yearMonth
+
+            if ri_key not in collection2values:
+                collection2values[ri_key] = (0, 0)
+
+            if ri.yearMonth not in yms:
+                yms.append(ri.yearMonth)
+
+            collection2values[ri_key] = (tir, uir)
+
         collection2values['Reporting_Period_Total'] = tuple(map(sum, zip(collection2values['Reporting_Period_Total'], (tir, uir))))
 
     output = {'rows': []}

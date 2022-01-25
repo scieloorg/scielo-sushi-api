@@ -58,7 +58,7 @@ def clean_parameters(required_params, optional_params):
     return cleaned_params
 
 
-def handle_str_date(str_date, is_end_date=False):
+def handle_str_date(str_date, is_end_date=False, year_month_only=False, str_format=True):
     handled_date = None
 
     if len(str_date) == len('YYYY-MM'):
@@ -73,4 +73,10 @@ def handle_str_date(str_date, is_end_date=False):
     elif len(str_date) == len('YYYY-MM-DD'):
         handled_date = datetime.strptime(str_date, '%Y-%m-%d')
 
-    return handled_date.strftime('%Y-%m-%d')
+    if not str_format:
+        return handled_date
+
+    if not year_month_only:
+        return handled_date.strftime('%Y-%m-%d')
+
+    return handled_date.strftime('%Y-%m')

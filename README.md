@@ -6,7 +6,7 @@ SciELO SUSHI API
 ## Instalation and Running
 _Build_
 ```shell script
-docker build . --tag scieloorg/scielo-sushi-api:0.5
+docker build . --tag scieloorg/scielo-sushi-api
 ```
 
 _Run_

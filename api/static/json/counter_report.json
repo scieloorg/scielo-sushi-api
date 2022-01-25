@@ -77,6 +77,13 @@
       "Report_Description": "Breaks down the usage of journal content, excluding Gold Open Access content, by year of publication (YOP), providing counts for the Metric_Types Total_Item_Requests and Unique_Item_Requests. Provides the details necessary to analyze usage of content in backfiles or covered by perpetual access agreement. Note that COUNTER reports do not provide access model or perpetual access rights details.",
       "Path": "/reports/tr_j4"
     },
+    "lr_j1": {
+      "Report_Name": "Journal Requests by Article Language (Excluding OA_Gold)",
+      "Report_ID": "lr_j1",
+      "Release": "5",
+      "Report_Description": "Reports on usage of journal content for all Metric_Types broken down by Article_Language.",
+      "Path": "/reports/tr_j1l"
+    },
     "ir_a1": {
       "Report_Name": "Journal Article Requests",
       "Report_ID": "ir_a1",

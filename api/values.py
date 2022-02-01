@@ -71,11 +71,17 @@ DB_CALL_V2_TR_J1_JOURNAL_MONTHLY = 'CALL V2_TR_J1_JOURNAL_MONTHLY("%s", "%s", "%
 DB_CALL_V2_LR_J1_JOURNAL_TOTALS = 'CALL V2_LR_J1_JOURNAL_TOTALS("%s", "%s", "%s", "%s", "%s")'
 DB_CALL_V2_LR_J1_JOURNAL_MONTHLY = 'CALL V2_LR_J1_JOURNAL_MONTHLY("%s", "%s", "%s", "%s", "%s")'
 
+DB_CALL_V2_GR_J1_JOURNAL_TOTALS = 'CALL V2_GR_J1_JOURNAL_TOTALS("%s", "%s", "%s", "%s", "%s")'
+DB_CALL_V2_GR_J1_JOURNAL_MONTHLY = 'CALL V2_GR_J1_JOURNAL_MONTHLY("%s", "%s", "%s", "%s", "%s")'
+
 DB_CALL_V2_TR_J1_TOTALS = 'CALL V2_TR_J1_TOTALS("%s", "%s", "%s")'
 DB_CALL_V2_TR_J1_MONTHLY = 'CALL V2_TR_J1_MONTHLY("%s", "%s", "%s")'
 
 DB_CALL_V2_LR_J1_TOTALS = 'CALL V2_LR_J1_TOTALS("%s", "%s", "%s", "%s")'
 DB_CALL_V2_LR_J1_MONTHLY = 'CALL V2_LR_J1_MONTHLY("%s", "%s", "%s", "%s")'
+
+DB_CALL_V2_GR_J1_TOTALS = 'CALL V2_GR_J1_TOTALS("%s", "%s", "%s", "%s")'
+DB_CALL_V2_GR_J1_MONTHLY = 'CALL V2_GR_J1_MONTHLY("%s", "%s", "%s", "%s")'
 
 DB_CALL_V2_CR_J1_TOTALS = 'CALL V2_CR_J1_TOTALS("%s", "%s", "%s", "%s")'
 DB_CALL_V2_CR_J1_MONTHLY = 'CALL V2_CR_J1_MONTHLY("%s", "%s", "%s", "%s")'

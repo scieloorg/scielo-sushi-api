@@ -92,6 +92,7 @@ REPORT_ID_TO_COLUMN_STATUS = {
     'tr_j1': 'status_sushi_journal_metric',
     'tr_j4': 'status_sushi_journal_yop_metric',
     'lr_j1': 'status_aggr_journal_language_year_month_metric',
+    'gr_j1': 'status_aggr_journal_geolocation_year_month_metric',
 }
 
 GRANULARITY_MODE_REPORT_TO_PROCEDURE_AND_PARAMETERS = {
@@ -134,23 +135,27 @@ GRANULARITY_MODE_REPORT_TO_PROCEDURE_AND_PARAMETERS = {
 V2_GRANULARITY_MODE_REPORT_TO_PROCEDURE_AND_PARAMETERS = {
     'totals': {
         'issn': {
+            'gr_j1': (DB_CALL_V2_GR_J1_JOURNAL_TOTALS, ['begin_date', 'end_date', 'issn', 'collection', 'collection_extra']),
             'lr_j1': (DB_CALL_V2_LR_J1_JOURNAL_TOTALS, ['begin_date', 'end_date', 'issn', 'collection', 'collection_extra']),
             'tr_j1': (DB_CALL_V2_TR_J1_JOURNAL_TOTALS, ['begin_date', 'end_date', 'issn', 'collection']),
         },
         'global': {
             'cr_j1': (DB_CALL_V2_CR_J1_TOTALS, ['begin_date', 'end_date', 'collection', 'collection_extra']),
+            'gr_j1': (DB_CALL_V2_GR_J1_TOTALS, ['begin_date', 'end_date', 'collection', 'collection_extra']),
             'lr_j1': (DB_CALL_V2_LR_J1_TOTALS, ['begin_date', 'end_date', 'collection', 'collection_extra']),
             'tr_j1': (DB_CALL_V2_TR_J1_TOTALS, ['begin_date', 'end_date', 'collection']),
         }
     },
     'monthly': {
         'issn': {
+            'gr_j1': (DB_CALL_V2_GR_J1_JOURNAL_MONTHLY, ['begin_date', 'end_date', 'issn', 'collection', 'collection_extra']),
             'lr_j1': (DB_CALL_V2_LR_J1_JOURNAL_MONTHLY, ['begin_date', 'end_date', 'issn', 'collection', 'collection_extra']),
             'tr_j1': (DB_CALL_V2_TR_J1_JOURNAL_MONTHLY, ['begin_date', 'end_date', 'issn', 'collection']),
 
         },
         'global': {
             'cr_j1': (DB_CALL_V2_CR_J1_MONTHLY, ['begin_date', 'end_date', 'collection', 'collection_extra']),
+            'gr_j1': (DB_CALL_V2_GR_J1_MONTHLY, ['begin_date', 'end_date', 'collection', 'collection_extra']),
             'lr_j1': (DB_CALL_V2_LR_J1_MONTHLY, ['begin_date', 'end_date', 'collection', 'collection_extra']),
             'tr_j1': (DB_CALL_V2_TR_J1_MONTHLY, ['begin_date', 'end_date', 'collection']),
         }

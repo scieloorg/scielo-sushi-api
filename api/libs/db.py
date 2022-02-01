@@ -40,7 +40,7 @@ def get_dates_not_ready(begin_date, end_date, collection, report_id):
         else:
             return []
 
-    elif report_id in ('lr_j1',):
+    elif report_id in ('gr_j1', 'lr_j1',):
         if status_column:
             not_read_dates = DBSession.query(AggrStatus).filter(and_(AggrStatus.collection == collection,
                                                                      getattr(AggrStatus, status_column) == 0,

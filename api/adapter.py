@@ -808,3 +808,67 @@ def _tsv_report_lr_j1(result_query, params, exceptions):
             output['rows'].append(line)
 
     return output
+
+
+def _tsv_report_gr_j1(result_query, params, exceptions):
+    begin_date, bd_discard  = cleaner.get_start_and_last_days(params['begin_date'])
+    ed_discard, end_date  = cleaner.get_start_and_last_days(params['end_date'])
+
+    params['begin_date'] = begin_date
+    params['end_date'] = end_date
+
+    result = {'headers': _tsv_header(params, exceptions)}
+
+    journal2values = {}
+    yms = ['Reporting_Period_Total']
+
+    for ri in result_query:
+        journal_key = (ri.journalID, ri.title, ri.publisherName, ri.printISSN, ri.onlineISSN, ri.uri, ri.countryCode)
+
+        tir = getattr(ri, 'totalItemRequests')
+        uir = getattr(ri, 'uniqueItemRequests')
+
+        if journal_key not in journal2values:
+            journal2values[journal_key] = {'Reporting_Period_Total': (0, 0)}
+
+        if params['granularity'] == 'monthly':
+            year_month = cleaner.handle_str_date(ri.yearMonth, str_format=False).strftime('%b-%Y')
+            if year_month not in yms:
+                yms.append(year_month)
+
+            if year_month not in journal2values[journal_key]:
+                journal2values[journal_key][year_month] = 0
+
+            journal2values[journal_key][year_month] = (tir, uir)
+
+        journal2values[journal_key]['Reporting_Period_Total'] = tuple(map(sum, zip(journal2values[journal_key]['Reporting_Period_Total'], (tir, uir))))
+
+    output = {'rows': []}
+    for k in values.TSV_REPORT_DEFAULT_HEADERS:
+        output['rows'].append([k, result['headers'][k]])
+
+    output['rows'].append(values.TSV_REPORT_GR_J1_ROWS + yms)
+
+    for i in journal2values:
+        for j, metric_name in enumerate(['Total_Item_Requests', 'Unique_Item_Requests']):
+            line = [
+                i[1],
+                i[2],
+                '',
+                'SciELO SUSHI API',
+                '',
+                '',
+                i[3],
+                i[4],
+                i[5],
+                i[6],
+                metric_name
+            ]
+
+            for ym in yms:
+                ym_v = str(journal2values[i].get(ym, (0, 0))[j])
+                line.append(ym_v)
+
+            output['rows'].append(line)
+
+    return output

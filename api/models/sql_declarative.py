@@ -1,6 +1,7 @@
-from sqlalchemy import Column, ForeignKey, BOOLEAN, UniqueConstraint, Date
-from sqlalchemy.dialects.mysql import INTEGER, VARCHAR, DATETIME
+from sqlalchemy import Column, ForeignKey, Index, UniqueConstraint
+from sqlalchemy.dialects.mysql import BIGINT, BOOLEAN, DATE, DATETIME, DECIMAL, INTEGER, VARCHAR
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
 
 
 Base = declarative_base()

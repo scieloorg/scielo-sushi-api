@@ -283,3 +283,39 @@ class AggrStatus(Base):
     status_aggr_journal_language_year_month_metric = Column(BOOLEAN, default=False)
     status_aggr_journal_geolocation_year_month_metric = Column(BOOLEAN, default=False)
 
+
+class AggrArticleLanguageYearMonthMetric(Base):
+    __tablename__ = 'aggr_article_language_year_month_metric'
+    __table_args__ = (UniqueConstraint('year_month', 'article_id', 'language_id', name='uni_art_lan_aalymm'),)
+    __table_args__ += (Index('idx_ym_id', 'year_month', 'article_id'),)
+
+    id = Column(INTEGER(unsigned=True), primary_key=True, autoincrement=True)
+
+    collection = Column(VARCHAR(3), nullable=False, primary_key=True)
+    article_id = Column(INTEGER(unsigned=True), ForeignKey('counter_article.id', name='idarticle_aalymm'))
+    language_id = Column(INTEGER(unsigned=True), ForeignKey('counter_article_language.id', name='idlanguage_aalymm'))
+    year_month = Column(VARCHAR(7), nullable=False)
+
+    total_item_requests = Column(INTEGER, nullable=False)
+    total_item_investigations = Column(INTEGER, nullable=False)
+    unique_item_requests = Column(INTEGER, nullable=False)
+    unique_item_investigations = Column(INTEGER, nullable=False)
+
+
+class AggrJournalLanguageYearMonthMetric(Base):
+    __tablename__ = 'aggr_journal_language_year_month_metric'
+    __table_args__ = (UniqueConstraint('year_month', 'journal_id', 'language_id', name='uni_jou_lan_ajlymm'),)
+    __table_args__ += (Index('idx_ym_id', 'year_month', 'journal_id'),)
+
+    id = Column(INTEGER(unsigned=True), primary_key=True, autoincrement=True)
+
+    collection = Column(VARCHAR(3), nullable=False, primary_key=True)
+    journal_id = Column(INTEGER(unsigned=True), ForeignKey('counter_journal.id', name='idjournal_ajlymm'))
+    language_id = Column(INTEGER(unsigned=True), ForeignKey('counter_article_language.id', name='idlanguage_ajlymm'))
+    year_month = Column(VARCHAR(7), nullable=False)
+
+    total_item_requests = Column(INTEGER, nullable=False)
+    total_item_investigations = Column(INTEGER, nullable=False)
+    unique_item_requests = Column(INTEGER, nullable=False)
+    unique_item_investigations = Column(INTEGER, nullable=False)
+

@@ -14,7 +14,7 @@ from pyramid.paster import (
     setup_logging,
 )
 
-from models.sql_declarative import Base, Report, Status, Alert
+from api.models.sql_declarative import Base, Report, Status, Alert
 
 
 def usage(argv):
@@ -43,7 +43,7 @@ def main(argv=sys.argv):
     Base.metadata.create_all(engine)
     DBSession.configure(bind=engine)
 
-    file_counter_report = os.path.join(os.getcwd(), 'api/static/counter_report.json')
+    file_counter_report = os.path.join(os.getcwd(), 'api/static/json/counter_report.json')
     with transaction.manager:
         with open(file_counter_report) as f:
             application_url = settings.get('application.url')

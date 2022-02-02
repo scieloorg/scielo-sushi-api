@@ -3,12 +3,12 @@
 ## Sumário
 
 1. [Introdução](#1-introdução)
-2. [Usos mais comuns](#2-usosmaiscomuns)
-    1. [Tabela de parâmetros](#21-tabeladeparâmetros)
-3. [Exemplos reais](#3-exemplosreais)
+2. [Usos mais comuns](#2-usos-mais-comuns)
+    1. [Tabela de parâmetros](#21-tabela-de-parâmetros)
+3. [Exemplos reais](#3-exemplos-reais)
 4. [Conceitos](#4-conceitos)
-    1. [Métricas COUNTER](#41-métricascounterrelease5)
-    2. [Relatórios disponíveis](#42-relatóriosdisponíveis)
+    1. [Métricas COUNTER](#41-métricas-counter-release-5)
+    2. [Relatórios disponíveis](#42-relatórios-disponíveis)
 
 ---
 

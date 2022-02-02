@@ -16,12 +16,12 @@
 SciELO SUSHI API, disponível em [usage.apis.scielo.org](http://usage.apis.scielo.org/), é uma ferramenta web para a obtenção de dados de acesso, no padrão [Project COUNTER Release 5](https://www.projectcounter.org/counter-release-5/), de documentos e periódicos da Rede SciELO. Essa API é capaz de informar valores de medidas de acesso relacionadas aos artigos publicados nos sites da rede SciELO agregados ou não em conjuntos de periódicos. Estão disponíveis na SciELO SUSHI API seis relatórios que apresentam métricas até quatro métricas de acesso. Para mais detalhes de cada relatório e métrica, acesse a seção Conceitos básicos. As listagens a seguir apresentam os relatórios e métricas disponíveis na SciELO SUSHI API.
 
 **Relatórios**
-- [Item Master Report A1](#item-master-report-a1): acessos por documento
-- [Title Master Report J1](#title-master-report-j1): acessos por periódico
-- [Title Master Report J4](#title-master-report-j4): acessos por periódico considerando ano de publicação dos documentos
-- [Collection Report J1](#collection-report-j1): acessos por coleção SciELO
-- [Geolocation Report J1](#geolocation-report-j1): acessos por periódico considerando o país origiário do acesso
-- [Language Report J1](#language-report-j1): acessos por periódico considerando o idioma dos documentos
+- [Item Master Report A1](#item-master-report-a1-ir_a1): acessos por documento
+- [Title Master Report J1](#title-master-report-j1-tr_j1): acessos por periódico
+- [Title Master Report J4](#title-master-report-j4-tr_j4): acessos por periódico considerando ano de publicação dos documentos
+- [Collection Report J1](#collection-report-j1-cr_j1): acessos por coleção SciELO
+- [Geolocation Report J1](#geolocation-report-j1-gr_j1): acessos por periódico considerando o país origiário do acesso
+- [Language Report J1](#language-report-j1-lr_j1): acessos por periódico considerando o idioma dos documentos
 
 **Métricas**
 - [Total Item Investigations](#total-item-investigations)

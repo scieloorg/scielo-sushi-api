@@ -24,12 +24,12 @@ BEGIN
 		`year_month` BETWEEN beginDate AND endDate
 	GROUP BY
 		journalID,
-		countryCode,
-		yearMonth
+		yearMonth,
+		countryCode
 	ORDER BY
 		journalID,
-		countryCode,
-		yearMonth
+		yearMonth,
+		countryCode
 	;
 END $$
 DELIMITER ;
@@ -97,12 +97,12 @@ BEGIN
 	    (online_issn <> '' OR print_issn <> '')
 	GROUP BY
 	 	journalID,
-	 	countryCode,
-	 	yearMonth
+	 	yearMonth,
+		countryCode
 	ORDER BY
 		journalID,
-		countryCode,
-		yearMonth
+		yearMonth,
+		countryCode
 	;
 END $$
 DELIMITER ;

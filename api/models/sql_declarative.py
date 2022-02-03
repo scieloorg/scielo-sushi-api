@@ -322,13 +322,13 @@ class AggrJournalLanguageYearMonthMetric(Base):
 
 class AggrJournalGeolocationYearMonthMetric(Base):
     __tablename__ = 'aggr_journal_geolocation_year_month_metric'
-    __table_args__ = (UniqueConstraint('year_month', 'journal_id', 'country_code', name='uni_jou_geo_ajlymm'),)
+    __table_args__ = (UniqueConstraint('year_month', 'journal_id', 'country_code', name='uni_jou_geo_ajgymm'),)
     __table_args__ += (Index('idx_ym_id', 'year_month', 'journal_id'),)
 
     id = Column(INTEGER(unsigned=True), primary_key=True, autoincrement=True)
 
     collection = Column(VARCHAR(3), nullable=False, primary_key=True)
-    journal_id = Column(INTEGER(unsigned=True), ForeignKey('counter_journal.id', name='idjournal_ajlymm'))
+    journal_id = Column(INTEGER(unsigned=True), ForeignKey('counter_journal.id', name='idjournal_ajgymm'))
     country_code = Column(VARCHAR(4), nullable=False)
     year_month = Column(VARCHAR(7), nullable=False)
 

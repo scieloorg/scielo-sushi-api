@@ -13,7 +13,7 @@
 ---
 
 ## 1. Introdução
-SciELO SUSHI API, disponível em [usage.apis.scielo.org](http://usage.apis.scielo.org/), é uma ferramenta web para a obtenção de dados de acesso, no padrão [Project COUNTER Release 5](https://www.projectcounter.org/counter-release-5/), de documentos e periódicos da Rede SciELO. Essa API é capaz de informar valores de medidas de acesso relacionadas aos artigos publicados nos sites da rede SciELO agregados ou não em conjuntos de periódicos. Estão disponíveis na SciELO SUSHI API seis relatórios que apresentam métricas até quatro métricas de acesso. Para mais detalhes de cada relatório e métrica, acesse a seção Conceitos básicos. As listagens a seguir apresentam os relatórios e métricas disponíveis na SciELO SUSHI API.
+SciELO SUSHI API, disponível em [usage.apis.scielo.org](http://usage.apis.scielo.org/), é uma ferramenta web para a obtenção de dados de acesso, no padrão [Project COUNTER Release 5](https://www.projectcounter.org/counter-release-5/), de documentos e periódicos da Rede SciELO. Essa API é capaz de informar valores de medidas de acesso relacionadas aos artigos publicados nos sites da rede SciELO agregados ou não em conjuntos de periódicos. Estão disponíveis na SciELO SUSHI API seis relatórios que apresentam até quatro métricas de acesso. Para mais detalhes de cada relatório e métrica, acesse a seção [Conceitos](#4-conceitos). As listagens a seguir apresentam os relatórios e métricas disponíveis na SciELO SUSHI API.
 
 **Relatórios**
 - [Item Master Report A1](#item-master-report-a1-ir_a1): acessos por documento

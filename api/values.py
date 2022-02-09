@@ -38,7 +38,7 @@ COLLECTION_ACRONYM_TO_COLLECTION_NAME = {
 }
 
 URI_REQUIRED_PARAMETERS = set(['begin_date', 'customer', 'end_date',])
-URI_OPTIONAL_PARAMETERS = set(['api', 'collection', 'customer', 'fmt', 'granularity', 'issn', 'pid',])
+URI_OPTIONAL_PARAMETERS = set(['api', 'collection', 'customer', 'fmt', 'granularity', 'issn', 'pid', 'yop'])
 URI_SUPPORTED_PARAMETERS = URI_REQUIRED_PARAMETERS.union(URI_OPTIONAL_PARAMETERS)
 
 REGEX_DATE_FORMAT = r'\d{4}\-\d{2}($|\-\d{2}$)'

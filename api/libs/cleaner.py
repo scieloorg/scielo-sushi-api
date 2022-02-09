@@ -53,6 +53,7 @@ def clean_parameters(required_params, optional_params):
         'report_data': '',
         'collection':  cleaned_collection_acronym,
         'api': clean_api(optional_params.get('api', '')),
+        'yop': optional_params.get('yop', ''),
     }
 
     return cleaned_params

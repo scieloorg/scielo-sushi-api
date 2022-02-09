@@ -38,7 +38,7 @@ COLLECTION_ACRONYM_TO_COLLECTION_NAME = {
 }
 
 URI_REQUIRED_PARAMETERS = set(['begin_date', 'customer', 'end_date',])
-URI_OPTIONAL_PARAMETERS = set(['api', 'collection', 'customer', 'fmt', 'granularity', 'issn', 'pid',])
+URI_OPTIONAL_PARAMETERS = set(['api', 'collection', 'customer', 'fmt', 'granularity', 'issn', 'pid', 'yop'])
 URI_SUPPORTED_PARAMETERS = URI_REQUIRED_PARAMETERS.union(URI_OPTIONAL_PARAMETERS)
 
 REGEX_DATE_FORMAT = r'\d{4}\-\d{2}($|\-\d{2}$)'
@@ -71,8 +71,18 @@ DB_CALL_V2_TR_J1_JOURNAL_MONTHLY = 'CALL V2_TR_J1_JOURNAL_MONTHLY("%s", "%s", "%
 DB_CALL_V2_LR_J1_JOURNAL_TOTALS = 'CALL V2_LR_J1_JOURNAL_TOTALS("%s", "%s", "%s", "%s", "%s")'
 DB_CALL_V2_LR_J1_JOURNAL_MONTHLY = 'CALL V2_LR_J1_JOURNAL_MONTHLY("%s", "%s", "%s", "%s", "%s")'
 
+DB_CALL_V2_LR_J4_JOURNAL_TOTALS = 'CALL V2_LR_J4_JOURNAL_TOTALS("%s", "%s", "%s", "%s", "%s")'
+DB_CALL_V2_LR_J4_JOURNAL_MONTHLY = 'CALL V2_LR_J4_JOURNAL_MONTHLY("%s", "%s", "%s", "%s", "%s")'
+DB_CALL_V2_LR_J4_JOURNAL_YOP_TOTALS = 'CALL V2_LR_J4_JOURNAL_YOP_TOTALS("%s", "%s", "%s", "%s", "%s", "%s")'
+DB_CALL_V2_LR_J4_JOURNAL_YOP_MONTHLY = 'CALL V2_LR_J4_JOURNAL_YOP_MONTHLY("%s", "%s", "%s", "%s", "%s", "%s")'
+
 DB_CALL_V2_GR_J1_JOURNAL_TOTALS = 'CALL V2_GR_J1_JOURNAL_TOTALS("%s", "%s", "%s", "%s", "%s")'
 DB_CALL_V2_GR_J1_JOURNAL_MONTHLY = 'CALL V2_GR_J1_JOURNAL_MONTHLY("%s", "%s", "%s", "%s", "%s")'
+
+DB_CALL_V2_GR_J4_JOURNAL_TOTALS = 'CALL V2_GR_J4_JOURNAL_TOTALS("%s", "%s", "%s", "%s", "%s")'
+DB_CALL_V2_GR_J4_JOURNAL_MONTHLY = 'CALL V2_GR_J4_JOURNAL_MONTHLY("%s", "%s", "%s", "%s", "%s")'
+DB_CALL_V2_GR_J4_JOURNAL_YOP_TOTALS = 'CALL V2_GR_J4_JOURNAL_YOP_TOTALS("%s", "%s", "%s", "%s", "%s", "%s")'
+DB_CALL_V2_GR_J4_JOURNAL_YOP_MONTHLY = 'CALL V2_GR_J4_JOURNAL_YOP_MONTHLY("%s", "%s", "%s", "%s", "%s", "%s")'
 
 DB_CALL_V2_TR_J1_TOTALS = 'CALL V2_TR_J1_TOTALS("%s", "%s", "%s")'
 DB_CALL_V2_TR_J1_MONTHLY = 'CALL V2_TR_J1_MONTHLY("%s", "%s", "%s")'
@@ -80,8 +90,18 @@ DB_CALL_V2_TR_J1_MONTHLY = 'CALL V2_TR_J1_MONTHLY("%s", "%s", "%s")'
 DB_CALL_V2_LR_J1_TOTALS = 'CALL V2_LR_J1_TOTALS("%s", "%s", "%s", "%s")'
 DB_CALL_V2_LR_J1_MONTHLY = 'CALL V2_LR_J1_MONTHLY("%s", "%s", "%s", "%s")'
 
+DB_CALL_V2_LR_J4_TOTALS = 'CALL V2_LR_J4_TOTALS("%s", "%s", "%s", "%s")'
+DB_CALL_V2_LR_J4_MONTHLY = 'CALL V2_LR_J4_MONTHLY("%s", "%s", "%s", "%s")'
+DB_CALL_V2_LR_J4_YOP_TOTALS = 'CALL V2_LR_J4_YOP_TOTALS("%s", "%s", "%s", "%s", "%s")'
+DB_CALL_V2_LR_J4_YOP_MONTHLY = 'CALL V2_LR_J4_YOP_MONTHLY("%s", "%s", "%s", "%s", "%s")'
+
 DB_CALL_V2_GR_J1_TOTALS = 'CALL V2_GR_J1_TOTALS("%s", "%s", "%s", "%s")'
 DB_CALL_V2_GR_J1_MONTHLY = 'CALL V2_GR_J1_MONTHLY("%s", "%s", "%s", "%s")'
+
+DB_CALL_V2_GR_J4_TOTALS = 'CALL V2_GR_J4_TOTALS("%s", "%s", "%s", "%s")'
+DB_CALL_V2_GR_J4_MONTHLY = 'CALL V2_GR_J4_MONTHLY("%s", "%s", "%s", "%s")'
+DB_CALL_V2_GR_J4_YOP_TOTALS = 'CALL V2_GR_J4_YOP_TOTALS("%s", "%s", "%s", "%s", "%s")'
+DB_CALL_V2_GR_J4_YOP_MONTHLY = 'CALL V2_GR_J4_YOP_MONTHLY("%s", "%s", "%s", "%s", "%s")'
 
 DB_CALL_V2_CR_J1_TOTALS = 'CALL V2_CR_J1_TOTALS("%s", "%s", "%s", "%s")'
 DB_CALL_V2_CR_J1_MONTHLY = 'CALL V2_CR_J1_MONTHLY("%s", "%s", "%s", "%s")'
@@ -92,7 +112,9 @@ REPORT_ID_TO_COLUMN_STATUS = {
     'tr_j1': 'status_sushi_journal_metric',
     'tr_j4': 'status_sushi_journal_yop_metric',
     'lr_j1': 'status_aggr_journal_language_year_month_metric',
+    'lr_j4': 'status_aggr_journal_language_yop_year_month_metric',
     'gr_j1': 'status_aggr_journal_geolocation_year_month_metric',
+    'gr_j4': 'status_aggr_journal_geolocation_yop_year_month_metric',
 }
 
 GRANULARITY_MODE_REPORT_TO_PROCEDURE_AND_PARAMETERS = {
@@ -136,29 +158,53 @@ V2_GRANULARITY_MODE_REPORT_TO_PROCEDURE_AND_PARAMETERS = {
     'totals': {
         'issn': {
             'gr_j1': (DB_CALL_V2_GR_J1_JOURNAL_TOTALS, ['begin_date', 'end_date', 'issn', 'collection', 'collection_extra']),
+            'gr_j4': (DB_CALL_V2_GR_J4_JOURNAL_TOTALS, ['begin_date', 'end_date', 'issn', 'collection', 'collection_extra']),
             'lr_j1': (DB_CALL_V2_LR_J1_JOURNAL_TOTALS, ['begin_date', 'end_date', 'issn', 'collection', 'collection_extra']),
+            'lr_j4': (DB_CALL_V2_LR_J4_JOURNAL_TOTALS, ['begin_date', 'end_date', 'issn', 'collection', 'collection_extra']),
             'tr_j1': (DB_CALL_V2_TR_J1_JOURNAL_TOTALS, ['begin_date', 'end_date', 'issn', 'collection']),
+            'yop': {
+                'gr_j4': (DB_CALL_V2_GR_J4_JOURNAL_YOP_TOTALS, ['begin_date', 'end_date', 'issn', 'collection', 'collection_extra', 'yop']),
+                'lr_j4': (DB_CALL_V2_LR_J4_JOURNAL_YOP_TOTALS, ['begin_date', 'end_date', 'issn', 'collection', 'collection_extra', 'yop']),
+            }
         },
         'global': {
             'cr_j1': (DB_CALL_V2_CR_J1_TOTALS, ['begin_date', 'end_date', 'collection', 'collection_extra']),
             'gr_j1': (DB_CALL_V2_GR_J1_TOTALS, ['begin_date', 'end_date', 'collection', 'collection_extra']),
+            'gr_j4': (DB_CALL_V2_GR_J4_TOTALS, ['begin_date', 'end_date', 'collection', 'collection_extra']),
             'lr_j1': (DB_CALL_V2_LR_J1_TOTALS, ['begin_date', 'end_date', 'collection', 'collection_extra']),
+            'lr_j4': (DB_CALL_V2_LR_J4_TOTALS, ['begin_date', 'end_date', 'collection', 'collection_extra']),
             'tr_j1': (DB_CALL_V2_TR_J1_TOTALS, ['begin_date', 'end_date', 'collection']),
+            'yop': {
+                'gr_j4': (DB_CALL_V2_GR_J4_YOP_TOTALS, ['begin_date', 'end_date', 'collection', 'collection_extra', 'yop']),
+                'lr_j4': (DB_CALL_V2_LR_J4_YOP_TOTALS, ['begin_date', 'end_date', 'collection', 'collection_extra', 'yop']),
+            }
         }
     },
     'monthly': {
         'issn': {
             'gr_j1': (DB_CALL_V2_GR_J1_JOURNAL_MONTHLY, ['begin_date', 'end_date', 'issn', 'collection', 'collection_extra']),
+            'gr_j4': (DB_CALL_V2_GR_J4_JOURNAL_MONTHLY, ['begin_date', 'end_date', 'issn', 'collection', 'collection_extra']),
             'lr_j1': (DB_CALL_V2_LR_J1_JOURNAL_MONTHLY, ['begin_date', 'end_date', 'issn', 'collection', 'collection_extra']),
+            'lr_j4': (DB_CALL_V2_LR_J4_JOURNAL_MONTHLY, ['begin_date', 'end_date', 'issn', 'collection', 'collection_extra']),
             'tr_j1': (DB_CALL_V2_TR_J1_JOURNAL_MONTHLY, ['begin_date', 'end_date', 'issn', 'collection']),
+            'yop': {
+                'gr_j4': (DB_CALL_V2_GR_J4_JOURNAL_YOP_MONTHLY, ['begin_date', 'end_date', 'issn', 'collection', 'collection_extra', 'yop']),
+                'lr_j4': (DB_CALL_V2_LR_J4_JOURNAL_YOP_MONTHLY, ['begin_date', 'end_date', 'issn', 'collection', 'collection_extra', 'yop']),
+            }
 
         },
         'global': {
             'cr_j1': (DB_CALL_V2_CR_J1_MONTHLY, ['begin_date', 'end_date', 'collection', 'collection_extra']),
             'gr_j1': (DB_CALL_V2_GR_J1_MONTHLY, ['begin_date', 'end_date', 'collection', 'collection_extra']),
+            'gr_j4': (DB_CALL_V2_GR_J4_MONTHLY, ['begin_date', 'end_date', 'collection', 'collection_extra']),
             'lr_j1': (DB_CALL_V2_LR_J1_MONTHLY, ['begin_date', 'end_date', 'collection', 'collection_extra']),
+            'lr_j4': (DB_CALL_V2_LR_J4_MONTHLY, ['begin_date', 'end_date', 'collection', 'collection_extra']),
             'tr_j1': (DB_CALL_V2_TR_J1_MONTHLY, ['begin_date', 'end_date', 'collection']),
-        }
+            'yop': {
+                'gr_j4': (DB_CALL_V2_GR_J4_YOP_MONTHLY, ['begin_date', 'end_date', 'collection', 'collection_extra', 'yop']),
+                'lr_j4': (DB_CALL_V2_LR_J4_YOP_MONTHLY, ['begin_date', 'end_date', 'collection', 'collection_extra', 'yop']),
+            }
+        },
     }
 }
 
@@ -219,6 +265,21 @@ TSV_REPORT_LR_J1_ROWS = [
     'Metric_Type',
 ]
 
+TSV_REPORT_LR_J4_ROWS = [
+    'Title',
+    'Publisher',
+    'Publisher_ID',
+    'Platform',
+    'DOI',
+    'Proprietary_ID',
+    'Print_ISSN',
+    'Online_ISSN',
+    'URI',
+    'Article_Language',
+    'Article_YOP',
+    'Metric_Type',
+]
+
 TSV_REPORT_GR_J1_ROWS = [
     'Title',
     'Publisher',
@@ -230,6 +291,21 @@ TSV_REPORT_GR_J1_ROWS = [
     'Online_ISSN',
     'URI',
     'Access_Country_Code',
+    'Metric_Type',
+]
+
+TSV_REPORT_GR_J4_ROWS = [
+    'Title',
+    'Publisher',
+    'Publisher_ID',
+    'Platform',
+    'DOI',
+    'Proprietary_ID',
+    'Print_ISSN',
+    'Online_ISSN',
+    'URI',
+    'Access_Country_Code',
+    'Article_YOP',
     'Metric_Type',
 ]
 

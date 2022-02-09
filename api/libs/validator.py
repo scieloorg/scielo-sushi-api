@@ -31,6 +31,13 @@ def is_valid_pid(pid):
     return True
 
 
+def is_valid_yop(yop):
+    if yop and yop.isdigit() and int(yop) > 0:
+        return True
+
+    return False
+
+
 def validate_date_format(param_date, name):
     if not param_date:
         return errors.error_required_filter_missing(name)
@@ -89,5 +96,11 @@ def validate_parameters(params, expected_params_list=[]):
             validation_value = errors.error_invalid_report_filter_value(params['pid'], severity='error')
             if isinstance(validation_value, dict):
                 validation_results['errors'].append(('pid', validation_value))
+
+    if 'yop' in params:
+        if not is_valid_yop(params['yop']):
+            validation_value = errors.error_invalid_report_filter_value(params['yop'], severity='error')
+            if isinstance(validation_value, dict):
+                validation_results['errors'].append(('yop', validation_value))
 
     return validation_results

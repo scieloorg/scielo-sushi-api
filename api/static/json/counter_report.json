@@ -82,7 +82,28 @@
       "Report_ID": "lr_j1",
       "Release": "5",
       "Report_Description": "Reports on usage of journal content for all Metric_Types broken down by Article_Language.",
-      "Path": "/reports/tr_j1l"
+      "Path": "/reports/lr_j1"
+    },
+    "lr_j4": {
+      "Report_Name": "Journal Requests by Article Language and YOP (Excluding OA_Gold)",
+      "Report_ID": "lr_j4",
+      "Release": "5",
+      "Report_Description": "Reports on usage of journal content for all Metric_Types broken down by Article_Language and year of publication (YOP).",
+      "Path": "/reports/lr_j4"
+    },
+    "gr_j1": {
+      "Report_Name": "Journal Requests by Country Code of Access (Excluding OA_Gold)",
+      "Report_ID": "gr_j1",
+      "Release": "5",
+      "Report_Description": "Reports on usage of journal content for all Metric_Types broken down by Country_Code.",
+      "Path": "/reports/gr_j1"
+    },
+    "gr_j4": {
+      "Report_Name": "Journal Requests by Country Code of Access and YOP (Excluding OA_Gold)",
+      "Report_ID": "gr_j4",
+      "Release": "5",
+      "Report_Description": "Reports on usage of journal content for all Metric_Types broken down by Country_Code and year of publication (YOP).",
+      "Path": "/reports/gr_j4"
     },
     "ir_a1": {
       "Report_Name": "Journal Article Requests",

@@ -28,14 +28,19 @@ def check_exceptions(report_id, params_names, cleaned_params):
 def check_report_and_parameters_compatibility(report_id, params):
     invalid_params = []
 
-    if report_id == 'cr_j1':
+    if report_id == 'ir_a1':
         for i in params:
-            if i in ['issn', 'pid']:
+            if i in ['yop',]:
                 invalid_params.append(i)
 
-    if report_id in ['tr_j1', 'tr_j4']:
+    if report_id == 'cr_j1':
         for i in params:
-            if i in ['pid']:
+            if i in ['issn', 'pid', 'yop']:
+                invalid_params.append(i)
+
+    if report_id in ['tr_j1', 'tr_j4', 'lr_j1', 'gr_j1']:
+        for i in params:
+            if i in ['pid', 'yop']:
                 invalid_params.append(i)
 
     return invalid_params
@@ -79,6 +84,14 @@ def get_granularity_and_mode(params):
     return granularity, mode
 
 
+def check_filter_by_yop(report_id, params):
+    yop = params.get('yop', '')
+
+    if report_id in ['lr_j4', 'gr_j4',]:
+        if yop.isdigit():
+            return True
+
+
 def is_empty_report(report_items):
     if len(report_items) == 0:
         return True
@@ -108,7 +121,7 @@ def format_error_messages(exceptions: list):
 
 
 def set_collection_extra(report_id, attrs):
-    if report_id in ('cr_j1', 'gr_j1', 'lr_j1',):
+    if report_id in ('cr_j1', 'gr_j1', 'lr_j1', 'gr_j4', 'lr_j4'):
         if attrs['collection'] == 'scl':
             attrs.update({'collection_extra': 'nbr'})
 
@@ -123,11 +136,14 @@ def wrapper_call_report(report_id, params):
     granularity, mode = get_granularity_and_mode(params)
 
     if params['api'] == 'v2':
-        procedure_name, params_names = values.V2_GRANULARITY_MODE_REPORT_TO_PROCEDURE_AND_PARAMETERS.get(granularity, {}).get(mode, {}).get(report_id, ('', []))
+        if check_filter_by_yop(report_id, params):
+            procedure_name, params_names = values.V2_GRANULARITY_MODE_REPORT_TO_PROCEDURE_AND_PARAMETERS.get(granularity, {}).get(mode, {}).get('yop', {}).get(report_id, ('', []))
+        else:
+            procedure_name, params_names = values.V2_GRANULARITY_MODE_REPORT_TO_PROCEDURE_AND_PARAMETERS.get(granularity, {}).get(mode, {}).get(report_id, ('', []))
     else:
         procedure_name, params_names = values.GRANULARITY_MODE_REPORT_TO_PROCEDURE_AND_PARAMETERS.get(granularity, {}).get(mode, {}).get(report_id, ('', []))
 
-    if report_id in ('gr_j1', 'lr_j1',):
+    if report_id in ('gr_j1', 'lr_j1', 'gr_j4', 'lr_j4'):
         params['begin_date'] = cleaner.handle_str_date(params['begin_date'], year_month_only=True)
         params['end_date'] = cleaner.handle_str_date(params['end_date'], year_month_only=True)
 

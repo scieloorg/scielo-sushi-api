@@ -22,7 +22,7 @@ SciELO SUSHI API, disponível em [usage.apis.scielo.org](http://usage.apis.sciel
 - [Collection Report J1](#collection-report-j1-cr_j1): acessos por coleção SciELO
 - [Geolocation Report J1](#geolocation-report-j1-gr_j1): acessos por periódico considerando o país origiário do acesso
 - [Geolocation Report J4](#geolocation-report-j4-gr_j4): acessos por periódico considerando o país origiário do acesso e o ano de publicação dos documentos
-- [Language Report J1](#language-report-j4-lr_j1): acessos por periódico considerando o idioma dos documentos
+- [Language Report J1](#language-report-j1-lr_j1): acessos por periódico considerando o idioma dos documentos
 - [Language Report J4](#language-report-j4-lr_j4): acessos por periódico considerando o idioma e o ano de publicação dos documentos
 
 **Métricas**

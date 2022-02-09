@@ -265,6 +265,21 @@ TSV_REPORT_LR_J1_ROWS = [
     'Metric_Type',
 ]
 
+TSV_REPORT_LR_J4_ROWS = [
+    'Title',
+    'Publisher',
+    'Publisher_ID',
+    'Platform',
+    'DOI',
+    'Proprietary_ID',
+    'Print_ISSN',
+    'Online_ISSN',
+    'URI',
+    'Article_Language',
+    'Article_YOP',
+    'Metric_Type',
+]
+
 TSV_REPORT_GR_J1_ROWS = [
     'Title',
     'Publisher',
@@ -276,6 +291,21 @@ TSV_REPORT_GR_J1_ROWS = [
     'Online_ISSN',
     'URI',
     'Access_Country_Code',
+    'Metric_Type',
+]
+
+TSV_REPORT_GR_J4_ROWS = [
+    'Title',
+    'Publisher',
+    'Publisher_ID',
+    'Platform',
+    'DOI',
+    'Proprietary_ID',
+    'Print_ISSN',
+    'Online_ISSN',
+    'URI',
+    'Access_Country_Code',
+    'Article_YOP',
     'Metric_Type',
 ]
 

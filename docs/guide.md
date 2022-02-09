@@ -13,7 +13,7 @@
 ---
 
 ## 1. Introdução
-SciELO SUSHI API, disponível em [usage.apis.scielo.org](http://usage.apis.scielo.org/), é uma ferramenta web para a obtenção de dados de acesso, no padrão [Project COUNTER Release 5](https://www.projectcounter.org/counter-release-5/), de documentos e periódicos da Rede SciELO. Essa API é capaz de informar valores de medidas de acesso relacionadas aos artigos publicados nos sites da rede SciELO agregados ou não em conjuntos de periódicos. Estão disponíveis na SciELO SUSHI API seis relatórios que apresentam até quatro métricas de acesso. Para mais detalhes de cada relatório e métrica, acesse a seção [Conceitos](#4-conceitos). As listagens a seguir apresentam os relatórios e métricas disponíveis na SciELO SUSHI API.
+SciELO SUSHI API, disponível em [usage.apis.scielo.org](http://usage.apis.scielo.org/), é uma ferramenta web para a obtenção de dados de acesso, no padrão [Project COUNTER Release 5](https://www.projectcounter.org/counter-release-5/), de documentos e periódicos da Rede SciELO. Essa API é capaz de informar valores de medidas de acesso relacionadas aos artigos publicados nos sites da rede SciELO agregados ou não em conjuntos de periódicos. Estão disponíveis na SciELO SUSHI API oito relatórios que apresentam até quatro métricas de acesso. Para mais detalhes de cada relatório e métrica, acesse a seção [Conceitos](#4-conceitos). As listagens a seguir apresentam os relatórios e métricas disponíveis na SciELO SUSHI API.
 
 **Relatórios**
 - [Item Master Report A1](#item-master-report-a1-ir_a1): acessos por documento
@@ -21,7 +21,9 @@ SciELO SUSHI API, disponível em [usage.apis.scielo.org](http://usage.apis.sciel
 - [Title Master Report J4](#title-master-report-j4-tr_j4): acessos por periódico considerando ano de publicação dos documentos
 - [Collection Report J1](#collection-report-j1-cr_j1): acessos por coleção SciELO
 - [Geolocation Report J1](#geolocation-report-j1-gr_j1): acessos por periódico considerando o país origiário do acesso
-- [Language Report J1](#language-report-j1-lr_j1): acessos por periódico considerando o idioma dos documentos
+- [Geolocation Report J4](#geolocation-report-j4-gr_j4): acessos por periódico considerando o país origiário do acesso e o ano de publicação dos documentos
+- [Language Report J1](#language-report-j4-lr_j1): acessos por periódico considerando o idioma dos documentos
+- [Language Report J4](#language-report-j4-lr_j4): acessos por periódico considerando o idioma e o ano de publicação dos documentos
 
 **Métricas**
 - [Total Item Investigations](#total-item-investigations)
@@ -36,7 +38,7 @@ De forma resumida, os usos mais comuns que os diferentes interessados possam ter
 
 - `http://usage.apis.scielo.org/reports/cr_j1?begin_date=2018-01&end_date=2021-12&api=v2&collection=<ACRÔNIMO>&fmt=tsv`
 
-Um **editor de periódico** pode estar interessado em visualizar os resultados de acesso ao seu periódico. É possível consultar informações gerais, bem como agregadas por ano de publicação e idioma dos documentos. Também é possível obter os resultados de acesso considerando os países de origem de onde partiram os acessos. Há quatro relatórios de interesse: **TR_J1**, **TR_J4**, **LR_J1** e **GR_J1**. É preciso informar o parâmetro "api=v2", o acrônimo da coleção (parâmetro "collection") e o valor do ISSN, tal como em:
+Um **editor de periódico** pode estar interessado em visualizar os resultados de acesso ao seu periódico. É possível consultar informações gerais, bem como agregadas por ano de publicação e idioma dos documentos. Também é possível obter os resultados de acesso considerando os países de origem de onde partiram os acessos. Há seis relatórios de interesse: **TR_J1**, **TR_J4**, **LR_J1**, **LR_J4**, **GR_J1** e **GR_J4**. É mandatório informar o parâmetro "api=v2" para esses seis relatórios. Outro parâmetro importante é o acrônimo da coleção (denominado "collection"). Para dados de um periódico específico, pode-ser informar o valor do ISSN. Para relatórios que consideram o ano de publicação, pode-se informar o parâmetro "yop". Seguem exemplos de consultas:
 
 - `http://usage.apis.scielo.org/reports/tr_j1?begin_date=2021-06&end_date=2021-12&api=v2&collection=<ACRÔNIMO>&issn=<ISSN>&fmt=tsv`
 
@@ -44,7 +46,11 @@ Um **editor de periódico** pode estar interessado em visualizar os resultados d
 
 - `http://usage.apis.scielo.org/reports/lr_j1?begin_date=2021-06&end_date=2021-12&api=v2&collection=<ACRÔNIMO>&issn=<ISSN>&fmt=tsv`
 
+- `http://usage.apis.scielo.org/reports/lr_j4?begin_date=2021-06&end_date=2021-12&api=v2&collection=<ACRÔNIMO>&issn=<ISSN>&yop=<ANO>&fmt=tsv`
+
 - `http://usage.apis.scielo.org/reports/gr_j1?begin_date=2021-06&end_date=2021-12&api=v2&collection=<ACRÔNIMO>&issn=<ISSN>&fmt=tsv`
+
+- `http://usage.apis.scielo.org/reports/gr_j4?begin_date=2021-06&end_date=2021-12&api=v2&collection=<ACRÔNIMO>&issn=<ISSN>&yop=<ANO>&fmt=tsv`
 
 ### 2.1. Tabela de parâmetros
 
@@ -57,6 +63,7 @@ Um **editor de periódico** pode estar interessado em visualizar os resultados d
 | `pid` | Código PID v2 ou v3 de documento SciELO | `S0000-00000000000000000` ou 23 letras ou dígitos | N/A | Não | Este parâmetro é aplicável apenas em relatórios `IR_A1` |
 | `collection` | Acrônimo de coleção da Rede SciELO | 3 letras minúsculas | `scl` | Não | N/A |
 | `fmt` | Formato de saída dos resultados | `json` ou `tsv` | `json` | Não | N/A |
+| `yop` | Ano de publicação dos documentos | `AAAA` | `json` | Não | Este parâmetro é aplicável apenas em relatórios `GR_J4` e `LR_J4` |
 | `api` | Versão da API utilizada | `v1` ou `v2` | `v1` | O parâmetro valorado com a versão 2 da api (`api=v2`) é obrigatório para os relatórios `CR_J1`, `GR_J1` e `LR_J1`  | N/A |
 
 
@@ -78,8 +85,8 @@ A SciELO SUSHI API pode ser acessada por meio do link [usage.apis.scielo.org](ht
                 "Alert": "Reports DR, DR_D1, DR_D2, PR, PR_1, TR_J2 and TR_J3 are currently unavailable."
             },
             {
-                "Date_Time": "2022-02-02 10:02:00",
-                "Alert": "Reports TR_J1, TR_J4, IR_A1, GR_J1, LR_J1 are available."
+                "Date_Time": "2022-02-09 13:07:00",
+                "Alert": "Reports TR_J1, TR_J4, IR_A1, GR_J1, GR_J4, LR_J1 and LR_J4 are available."
             }
         ]
     }
@@ -300,28 +307,36 @@ Para visualizar dados de acesso de uma coleção inteira para o período de 2021
 }
 ```
 
-**Figura 1**. Imagem ilustrativa de um exemplo de relatório **CR_J1** em formato TSV. 
+**Figura 1**. Imagem ilustrativa de um exemplo de relatório **CR_J1** em formato TSV.
 
 ![Relatório CR_J1](cr_j1.png "Relatório CR_J1")
 
 
 Para visualizar dados de acesso de apenas um periódico para o período de 2021-06 a 2021-12 (em formato `tsv`), acesse [http://usage.apis.scielo.org/reports/tr_j1?begin_date=2021-06&end_date=2021-12&api=v2&collection=nbr&issn=0102-8650&fmt=tsv](http://usage.apis.scielo.org/reports/tr_j1?begin_date=2021-06&end_date=2021-12&api=v2&collection=nbr&issn=0102-8650&fmt=tsv). Observe que também foi utilizado o parâmetro `api=v2`. Isso faz com que coleções como a SciELO Brasil, que possui dois sites (old.scielo.br e scielo.br) some os resultados de acesso para as diferentes representações existents.
 
-**Figura 2**. Imagem ilustrativa de um exemplo de relatório **TR_J1** em formato TSV. 
+**Figura 2**. Imagem ilustrativa de um exemplo de relatório **TR_J1** em formato TSV.
 
 ![Relatório TR_J1](tr_j1.png "Relatório TR_J1")
 
 Para visualizar dados de acesso de apenas um periódico, agregado pelo idioma dos documentos, para o período de 2021-06 a 2021-12 (em formato `tsv`), acesse [http://usage.apis.scielo.org/reports/lr_j1?begin_date=2021-06&end_date=2021-12&api=v2&collection=nbr&issn=0102-8650&fmt=tsv](http://usage.apis.scielo.org/reports/lr_j1?begin_date=2021-06&end_date=2021-12&api=v2&collection=nbr&issn=0102-8650&fmt=tsv). Observe que também foi utilizado o parâmetro `api=v2`, que possui o mesmo efeito indicado no exemplo anterior.
 
-**Figura 3**. Imagem ilustrativa de um exemplo de relatório **LR_J1** em formato TSV. 
+**Figura 3**. Imagem ilustrativa de um exemplo de relatório **LR_J1** em formato TSV.
 
 ![Relatório LR_J1](lr_j1.png "Relatório LR_J1")
 
 Para visualizar dados de acesso de apenas um periódico, agregado pelo país de origem dos acessos, para o período de 2018-01 a 2018-03 (em formato `tsv`), acesse [http://usage.apis.scielo.org/reports/gr_j1?begin_date=2018-01&end_date=2018-03&api=v2&collection=nbr&issn=0102-8650&fmt=tsv](http://usage.apis.scielo.org/reports/gr_j1?begin_date=2018-01&end_date=2018-03&api=v2&collection=nbr&issn=0102-8650&fmt=tsv). Observe que também foi utilizado o parâmetro `api=v2`, que possui o mesmo efeito indicado no exemplo anterior.
 
-**Figura 4**. Imagem ilustrativa de um exemplo de relatório **GR_J1** em formato TSV. 
+**Figura 4**. Imagem ilustrativa de um exemplo de relatório **GR_J1** em formato TSV.
 
 ![Relatório GR_J1](gr_j1.png "Relatório GR_J1")
+
+**Figura 5**. Imagem ilustrativa de um exemplo de relatório **LR_J4** em formato TSV.
+
+![Relatório LR_J4](lr_j4.png "Relatório LR_J4")
+
+**Figura 6**. Imagem ilustrativa de um exemplo de relatório **GR_J4** em formato TSV.
+
+![Relatório GR_J4](gr_j4.png "Relatório GR_J4")
 
 ---
 
@@ -372,3 +387,9 @@ Relatórios **LR_J1** descrevem o uso de periódicos considerando o idioma dos d
 
 #### Geolocation Report J1 (GR_J1)
 Relatórios **GR_J1** descrevem o uso de periódicos considerando o país de origem do acesso realizado aos documentos. Essa também é uma extensão do Project COUNTER R5 que foi contextualizada ao universo SciELO. Os resultados apresentados por esse relatório agregam as métricas por cada um dos países de origem dos acessos (em termos de códigos ISO). Assim como os relatórios **CR_J1** e **LR_J1**, relatórios **GR_J1** são acessados por meio do parâmetro `api=v2`.
+
+#### Language Report J4 (LR_J4)
+Relatórios **LR_J4** descrevem o uso de periódicos considerando o idioma e o ano de publicação dos documentos acessados. Essa também é uma extensão do Project COUNTER R5 que foi contextualizada ao universo SciELO, que possui textos completos em Português, Inglês, Espanhol e outros idiomas (e isso, por vezes, para um mesmo artigo). Os resultados apresentados por esse relatório agregam as métricas por cada um dos idiomas e dos anos de publicação. Assim, se um periódico possui 100 artigos em Português e 50 em Inglês, por exemplo, para cada um desses idiomas haverá um conjunto de métricas de acesso agregadas por ano de publicação. Ao informar o parâmetro _yop=2000_, por exemplo, serão obtidos apenas os dados de documentos publicados em 2000. Assim como os relatórios **CR_J1**, **GR_J1** e **LR_J1**, relatórios **LR_J4** são acessados por meio do parâmetro _api=v2_.
+
+#### Geolocation Report J4 (GR_J4)
+Relatórios **GR_J4** descrevem o uso de periódicos considerando o país de origem do acesso realizado aos documentos bem como o ano de publicação dos documentos. Essa também é uma extensão do Project COUNTER R5 que foi contextualizada ao universo SciELO. Os resultados apresentados por esse relatório agregam as métricas por cada um dos países de origem dos acessos (em termos de códigos ISO) e pelo ano de publicação dos documentos. Assim como os relatórios **CR_J1**, **LR_J1**, **GR_J1** e **LR_J4**, relatórios **GR_J4** são acessados por meio do parâmetro `api=v2`.

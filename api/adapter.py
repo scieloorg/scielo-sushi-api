@@ -26,8 +26,14 @@ def json_report_wrapper(report_id, result_query, params, exceptions):
     if report_id == 'lr_j1':
         return _json_lr_j1(result_query, params, exceptions)
 
+    if report_id == 'lr_j4':
+        return _json_lr_j4(result_query, params, exceptions)
+
     if report_id == 'gr_j1':
         return _json_gr_j1(result_query, params, exceptions)
+
+    if report_id == 'gr_j4':
+        return _json_gr_j4(result_query, params, exceptions)
 
 
 def mount_json_for_reports(result_query):

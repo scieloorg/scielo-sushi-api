@@ -769,8 +769,14 @@ def tsv_report_wrapper(request, report_id, result_query, params, exceptions):
     if report_id == 'lr_j1':
         return _tsv_report_lr_j1(result_query, params, exceptions)
 
+    if report_id == 'lr_j4':
+        return _tsv_report_lr_j4(result_query, params, exceptions)
+
     if report_id == 'gr_j1':
         return _tsv_report_gr_j1(result_query, params, exceptions)
+
+    if report_id == 'gr_j4':
+        return _tsv_report_gr_j4(result_query, params, exceptions)
 
 
 def _tsv_header(params, exceptions, data_type='Journal'):

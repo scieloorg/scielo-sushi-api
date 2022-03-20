@@ -207,7 +207,7 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE IR_A1_JOURNAL_TOTALS(IN beginDate date, IN endDate date, IN issn varchar(9), IN collection_acronym varchar(3))
+CREATE PROCEDURE IR_A1_JOURNAL_TOTALS(IN beginDate date, IN endDate date, IN issn varchar(9), IN collection_acronym varchar(3), IN yop varchar(4))
 BEGIN
     SELECT
            cj.online_issn AS onlineISSN,
@@ -230,13 +230,14 @@ BEGIN
           (cjc.collection = collection_acronym) AND
           (issn = online_issn OR issn = print_issn OR issn = pid_issn) AND
           (year_month_day between beginDate AND endDate) AND
-          (online_issn <> '' OR print_issn <> '')
+          (online_issn <> '' OR print_issn <> '') AND
+          (ca.yop = yop)
     GROUP BY ca.pid;
 END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE IR_A1_JOURNAL_MONTHLY(IN beginDate date, IN endDate date, IN issn varchar(9), IN collection_acronym varchar(3))
+CREATE PROCEDURE IR_A1_JOURNAL_MONTHLY(IN beginDate date, IN endDate date, IN issn varchar(9), IN collection_acronym varchar(3), IN yop varchar(4))
 BEGIN
     SELECT
            cj.id as journalID,
@@ -261,7 +262,8 @@ BEGIN
           (cjc.collection = collection_acronym) AND
           (issn = online_issn OR issn = print_issn OR issn = pid_issn) AND
           (year_month_day between beginDate AND endDate) AND
-          (online_issn <> '' OR print_issn <> '')
+          (online_issn <> '' OR print_issn <> '') AND
+          (ca.yop = yop)
     GROUP BY ca.pid, yearMonth;
 END $$
 DELIMITER ;
@@ -325,7 +327,7 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE IR_A1_MONTHLY(IN beginDate date, IN endDate date, IN collection_acronym varchar(3))
+CREATE PROCEDURE IR_A1_MONTHLY(IN beginDate date, IN endDate date, IN collection_acronym varchar(3), IN yop varchar(3))
 BEGIN
     SELECT
            cj.online_issn AS onlineISSN,
@@ -348,13 +350,14 @@ BEGIN
     WHERE (ca.collection = collection_acronym) AND
           (cjc.collection = collection_acronym) AND
           (year_month_day between beginDate AND endDate) AND
-          (online_issn <> '' OR print_issn <> '')
+          (online_issn <> '' OR print_issn <> '') AND
+          (ca.yop = yop)
     GROUP BY ca.pid, yearMonth;
 END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE IR_A1_TOTALS(IN beginDate date, IN endDate date, IN collection_acronym varchar(3))
+CREATE PROCEDURE IR_A1_TOTALS(IN beginDate date, IN endDate date, IN collection_acronym varchar(3), IN yop varchar(3))
 BEGIN
     SELECT
            cj.online_issn AS onlineISSN,
@@ -376,7 +379,8 @@ BEGIN
     WHERE (ca.collection = collection_acronym) AND
           (cjc.collection = collection_acronym) AND
           (year_month_day between beginDate AND endDate) AND
-          (online_issn <> '' OR print_issn <> '')
+          (online_issn <> '' OR print_issn <> '') AND
+          (ca.yop = yop)
     GROUP BY ca.pid;
 END $$
 DELIMITER ;

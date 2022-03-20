@@ -82,7 +82,7 @@ def get_granularity_and_mode(params):
 def check_filter_by_yop(report_id, params):
     yop = params.get('yop', '')
 
-    if report_id in ['lr_j4', 'gr_j4',]:
+    if report_id in ['lr_j4', 'gr_j4', 'ir_a1']:
         if yop.isdigit():
             return True
 

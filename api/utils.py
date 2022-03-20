@@ -28,11 +28,6 @@ def check_exceptions(report_id, params_names, cleaned_params):
 def check_report_and_parameters_compatibility(report_id, params):
     invalid_params = []
 
-    if report_id == 'ir_a1':
-        for i in params:
-            if i in ['yop',]:
-                invalid_params.append(i)
-
     if report_id == 'cr_j1':
         for i in params:
             if i in ['issn', 'pid', 'yop']:
@@ -87,7 +82,7 @@ def get_granularity_and_mode(params):
 def check_filter_by_yop(report_id, params):
     yop = params.get('yop', '')
 
-    if report_id in ['lr_j4', 'gr_j4',]:
+    if report_id in ['lr_j4', 'gr_j4', 'ir_a1']:
         if yop.isdigit():
             return True
 

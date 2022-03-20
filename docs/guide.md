@@ -52,6 +52,7 @@ Um **editor de periódico** pode estar interessado em visualizar os resultados d
 
 - `http://usage.apis.scielo.org/reports/gr_j4?begin_date=2021-06&end_date=2021-12&api=v2&collection=<ACRÔNIMO>&issn=<ISSN>&yop=<ANO>&fmt=tsv`
 
+
 ### 2.1. Tabela de parâmetros
 
 | Parâmetro | Descrição | Formato | Valor padrão | Obrigatório | Observações |
@@ -371,7 +372,7 @@ _Total Item Investigations_ é uma métrica que contabiliza cada clique que apre
 Nas estruturas da Rede SciELO foram implantados três relatórios COUNTER Release 5 e três extensões. Os relatórios responsáveis por obter dados agregados por periódico são **TR_J1**, **LR_J1**, **GR_J1** e **TR_J4**, sendo este último considerando o ano de publicação dos documentos. Os dados agregados por artigo são representados pelo relatório **IR_A1**. Dados agregados para uma coleção inteira são representados por relatórios **CR_J1**. Observe que, originalmente, não existem relatórios **GR_J1**, **LR_J1** e **CR_J1** no Project COUNTER R5 - essas foram extensões implementadas e contextualizadas ao Programa SciELO.
 
 #### Item Master Report A1 (IR_A1)
-Relatórios **IR_A1** fornecem um resumo da atividade relacionada ao conteúdo no nível de artigo. É um meio de avaliar o impacto que um artigo possui, em termos de acesso. É preciso conhecer o identificador único de um artigo (os códigos PID, no âmbito SciELO).
+Relatórios **IR_A1** fornecem um resumo da atividade relacionada ao conteúdo no nível de artigo. É um meio de avaliar o impacto que um artigo possui, em termos de acesso. É preciso conhecer o identificador único de um artigo (os códigos PID, no âmbito SciELO) em todas as coleções das quais faz parte. É possível obter, por coleção, os acessos relacionados a um periódico. Para isso, basta informar os parâmetros `issn` e `yop` (ano de publicação).
 
 #### Title Master Report J1 (TR_J1)
 Relatórios **TR_J1** abordam o acesso a conteúdo no nível de periódico, excluindo documentos Gold Open Access. A métrica Unique Item Requests, no contexto desse relatório, fornece uso comparável em plataformas de periódicos, reduzindo o efeito inflacionário que ocorre quando um texto completo em HTML é exibido automaticamente e o usuário acessa a versão em PDF. A métrica Total Item Requests mostra a atividade geral relacionada ao periódico. É preciso informar o código ISSN de um periódico, caso deseja-se saber apenas os dados a ele referentes. Na situação em que essa informação é omitida, são retornados dados de todos os periódicos da coleção.

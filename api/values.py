@@ -62,9 +62,6 @@ DB_CALL_IR_A1_ARTICLE_MONTHLY = 'CALL IR_A1_ARTICLE_MONTHLY("%s", "%s", "%s", "%
 DB_CALL_IR_A1_JOURNAL_TOTALS = 'CALL IR_A1_JOURNAL_TOTALS("%s", "%s", "%s", "%s")'
 DB_CALL_IR_A1_JOURNAL_MONTHLY = 'CALL IR_A1_JOURNAL_MONTHLY("%s", "%s", "%s", "%s")'
 
-DB_CALL_IR_A1_TOTALS = 'CALL IR_A1_TOTALS("%s", "%s", "%s")'
-DB_CALL_IR_A1_MONTHLY = 'CALL IR_A1_MONTHLY("%s", "%s", "%s")'
-
 DB_CALL_V2_TR_J1_JOURNAL_TOTALS = 'CALL V2_TR_J1_JOURNAL_TOTALS("%s", "%s", "%s", "%s")'
 DB_CALL_V2_TR_J1_JOURNAL_MONTHLY = 'CALL V2_TR_J1_JOURNAL_MONTHLY("%s", "%s", "%s", "%s")'
 
@@ -127,12 +124,11 @@ GRANULARITY_MODE_REPORT_TO_PROCEDURE_AND_PARAMETERS = {
         'issn': {
             'tr_j1': (DB_CALL_TR_J1_JOURNAL_TOTALS, ['begin_date', 'end_date', 'issn', 'collection']),
             'tr_j4': (DB_CALL_TR_J4_JOURNAL_TOTALS, ['begin_date', 'end_date', 'issn', 'collection']),
-            'ir_a1': (DB_CALL_IR_A1_JOURNAL_TOTALS, ['begin_date', 'end_date', 'issn', 'collection'])
+            'ir_a1': (DB_CALL_IR_A1_JOURNAL_TOTALS, ['begin_date', 'end_date', 'issn', 'collection', 'yop'])
         },
         'global': {
             'tr_j1': (DB_CALL_TR_J1_TOTALS, ['begin_date', 'end_date', 'collection']),
             'tr_j4': (DB_CALL_TR_J4_TOTALS, ['begin_date', 'end_date', 'collection']),
-            'ir_a1': (DB_CALL_IR_A1_TOTALS, ['begin_date', 'end_date', 'collection'])
         }
     },
     'monthly': {
@@ -144,12 +140,11 @@ GRANULARITY_MODE_REPORT_TO_PROCEDURE_AND_PARAMETERS = {
         'issn': {
             'tr_j1': (DB_CALL_TR_J1_JOURNAL_MONTHLY, ['begin_date', 'end_date', 'issn', 'collection']),
             'tr_j4': (DB_CALL_TR_J4_JOURNAL_MONTHLY, ['begin_date', 'end_date', 'issn', 'collection']),
-            'ir_a1': (DB_CALL_IR_A1_JOURNAL_MONTHLY, ['begin_date', 'end_date', 'issn', 'collection'])
+            'ir_a1': (DB_CALL_IR_A1_JOURNAL_MONTHLY, ['begin_date', 'end_date', 'issn', 'collection', 'yop'])
         },
         'global': {
             'tr_j1': (DB_CALL_TR_J1_MONTHLY, ['begin_date', 'end_date', 'collection']),
             'tr_j4': (DB_CALL_TR_J4_MONTHLY, ['begin_date', 'end_date', 'collection']),
-            'ir_a1': (DB_CALL_IR_A1_MONTHLY, ['begin_date', 'end_date', 'collection'])
         }
     }
 }
@@ -333,3 +328,6 @@ TSV_REPORT_IR_ROWS = [
     'Access_Type',
     'Metric_Type',
 ]
+
+MIN_YEAR = 1900
+MAX_YEAR = 2100

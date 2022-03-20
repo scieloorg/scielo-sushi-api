@@ -53,6 +53,10 @@ class CounterViews(object):
         if len(op_validation_results['errors']) > 0:
             return op_validation_results['errors']
 
+        special_validation_results = validator.validate_parameters_according_to_report(report_id, {**optional_params, **required_params})
+        if len(special_validation_results['errors']) > 0:
+            return special_validation_results['errors']
+
         cleaned_params = cleaner.clean_parameters(rp_validation_results, op_validation_results)
         utils.set_collection_extra(report_id, cleaned_params)
 

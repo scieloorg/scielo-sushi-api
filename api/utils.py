@@ -28,11 +28,6 @@ def check_exceptions(report_id, params_names, cleaned_params):
 def check_report_and_parameters_compatibility(report_id, params):
     invalid_params = []
 
-    if report_id == 'ir_a1':
-        for i in params:
-            if i in ['yop',]:
-                invalid_params.append(i)
-
     if report_id == 'cr_j1':
         for i in params:
             if i in ['issn', 'pid', 'yop']:

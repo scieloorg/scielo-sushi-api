@@ -65,6 +65,15 @@ def error_invalid_report_filter_value(data, severity):
     }
 
 
+def error_invalid_report_attribute_value(data, severity):
+    return {
+        'Code': 3062,
+        'Severity': severity,
+        'Message': 'Request contained one or more attribute values that are not supported by the server',
+        'Data': data
+    }
+
+
 def error_parameter_not_recognized_in_this_context(data):
     return {
         'Code': 3050,

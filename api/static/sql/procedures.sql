@@ -227,6 +227,7 @@ BEGIN
              JOIN counter_journal cj on ca.idjournal_a = cj.id
              JOIN counter_journal_collection cjc on cj.id = cjc.idjournal_jc
     WHERE (ca.collection = collection_acronym) AND
+          (cjc.collection = collection_acronym) AND
           (issn = online_issn OR issn = print_issn OR issn = pid_issn) AND
           (year_month_day between beginDate AND endDate) AND
           (online_issn <> '' OR print_issn <> '')
@@ -257,6 +258,7 @@ BEGIN
              JOIN counter_journal cj on ca.idjournal_a = cj.id
              JOIN counter_journal_collection cjc on cj.id = cjc.idjournal_jc
     WHERE (ca.collection = collection_acronym) AND
+          (cjc.collection = collection_acronym) AND
           (issn = online_issn OR issn = print_issn OR issn = pid_issn) AND
           (year_month_day between beginDate AND endDate) AND
           (online_issn <> '' OR print_issn <> '')
@@ -285,6 +287,7 @@ BEGIN
              JOIN counter_journal cj on ca.idjournal_a = cj.id
              JOIN counter_journal_collection cjc on cj.id = cjc.idjournal_jc
     WHERE (ca.collection = collection_acronym) AND
+          (cjc.collection = collection_acronym) AND
           (pid = ca.pid) AND
           (year_month_day between beginDate AND endDate) AND
           (online_issn <> '' OR print_issn <> '');
@@ -313,6 +316,7 @@ BEGIN
              JOIN counter_journal cj on ca.idjournal_a = cj.id
              JOIN counter_journal_collection cjc on cj.id = cjc.idjournal_jc
     WHERE (ca.collection = collection_acronym) AND
+          (cjc.collection = collection_acronym) AND
           (pid = ca.pid) AND
           (year_month_day between beginDate AND endDate) AND
           (online_issn <> '' OR print_issn <> '')
@@ -342,6 +346,7 @@ BEGIN
              JOIN counter_journal cj on ca.idjournal_a = cj.id
              JOIN counter_journal_collection cjc on cj.id = cjc.idjournal_jc
     WHERE (ca.collection = collection_acronym) AND
+          (cjc.collection = collection_acronym) AND
           (year_month_day between beginDate AND endDate) AND
           (online_issn <> '' OR print_issn <> '')
     GROUP BY ca.pid, yearMonth;
@@ -369,6 +374,7 @@ BEGIN
              JOIN counter_journal cj on ca.idjournal_a = cj.id
              JOIN counter_journal_collection cjc on cj.id = cjc.idjournal_jc
     WHERE (ca.collection = collection_acronym) AND
+          (cjc.collection = collection_acronym) AND
           (year_month_day between beginDate AND endDate) AND
           (online_issn <> '' OR print_issn <> '')
     GROUP BY ca.pid;

@@ -104,3 +104,22 @@ def validate_parameters(params, expected_params_list=[]):
                 validation_results['errors'].append(('yop', validation_value))
 
     return validation_results
+
+
+def validate_parameters_according_to_report(report_id, params):
+    validation_results = {'errors': []}
+
+    if report_id in ('ir_a1', ):
+        if 'issn' not in params and 'pid' not in params:
+            validation_results['errors'].append(('yop', errors.error_required_filter_missing('issn or pid')))        
+
+        if 'yop' not in params:
+            if 'pid' not in params:
+                validation_results['errors'].append(('yop', errors.error_required_filter_missing('yop')))
+        else:
+            if not params.get('yop', '').isdigit():
+                validation_results['errors'].append(('yop', errors.error_invalid_report_attribute_value({'yop': params.get('yop', '')}, severity='error')))
+            elif not values.MIN_YEAR <  int(params['yop']) < values.MAX_YEAR:
+                validation_results['errors'].append(('yop', errors.error_invalid_report_attribute_value({'yop': params.get('yop', '')}, severity='error')))
+   
+    return validation_results

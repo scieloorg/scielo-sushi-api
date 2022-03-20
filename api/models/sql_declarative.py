@@ -207,6 +207,7 @@ class SushiArticleMetric(Base):
     unique_item_requests = Column(INTEGER, nullable=False)
     unique_item_investigations = Column(INTEGER, nullable=False)
 
+
 class Institution(Base):
     __tablename__ = 'counter_institution'
 

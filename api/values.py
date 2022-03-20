@@ -333,3 +333,6 @@ TSV_REPORT_IR_ROWS = [
     'Access_Type',
     'Metric_Type',
 ]
+
+MIN_YEAR = 1900
+MAX_YEAR = 2100

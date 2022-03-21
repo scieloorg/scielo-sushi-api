@@ -23,6 +23,7 @@ SciELO SUSHI API, disponível em [usage.apis.scielo.org](http://usage.apis.sciel
 - [Geolocation Report J1](#geolocation-report-j1-gr_j1): acessos por periódico considerando o país origiário do acesso
 - [Geolocation Report J4](#geolocation-report-j4-gr_j4): acessos por periódico considerando o país origiário do acesso e o ano de publicação dos documentos
 - [Language Report J1](#language-report-j1-lr_j1): acessos por periódico considerando o idioma dos documentos
+- [Language Report A1](#language-report-a1-lr_a1): acessos por documento considerando o idioma
 - [Language Report J4](#language-report-j4-lr_j4): acessos por periódico considerando o idioma e o ano de publicação dos documentos
 
 **Métricas**
@@ -385,6 +386,9 @@ Relatórios **CR_J1** descrevem o uso de uma coleção inteira. Esse relatório 
 
 #### Language Report J1 (LR_J1)
 Relatórios **LR_J1** descrevem o uso de periódicos considerando o idioma dos documentos acessados. Essa também é uma extensão do Project COUNTER R5 que foi contextualizada ao universo SciELO, que possui textos completos em Português, Inglês, Espanhol e outros idiomas (e isso, por vezes, para um mesmo artigo). Os resultados apresentados por esse relatório agregam as métricas por cada um dos idiomas. Assim, se um periódico possui 100 artigos em Português e 50 em Inglês, por exemplo, para cada um desses idiomas haverá um conjunto de métricas de acesso. Assim como o relatório **CR_J1**, relatórios **LR_J1** são acessados por meio do parâmetro _api=v2_.
+
+#### Language Report A1 (LR_A1)
+Relatórios **LR_A1** descrevem o uso de artigos considerando o idioma acessado. Essa também é uma extensão do Project COUNTER R5 que foi contextualizada ao universo SciELO, que possui textos completos em Português, Inglês, Espanhol e outros idiomas (e isso, por vezes, para um mesmo artigo). Os resultados apresentados por esse relatório agregam as métricas por cada um dos idiomas. Assim, se um artigo possui três versões, sendo uma em Português outra em Inglês e uma terceira em Espanhol, por exemplo, para cada um desses idiomas haverá um conjunto de métricas de acesso.
 
 #### Geolocation Report J1 (GR_J1)
 Relatórios **GR_J1** descrevem o uso de periódicos considerando o país de origem do acesso realizado aos documentos. Essa também é uma extensão do Project COUNTER R5 que foi contextualizada ao universo SciELO. Os resultados apresentados por esse relatório agregam as métricas por cada um dos países de origem dos acessos (em termos de códigos ISO). Assim como os relatórios **CR_J1** e **LR_J1**, relatórios **GR_J1** são acessados por meio do parâmetro `api=v2`.

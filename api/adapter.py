@@ -11,6 +11,9 @@ def generate_output(request, fmt, report_id, data, params, exceptions):
 
 
 def json_report_wrapper(report_id, result_query, params, exceptions):
+    if report_id == 'lr_a1':
+        return _json_lr_a1(result_query, params, exceptions)
+
     if report_id == 'ir_a1':
         return _json_ir_a1(result_query, params, exceptions)
 
@@ -253,6 +256,99 @@ def _json_lr_j1(result_query_reports_lr_j1, params, exceptions):
             report_items[key]['Performance'].append(performance_m)
 
         json_results['Report_Items'] = [ri for ri in report_items.values() if ri['Title']]
+    return json_results
+
+
+def _json_lr_a1(result_query_reports_lr_a1, params, exceptions):
+    begin_date, ed_discard = cleaner.get_start_and_last_days(params.get('begin_date', ''))
+    bd_discard, end_date = cleaner.get_start_and_last_days(params.get('end_date', ''))
+
+    json_results = {
+        "Report_Header": {
+            "Created": datetime.now().isoformat(),
+            "Created_By": "Scientific Electronic Library Online SUSHI API",
+            "Customer_ID": params.get('customer', ''),
+            "Report_ID": params.get('report_db_params', {}).report_id,
+            "Release": params.get('report_db_params', {}).release,
+            "Report_Name": params.get('report_db_params', {}).name,
+            "Institution_Name": params.get('institution_name', ''),
+            "Institution_ID": [{
+                "Type": "ISNI",
+                "Value": params.get('institution_id', '')
+            }],
+        },
+        "Report_Filters": [{
+            "Name": "Begin_Date",
+            "Value": str(begin_date)
+        }, {
+            "Name": "End_Date",
+            "Value": str(end_date)
+        }],
+        "Report_Attributes": [{
+            "Name": "Attributes_To_Show",
+            "Value": "Data_Type|Access_Method"
+        }],
+        "Exceptions": exceptions,
+        "Report_Items": []
+    }
+
+    report_items = {}
+
+    for r in result_query_reports_lr_a1:
+        key = '-'.join([r.articleCollection, r.articlePID, r.articleLanguage])
+
+        if key not in report_items:
+            report_items[key] = {
+                'Item': r.articlePID,
+                'Publisher': r.journalPublisher,
+                'Publisher_ID': [],
+                'Platform': params.get('platform', ''),
+                'Authors': '',
+                'Publication_Date': '',
+                'Article_Language': r.articleLanguage,
+                'Article_Version': '',
+                'DOI': '',
+                'Proprietary_ID': '',
+                'Print_ISSN': '',
+                'Online_ISSN': '',
+                'URI': '',
+                'Parent_Title': r.journalTitle,
+                'Parent_DOI': '',
+                'Parent_Proprietary_ID': '',
+                'Parent_Print_ISSN': r.printISSN,
+                'Parent_Online_ISSN': r.onlineISSN,
+                'Parent_URI': r.journalURI,
+                'Parent_Data_Type': 'Journal',
+                'Item_ID': [],
+                'Data_Type': 'Article',
+                'Access_Type': 'Open Access',
+                'Access_Method': 'Regular',
+                'Performance': []}
+
+        if params['granularity'] == 'monthly':
+            begin_date, end_date  = cleaner.get_start_and_last_days(r.yearMonth)
+
+        elif params['granularity'] == 'totals':
+            begin_date, ed_discard  = cleaner.get_start_and_last_days(r.beginDate)
+            bd_discard, end_date  = cleaner.get_start_and_last_days(r.endDate)
+
+        for m in ['Total_Item_Requests', 'Unique_Item_Requests']:
+            metric_name = m[0].lower() + m[1:].replace('_', '')
+
+            performance_m = {
+                'Period': {
+                    'Begin_Date': str(begin_date),
+                    'End_Date': str(end_date)
+                },
+                'Instance': {
+                    'Metric_Type': m,
+                    'Count': str(getattr(r, metric_name))
+                }
+            }
+            report_items[key]['Performance'].append(performance_m)
+
+        json_results['Report_Items'] = [ri for ri in report_items.values() if ri['Parent_Title']]
+        
     return json_results
 
 
@@ -754,6 +850,9 @@ def tsv_report_wrapper(request, report_id, result_query, params, exceptions):
     filename = '_'.join(['report', report_id]) + '.tsv'
     request.response.content_disposition = 'attachment;filename=' + filename
 
+    if report_id == 'lr_a1':
+        return _tsv_report_lr_a1(result_query, params, exceptions)
+
     if report_id == 'ir_a1':
         return _tsv_report_ir_a1(result_query, params, exceptions)
 
@@ -848,6 +947,82 @@ def _tsv_report_cr_j1(result_query, params, exceptions):
             line.append(ym_v)
 
         output['rows'].append(line)
+
+    return output
+
+
+def _tsv_report_lr_a1(result_query, params, exceptions):
+    begin_date, bd_discard  = cleaner.get_start_and_last_days(params['begin_date'])
+    ed_discard, end_date  = cleaner.get_start_and_last_days(params['end_date'])
+
+    params['begin_date'] = begin_date
+    params['end_date'] = end_date
+
+    result = {'headers': _tsv_header(params, exceptions)}
+
+    article2values = {}
+    yms = ['Reporting_Period_Total']
+
+    for ri in result_query:
+        article_key = (ri.printISSN, ri.onlineISSN, ri.journalTitle, ri.journalURI, ri.journalPublisher, ri.articleCollection, ri.articlePID, ri.articleLanguage)
+
+        tir = getattr(ri, 'totalItemRequests')
+        uir = getattr(ri, 'uniqueItemRequests')
+
+        if article_key not in article2values:
+            article2values[article_key] = {'Reporting_Period_Total': (0, 0)}
+
+        if params['granularity'] == 'monthly':
+            year_month = cleaner.handle_str_date(ri.yearMonth, str_format=False).strftime('%b-%Y')
+            if year_month not in yms:
+                yms.append(year_month)
+
+            if year_month not in article2values[article_key]:
+                article2values[article_key][year_month] = 0
+
+            article2values[article_key][year_month] = (tir, uir)
+
+        article2values[article_key]['Reporting_Period_Total'] = tuple(map(sum, zip(article2values[article_key]['Reporting_Period_Total'], (tir, uir))))
+
+    output = {'rows': []}
+    for k in values.TSV_REPORT_DEFAULT_HEADERS:
+        output['rows'].append([k, result['headers'][k]])
+
+    output['rows'].append(values.TSV_REPORT_LR_A1_ROWS + yms)
+
+    for i in article2values:
+        for j, metric_name in enumerate(['Total_Item_Requests', 'Unique_Item_Requests']):
+            line = [
+                i[6],
+                i[4],
+                '',
+                'SciELO SUSHI API',
+                '',
+                '',
+                i[7],
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                i[2],
+                '',
+                '',
+                '',
+                '',
+                i[0],
+                i[1],
+                i[3],
+                '',
+                metric_name
+            ]
+
+            for ym in yms:
+                ym_v = str(article2values[i].get(ym, (0, 0))[j])
+                line.append(ym_v)
+
+            output['rows'].append(line)
 
     return output
 

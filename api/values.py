@@ -335,5 +335,31 @@ TSV_REPORT_IR_ROWS = [
     'Metric_Type',
 ]
 
+TSV_REPORT_LR_A1_ROWS = [
+    'Item',
+    'Publisher',
+    'Publisher_ID',
+    'Platform',
+    'Authors',
+    'Publication_Date',
+    'Article_Language',
+    'Article_Version',
+    'DOI',
+    'Proprietary_ID',
+    'Print_ISSN',
+    'Online_ISSN',
+    'URI',
+    'Parent_Title',
+    'Parent_Authors',
+    'Parent_Article_Version',
+    'Parent_DOI',
+    'Parent_Proprietary_ID',
+    'Parent_Print_ISSN',
+    'Parent_Online_ISSN',
+    'Parent_URI',
+    'Access_Type',
+    'Metric_Type',
+]
+
 MIN_YEAR = 1900
 MAX_YEAR = 2100

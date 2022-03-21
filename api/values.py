@@ -59,6 +59,9 @@ DB_CALL_TR_J4_JOURNAL_MONTHLY = 'CALL TR_J4_JOURNAL_MONTHLY("%s", "%s", "%s", "%
 DB_CALL_IR_A1_ARTICLE_TOTALS = 'CALL IR_A1_ARTICLE_TOTALS("%s", "%s", "%s", "%s")'
 DB_CALL_IR_A1_ARTICLE_MONTHLY = 'CALL IR_A1_ARTICLE_MONTHLY("%s", "%s", "%s", "%s")'
 
+DB_CALL_LR_A1_ARTICLE_TOTALS = 'CALL LR_A1_ARTICLE_TOTALS("%s", "%s", "%s", "%s")'
+DB_CALL_LR_A1_ARTICLE_MONTHLY = 'CALL LR_A1_ARTICLE_MONTHLY("%s", "%s", "%s", "%s")'
+
 DB_CALL_IR_A1_JOURNAL_TOTALS = 'CALL IR_A1_JOURNAL_TOTALS("%s", "%s", "%s", "%s", "%s")'
 DB_CALL_IR_A1_JOURNAL_MONTHLY = 'CALL IR_A1_JOURNAL_MONTHLY("%s", "%s", "%s", "%s", "%s")'
 
@@ -109,6 +112,7 @@ REPORT_ID_TO_COLUMN_STATUS = {
     'tr_j1': 'status_sushi_journal_metric',
     'tr_j4': 'status_sushi_journal_yop_metric',
     'lr_j1': 'status_aggr_journal_language_year_month_metric',
+    'lr_a1': 'status_aggr_article_language_year_month_metric',
     'lr_j4': 'status_aggr_journal_language_yop_year_month_metric',
     'gr_j1': 'status_aggr_journal_geolocation_year_month_metric',
     'gr_j4': 'status_aggr_journal_geolocation_yop_year_month_metric',
@@ -119,7 +123,8 @@ GRANULARITY_MODE_REPORT_TO_PROCEDURE_AND_PARAMETERS = {
         'pid': {
             'tr_j1': ('', []),
             'tr_j4': ('', []),
-            'ir_a1': (DB_CALL_IR_A1_ARTICLE_TOTALS, ['begin_date', 'end_date', 'pid', 'collection'])
+            'ir_a1': (DB_CALL_IR_A1_ARTICLE_TOTALS, ['begin_date', 'end_date', 'pid', 'collection']),
+            'lr_a1': (DB_CALL_LR_A1_ARTICLE_TOTALS, ['begin_date', 'end_date', 'pid', 'collection']),
         },
         'issn': {
             'tr_j1': (DB_CALL_TR_J1_JOURNAL_TOTALS, ['begin_date', 'end_date', 'issn', 'collection']),
@@ -135,7 +140,8 @@ GRANULARITY_MODE_REPORT_TO_PROCEDURE_AND_PARAMETERS = {
         'pid': {
             'tr_j1': ('', []),
             'tr_j4': ('', []),
-            'ir_a1': (DB_CALL_IR_A1_ARTICLE_MONTHLY, ['begin_date', 'end_date', 'pid', 'collection'])
+            'ir_a1': (DB_CALL_IR_A1_ARTICLE_MONTHLY, ['begin_date', 'end_date', 'pid', 'collection']),
+            'lr_a1': (DB_CALL_LR_A1_ARTICLE_MONTHLY, ['begin_date', 'end_date', 'pid', 'collection']),
         },
         'issn': {
             'tr_j1': (DB_CALL_TR_J1_JOURNAL_MONTHLY, ['begin_date', 'end_date', 'issn', 'collection']),

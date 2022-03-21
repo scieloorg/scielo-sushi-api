@@ -11,6 +11,9 @@ def generate_output(request, fmt, report_id, data, params, exceptions):
 
 
 def json_report_wrapper(report_id, result_query, params, exceptions):
+    if report_id == 'lr_a1':
+        return _json_lr_a1(result_query, params, exceptions)
+
     if report_id == 'ir_a1':
         return _json_ir_a1(result_query, params, exceptions)
 
@@ -753,6 +756,9 @@ def _json_gr_j4(result_query_reports_gr_j4, params, exceptions):
 def tsv_report_wrapper(request, report_id, result_query, params, exceptions):
     filename = '_'.join(['report', report_id]) + '.tsv'
     request.response.content_disposition = 'attachment;filename=' + filename
+
+    if report_id == 'lr_a1':
+        return _tsv_report_lr_a1(result_query, params, exceptions)
 
     if report_id == 'ir_a1':
         return _tsv_report_ir_a1(result_query, params, exceptions)

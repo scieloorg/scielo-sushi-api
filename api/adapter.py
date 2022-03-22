@@ -294,12 +294,15 @@ def _json_lr_a1(result_query_reports_lr_a1, params, exceptions):
 
     report_items = {}
 
+
+    article_scielo_ids = _get_scielo_pids(result_query_reports_lr_a1, 'articlePID')
+
     for r in result_query_reports_lr_a1:
-        key = '-'.join([r.articleCollection, r.articlePID, r.articleLanguage])
+        key = '-'.join([r.articleDOI, r.articleLanguage])
 
         if key not in report_items:
             report_items[key] = {
-                'Item': r.articlePID,
+                'Item': r.articleDOI,
                 'Publisher': r.journalPublisher,
                 'Publisher_ID': [],
                 'Platform': params.get('platform', ''),
@@ -307,7 +310,7 @@ def _json_lr_a1(result_query_reports_lr_a1, params, exceptions):
                 'Publication_Date': '',
                 'Article_Language': r.articleLanguage,
                 'Article_Version': '',
-                'DOI': '',
+                'DOI': r.articleDOI,
                 'Proprietary_ID': '',
                 'Print_ISSN': '',
                 'Online_ISSN': '',
@@ -319,7 +322,7 @@ def _json_lr_a1(result_query_reports_lr_a1, params, exceptions):
                 'Parent_Online_ISSN': r.onlineISSN,
                 'Parent_URI': r.journalURI,
                 'Parent_Data_Type': 'Journal',
-                'Item_ID': [],
+                'Item_ID': article_scielo_ids,
                 'Data_Type': 'Article',
                 'Access_Type': 'Open Access',
                 'Access_Method': 'Regular',

@@ -294,15 +294,16 @@ def _json_lr_a1(result_query_reports_lr_a1, params, exceptions):
 
     report_items = {}
 
-
     article_scielo_ids = _get_scielo_pids(result_query_reports_lr_a1, 'articlePID')
-
+    
     for r in result_query_reports_lr_a1:
-        key = '-'.join([r.articleDOI, r.articleLanguage])
+        article_key, article_doi = _get_article_key_and_doi(r, 'articleDOI', 'articlePID')
+
+        key = '-'.join([article_key, r.articleLanguage])
 
         if key not in report_items:
             report_items[key] = {
-                'Item': r.articleDOI,
+                'Item': article_key,
                 'Publisher': r.journalPublisher,
                 'Publisher_ID': [],
                 'Platform': params.get('platform', ''),
@@ -310,7 +311,7 @@ def _json_lr_a1(result_query_reports_lr_a1, params, exceptions):
                 'Publication_Date': '',
                 'Article_Language': r.articleLanguage,
                 'Article_Version': '',
-                'DOI': r.articleDOI,
+                'DOI': article_doi,
                 'Proprietary_ID': '',
                 'Print_ISSN': '',
                 'Online_ISSN': '',
@@ -1482,3 +1483,10 @@ def _get_scielo_pids(result_query, field_pid_name):
         
         article_scielo_ids = article_scielo_ids.union(set(els_pids))
     return sorted(article_scielo_ids)
+
+
+def _get_article_key_and_doi(item, field_doi_name, field_pid_name):
+    article_doi = getattr(item, field_doi_name, '')
+    article_key = getattr(item, field_pid_name)
+
+    return article_key, article_doi

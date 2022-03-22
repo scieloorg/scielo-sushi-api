@@ -107,17 +107,32 @@ def validate_parameters(params, expected_params_list=[]):
 def validate_parameters_according_to_report(report_id, params):
     validation_results = {'errors': []}
 
-    if report_id in ('ir_a1', ):
+    if report_id in ('ir_a1',):
         if 'issn' not in params and 'pid' not in params:
-            validation_results['errors'].append(('yop', errors.error_required_filter_missing('issn or pid')))        
+            validation_results['errors'].append(errors.error_required_filter_missing('issn or pid'))      
 
         if 'yop' not in params:
             if 'pid' not in params:
-                validation_results['errors'].append(('yop', errors.error_required_filter_missing('yop')))
+                validation_results['errors'].append(errors.error_required_filter_missing('yop'))
         else:
             if not params.get('yop', '').isdigit():
-                validation_results['errors'].append(('yop', errors.error_invalid_report_attribute_value({'yop': params.get('yop', '')}, severity='error')))
+                validation_results['errors'].append(errors.error_invalid_report_attribute_value({'name': 'yop', 'value': params.get('yop', '')}, severity='error'))
             elif not values.MIN_YEAR <  int(params['yop']) < values.MAX_YEAR:
-                validation_results['errors'].append(('yop', errors.error_invalid_report_attribute_value({'yop': params.get('yop', '')}, severity='error')))
+                validation_results['errors'].append(errors.error_invalid_report_attribute_value({'name': 'yop', 'value': params.get('yop', '')}, severity='error'))
    
+    if report_id in ('lr_a1',):
+        if 'pid' not in params:
+            validation_results['errors'].append(errors.error_required_filter_missing('pid'))
+
+        else:
+            if 'issn' in params:
+                validation_results['errors'].append(errors.error_parameter_not_recognized_in_this_context('issn'))
+
+            if params.get('api', 'v1') == 'v1':
+                if len(params['pid']) != 23:
+                    validation_results['errors'].append(errors.error_invalid_report_filter_value({'name': 'pid', 'value': params.get('pid', '')}, severity='error'))
+            elif params.get('api', 'v1') == 'v2':        
+                if len(params['pid']) > 255 or len(params['pid']) < 7:
+                    validation_results['errors'].append(errors.error_invalid_report_filter_value({'name': 'pid', 'value': params.get('pid', '')}, severity='error'))
+
     return validation_results

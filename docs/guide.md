@@ -62,11 +62,11 @@ Um **editor de periódico** pode estar interessado em visualizar os resultados d
 | `end_date` | Data de fim | `AAAA-MM-DD` ou `AAAA-MM` | N/A | Sim | O formato `AAAA-MM` é obrigatório para relatórios `CR_J1`, `GR_J1` e `LR_J1` |
 | `granularity` | Exibir valores por mês/ano ou apenas totais | `monthly` ou `totals` | `monthly` | Não | N/A |
 | `issn` | Código ISSN de periódico | `0000-0000` | N/A | Não | N/A |
-| `pid` | Código PID v2 ou v3 de documento SciELO | `S0000-00000000000000000` ou 23 letras ou dígitos | N/A | Não | Este parâmetro é aplicável apenas em relatórios `IR_A1` |
+| `pid` | Código PID v2 ou v3 de documento SciELO | `S0000-00000000000000000` ou 23 letras ou dígitos | N/A | Não | Este parâmetro é aplicável apenas em relatórios `IR_A1`. No relatório `LR_A1`, associado à api=v2, pode ser informado o código `DOI` |
 | `collection` | Acrônimo de coleção da Rede SciELO | 3 letras minúsculas | `scl` | Não | N/A |
 | `fmt` | Formato de saída dos resultados | `json` ou `tsv` | `json` | Não | N/A |
 | `yop` | Ano de publicação dos documentos | `AAAA` | `json` | Não | Este parâmetro é aplicável apenas em relatórios `GR_J4` e `LR_J4` |
-| `api` | Versão da API utilizada | `v1` ou `v2` | `v1` | O parâmetro valorado com a versão 2 da api (`api=v2`) é obrigatório para os relatórios `CR_J1`, `GR_J1` e `LR_J1`  | N/A |
+| `api` | Versão da API utilizada | `v1` ou `v2` | `v1` | O parâmetro valorado com a versão 2 da api (`api=v2`) é obrigatório para os relatórios `CR_J1`, `GR_J1` e `LR_J1`. É optativo para o relatório `LR_A1` | N/A |
 
 
 ---
@@ -388,7 +388,7 @@ Relatórios **CR_J1** descrevem o uso de uma coleção inteira. Esse relatório 
 Relatórios **LR_J1** descrevem o uso de periódicos considerando o idioma dos documentos acessados. Essa também é uma extensão do Project COUNTER R5 que foi contextualizada ao universo SciELO, que possui textos completos em Português, Inglês, Espanhol e outros idiomas (e isso, por vezes, para um mesmo artigo). Os resultados apresentados por esse relatório agregam as métricas por cada um dos idiomas. Assim, se um periódico possui 100 artigos em Português e 50 em Inglês, por exemplo, para cada um desses idiomas haverá um conjunto de métricas de acesso. Assim como o relatório **CR_J1**, relatórios **LR_J1** são acessados por meio do parâmetro _api=v2_.
 
 #### Language Report A1 (LR_A1)
-Relatórios **LR_A1** descrevem o uso de artigos considerando o idioma acessado. Essa também é uma extensão do Project COUNTER R5 que foi contextualizada ao universo SciELO, que possui textos completos em Português, Inglês, Espanhol e outros idiomas (e isso, por vezes, para um mesmo artigo). Os resultados apresentados por esse relatório agregam as métricas por cada um dos idiomas. Assim, se um artigo possui três versões, sendo uma em Português outra em Inglês e uma terceira em Espanhol, por exemplo, para cada um desses idiomas haverá um conjunto de métricas de acesso.
+Relatórios **LR_A1** descrevem o uso de artigos considerando o idioma acessado. Essa também é uma extensão do Project COUNTER R5 que foi contextualizada ao universo SciELO, que possui textos completos em Português, Inglês, Espanhol e outros idiomas (e isso, por vezes, para um mesmo artigo). Os resultados apresentados por esse relatório agregam as métricas por cada um dos idiomas. Assim, se um artigo possui três versões, sendo uma em Português outra em Inglês e uma terceira em Espanhol, por exemplo, para cada um desses idiomas haverá um conjunto de métricas de acesso. Assim como o relatório **LR_J1**, relatórios **LR_A1** também podem ser acessados por meio do parâmetro _api=v2_. E nesse caso, o valor do parametro _pid_ pode conter um código _doi_ ou qualquer um dos valores de _pid_ conhecidos de um artigo.
 
 #### Geolocation Report J1 (GR_J1)
 Relatórios **GR_J1** descrevem o uso de periódicos considerando o país de origem do acesso realizado aos documentos. Essa também é uma extensão do Project COUNTER R5 que foi contextualizada ao universo SciELO. Os resultados apresentados por esse relatório agregam as métricas por cada um dos países de origem dos acessos (em termos de códigos ISO). Assim como os relatórios **CR_J1** e **LR_J1**, relatórios **GR_J1** são acessados por meio do parâmetro `api=v2`.

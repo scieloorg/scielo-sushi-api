@@ -964,10 +964,19 @@ def _tsv_report_lr_a1(result_query, params, exceptions):
     result = {'headers': _tsv_header(params, exceptions)}
 
     article2values = {}
+    article2description = {}
+    article_scielo_pids = _get_scielo_pids(result_query, 'articlePID')    
     yms = ['Reporting_Period_Total']
 
     for ri in result_query:
-        article_key = (ri.printISSN, ri.onlineISSN, ri.journalTitle, ri.journalURI, ri.journalPublisher, ri.articleCollection, ri.articlePID, ri.articleLanguage)
+        if params.get('api', 'v1') == 'v2':
+            article_key = (ri.articleDOI, ri.articleLanguage)
+            article_description = (ri.printISSN, ri.onlineISSN, ri.journalTitle, ri.journalURI, ri.journalPublisher, ri.articleCollection, article_scielo_pids, ri.articleLanguage, ri.articleDOI)
+        else:
+            article_key = (ri.articlePID, ri.articleLanguage)
+            article_description = (ri.printISSN, ri.onlineISSN, ri.journalTitle, ri.journalURI, ri.journalPublisher, ri.articleCollection, ri.articlePID, ri.articleLanguage, '')
+
+        article2description[article_key] = article_description
 
         tir = getattr(ri, 'totalItemRequests')
         uir = getattr(ri, 'uniqueItemRequests')
@@ -996,27 +1005,27 @@ def _tsv_report_lr_a1(result_query, params, exceptions):
     for i in article2values:
         for j, metric_name in enumerate(['Total_Item_Requests', 'Unique_Item_Requests']):
             line = [
-                i[6],
-                i[4],
+                i[0],
+                article2description[i][4],
                 '',
                 'SciELO SUSHI API',
                 '',
                 '',
-                i[7],
-                '',
-                '',
-                '',
-                '',
-                '',
-                '',
-                i[2],
-                '',
-                '',
-                '',
-                '',
-                i[0],
                 i[1],
-                i[3],
+                '',
+                article2description[i][8],
+                '',
+                '',
+                '',
+                '',
+                article2description[i][2],
+                '',
+                '',
+                '',
+                '',
+                article2description[i][0],
+                article2description[i][1],
+                article2description[i][3],
                 '',
                 metric_name
             ]

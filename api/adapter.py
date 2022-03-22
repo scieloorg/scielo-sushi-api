@@ -1482,3 +1482,10 @@ def _get_scielo_pids(result_query, field_pid_name):
         
         article_scielo_ids = article_scielo_ids.union(set(els_pids))
     return sorted(article_scielo_ids)
+
+
+def _get_article_key_and_doi(item, field_doi_name, field_pid_name):
+    article_doi = getattr(item, field_doi_name, '')
+    article_key = getattr(item, field_pid_name)
+
+    return article_key, article_doi

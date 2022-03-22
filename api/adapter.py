@@ -294,12 +294,15 @@ def _json_lr_a1(result_query_reports_lr_a1, params, exceptions):
 
     report_items = {}
 
+
+    article_scielo_ids = _get_scielo_pids(result_query_reports_lr_a1, 'articlePID')
+
     for r in result_query_reports_lr_a1:
-        key = '-'.join([r.articleCollection, r.articlePID, r.articleLanguage])
+        key = '-'.join([r.articleDOI, r.articleLanguage])
 
         if key not in report_items:
             report_items[key] = {
-                'Item': r.articlePID,
+                'Item': r.articleDOI,
                 'Publisher': r.journalPublisher,
                 'Publisher_ID': [],
                 'Platform': params.get('platform', ''),
@@ -307,7 +310,7 @@ def _json_lr_a1(result_query_reports_lr_a1, params, exceptions):
                 'Publication_Date': '',
                 'Article_Language': r.articleLanguage,
                 'Article_Version': '',
-                'DOI': '',
+                'DOI': r.articleDOI,
                 'Proprietary_ID': '',
                 'Print_ISSN': '',
                 'Online_ISSN': '',
@@ -319,7 +322,7 @@ def _json_lr_a1(result_query_reports_lr_a1, params, exceptions):
                 'Parent_Online_ISSN': r.onlineISSN,
                 'Parent_URI': r.journalURI,
                 'Parent_Data_Type': 'Journal',
-                'Item_ID': [],
+                'Item_ID': article_scielo_ids,
                 'Data_Type': 'Article',
                 'Access_Type': 'Open Access',
                 'Access_Method': 'Regular',
@@ -961,10 +964,19 @@ def _tsv_report_lr_a1(result_query, params, exceptions):
     result = {'headers': _tsv_header(params, exceptions)}
 
     article2values = {}
+    article2description = {}
+    article_scielo_pids = _get_scielo_pids(result_query, 'articlePID')    
     yms = ['Reporting_Period_Total']
 
     for ri in result_query:
-        article_key = (ri.printISSN, ri.onlineISSN, ri.journalTitle, ri.journalURI, ri.journalPublisher, ri.articleCollection, ri.articlePID, ri.articleLanguage)
+        if params.get('api', 'v1') == 'v2':
+            article_key = (ri.articleDOI, ri.articleLanguage)
+            article_description = (ri.printISSN, ri.onlineISSN, ri.journalTitle, ri.journalURI, ri.journalPublisher, ri.articleCollection, article_scielo_pids, ri.articleLanguage, ri.articleDOI)
+        else:
+            article_key = (ri.articlePID, ri.articleLanguage)
+            article_description = (ri.printISSN, ri.onlineISSN, ri.journalTitle, ri.journalURI, ri.journalPublisher, ri.articleCollection, ri.articlePID, ri.articleLanguage, '')
+
+        article2description[article_key] = article_description
 
         tir = getattr(ri, 'totalItemRequests')
         uir = getattr(ri, 'uniqueItemRequests')
@@ -993,27 +1005,27 @@ def _tsv_report_lr_a1(result_query, params, exceptions):
     for i in article2values:
         for j, metric_name in enumerate(['Total_Item_Requests', 'Unique_Item_Requests']):
             line = [
-                i[6],
-                i[4],
+                i[0],
+                article2description[i][4],
                 '',
                 'SciELO SUSHI API',
                 '',
                 '',
-                i[7],
-                '',
-                '',
-                '',
-                '',
-                '',
-                '',
-                i[2],
-                '',
-                '',
-                '',
-                '',
-                i[0],
                 i[1],
-                i[3],
+                '',
+                article2description[i][8],
+                '',
+                '',
+                '',
+                '',
+                article2description[i][2],
+                '',
+                '',
+                '',
+                '',
+                article2description[i][0],
+                article2description[i][1],
+                article2description[i][3],
                 '',
                 metric_name
             ]
@@ -1459,3 +1471,14 @@ def _tsv_report_gr_j4(result_query, params, exceptions):
             output['rows'].append(line)
 
     return output
+
+
+def _get_scielo_pids(result_query, field_pid_name):
+    article_scielo_ids = set()
+
+    for r in result_query:
+        str_pids = getattr(r, field_pid_name) or ''
+        els_pids = str_pids.split(',')
+        
+        article_scielo_ids = article_scielo_ids.union(set(els_pids))
+    return sorted(article_scielo_ids)

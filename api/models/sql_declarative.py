@@ -378,3 +378,18 @@ class AggrJournalGeolocationYOPYearMonthMetric(Base):
     total_item_investigations = Column(INTEGER, nullable=False)
     unique_item_requests = Column(INTEGER, nullable=False)
     unique_item_investigations = Column(INTEGER, nullable=False)
+
+
+class ArticleCode(Base):
+    __tablename__ = 'counter_article_code'
+    __table_args__ = (UniqueConstraint('collection', 'pid_v2', 'pid_v3', 'doi', name='uni_col_pid2_pid3_doi_cac'),)
+    __table_args__ += (Index('idx_p2_p3', 'pid_v2', 'pid_v3'),)
+    __table_args__ += (Index('idx_p2_doi', 'pid_v2', 'doi'),)
+    __table_args__ += (Index('idx_p3_doi', 'pid_v3', 'doi'),)
+
+    id = Column(INTEGER(unsigned=True), primary_key=True, autoincrement=True)
+
+    collection = Column(VARCHAR(3), nullable=False, primary_key=True)
+    pid_v2 = Column(VARCHAR(23), nullable=False, primary_key=True)
+    pid_v3 = Column(VARCHAR(23), nullable=False, primary_key=True)
+    doi = Column(VARCHAR(255), nullable=False, primary_key=True)

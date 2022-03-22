@@ -116,7 +116,7 @@ def format_error_messages(exceptions: list):
 
 
 def set_collection_extra(report_id, attrs):
-    if report_id in ('cr_j1', 'gr_j1', 'lr_j1', 'gr_j4', 'lr_j4'):
+    if report_id in ('cr_j1', 'gr_j1', 'lr_j1', 'gr_j4', 'lr_j4', 'lr_a1'):
         if attrs['collection'] == 'scl':
             attrs.update({'collection_extra': 'nbr'})
 

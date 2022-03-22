@@ -1471,3 +1471,14 @@ def _tsv_report_gr_j4(result_query, params, exceptions):
             output['rows'].append(line)
 
     return output
+
+
+def _get_scielo_pids(result_query, field_pid_name):
+    article_scielo_ids = set()
+
+    for r in result_query:
+        str_pids = getattr(r, field_pid_name) or ''
+        els_pids = str_pids.split(',')
+        
+        article_scielo_ids = article_scielo_ids.union(set(els_pids))
+    return sorted(article_scielo_ids)

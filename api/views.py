@@ -62,8 +62,8 @@ class CounterViews(object):
 
         try:
             report_db_params = db.get_report_by_id(report_id=report_id)
-        except NoResultFound or MultipleResultsFound:
-            report_db_params = {}
+        except (NoResultFound, MultipleResultsFound):
+            return errors.error_report_not_supported()
         cleaned_params['report_db_params'] = report_db_params
 
         report_exceptions = utils.check_exceptions(report_id, self.request.GET.keys(), cleaned_params)

@@ -297,13 +297,18 @@ def _json_lr_a1(result_query_reports_lr_a1, params, exceptions):
     article_scielo_ids = _get_scielo_pids(result_query_reports_lr_a1, 'articlePID')
     
     for r in result_query_reports_lr_a1:
-        article_key, article_doi = _get_article_key_and_doi(r, 'articleDOI', 'articlePID')
-
-        key = '-'.join([article_key, r.articleLanguage])
+        article_doi = getattr(r, 'articleDOI', '')
+        
+        if params.get('api', 'v1') == 'v2':
+            article_code_lang = (article_doi, r.articleLanguage)
+        else:
+            article_code_lang = (r.articlePID, r.articleLanguage)
+        
+        key = '-'.join(article_code_lang)
 
         if key not in report_items:
             report_items[key] = {
-                'Item': article_key,
+                'Item': article_code_lang[0],
                 'Publisher': r.journalPublisher,
                 'Publisher_ID': [],
                 'Platform': params.get('platform', ''),
@@ -847,7 +852,6 @@ def _json_gr_j4(result_query_reports_gr_j4, params, exceptions):
 
         json_results['Report_Items'] = [ri for ri in report_items.values() if ri['Title']]
     return json_results
-
 
 
 def tsv_report_wrapper(request, report_id, result_query, params, exceptions):
@@ -1483,10 +1487,3 @@ def _get_scielo_pids(result_query, field_pid_name):
         
         article_scielo_ids = article_scielo_ids.union(set(els_pids))
     return sorted(article_scielo_ids)
-
-
-def _get_article_key_and_doi(item, field_doi_name, field_pid_name):
-    article_doi = getattr(item, field_doi_name, '')
-    article_key = getattr(item, field_pid_name)
-
-    return article_key, article_doi

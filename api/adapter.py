@@ -1208,6 +1208,86 @@ def _tsv_report_ir_a1(result_query, params, exceptions):
     return output
 
 
+def _tsv_report_ir_a4(result_query, params, exceptions):
+    begin_date, bd_discard  = cleaner.get_start_and_last_days(params['begin_date'])
+    ed_discard, end_date  = cleaner.get_start_and_last_days(params['end_date'])
+
+    params['begin_date'] = begin_date
+    params['end_date'] = end_date
+
+    result = {'headers': _tsv_header(params, exceptions)}
+
+    article2values = {}
+    article2description = {}
+    yms = ['Reporting_Period_Total']
+
+    for ri in result_query:
+        if ri.articleDOI:
+            article_key = ri.articleDOI
+            article_description = (ri.printISSN, ri.onlineISSN, ri.journalTitle, ri.journalURI, ri.journalPublisher, ri.journalCollection, ri.articlePID, ri.articleYOP, ri.articleDOI)
+
+            article2description[article_key] = article_description
+
+            tir = getattr(ri, 'totalItemRequests')
+            uir = getattr(ri, 'uniqueItemRequests')
+
+            if article_key not in article2values:
+                article2values[article_key] = {'Reporting_Period_Total': (0, 0)}
+
+            if params['granularity'] == 'monthly':
+                year_month = cleaner.handle_str_date(ri.yearMonth, str_format=False).strftime('%b-%Y')
+                if year_month not in yms:
+                    yms.append(year_month)
+
+                if year_month not in article2values[article_key]:
+                    article2values[article_key][year_month] = 0
+
+                article2values[article_key][year_month] = (tir, uir)
+
+            article2values[article_key]['Reporting_Period_Total'] = tuple(map(sum, zip(article2values[article_key]['Reporting_Period_Total'], (tir, uir))))
+
+    output = {'rows': []}
+    for k in values.TSV_REPORT_DEFAULT_HEADERS:
+        output['rows'].append([k, result['headers'][k]])
+
+    output['rows'].append(values.TSV_REPORT_IR_A4_ROWS + yms)
+
+    for doi in article2values:
+        for j, metric_name in enumerate(['Total_Item_Requests', 'Unique_Item_Requests']):
+            line = [
+                doi,
+                article2description[doi][4],
+                '',
+                'SciELO SUSHI API',
+                '',
+                article2description[doi][7],
+                '',
+                article2description[doi][8],
+                '',
+                '',
+                '',
+                '',
+                article2description[doi][2],
+                '',
+                '',
+                '',
+                '',
+                article2description[doi][0],
+                article2description[doi][1],
+                article2description[doi][3],
+                '',
+                metric_name
+            ]
+
+            for ym in yms:
+                ym_v = str(article2values[doi].get(ym, (0, 0))[j])
+                line.append(ym_v)
+
+            output['rows'].append(line)
+
+    return output
+
+
 def _tsv_report_tr_j1(result_query, params, exceptions):
     result = {'headers': _tsv_header(params, exceptions)}
 

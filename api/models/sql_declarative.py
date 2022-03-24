@@ -288,6 +288,26 @@ class AggrStatus(Base):
     status_aggr_journal_geolocation_yop_year_month_metric = Column(BOOLEAN, default=False)
 
 
+class AggrArticleJournalYearMonthMetric(Base):
+    __tablename__ = 'aggr_article_journal_year_month_metric'
+    __table_args__ = (UniqueConstraint('collection', 'year_month', 'article_id', 'journal_id', name='uni_col_art_jou_ymm_aajymm'),)
+    __table_args__ += (Index('idx_ymaj_id', 'year_month', 'article_id', 'journal_id'),)
+    __table_args__ += (Index('idx_yj_id', 'year_month', 'journal_id'),)
+    __table_args__ += (Index('idx_j_id', 'journal_id'),)
+
+    id = Column(INTEGER(unsigned=True), primary_key=True, autoincrement=True)
+
+    collection = Column(VARCHAR(3), nullable=False, primary_key=True)
+    article_id = Column(INTEGER(unsigned=True), ForeignKey('counter_article.id', name='idarticle_aajymm'))
+    journal_id = Column(INTEGER(unsigned=True), ForeignKey('counter_journal.id', name='idjournal_aajymm'))
+    year_month = Column(VARCHAR(7), nullable=False)
+
+    total_item_requests = Column(INTEGER, nullable=False)
+    total_item_investigations = Column(INTEGER, nullable=False)
+    unique_item_requests = Column(INTEGER, nullable=False)
+    unique_item_investigations = Column(INTEGER, nullable=False)
+
+
 class AggrArticleLanguageYearMonthMetric(Base):
     __tablename__ = 'aggr_article_language_year_month_metric'
     __table_args__ = (UniqueConstraint('collection', 'year_month', 'article_id', 'language_id', name='uni_col_art_lan_ymm_aalymm'),)

@@ -17,6 +17,9 @@ def json_report_wrapper(report_id, result_query, params, exceptions):
     if report_id == 'ir_a1':
         return _json_ir_a1(result_query, params, exceptions)
 
+    if report_id == 'ir_a4':
+        return _json_ir_a4(result_query, params, exceptions)
+
     if report_id == 'cr_j1':
         return _json_cr_j1(result_query, params, exceptions)
 
@@ -863,6 +866,9 @@ def tsv_report_wrapper(request, report_id, result_query, params, exceptions):
 
     if report_id == 'ir_a1':
         return _tsv_report_ir_a1(result_query, params, exceptions)
+
+    if report_id == 'ir_a4':
+        return _tsv_report_ir_a4(result_query, params, exceptions)
 
     if report_id == 'cr_j1':
         return _tsv_report_cr_j1(result_query, params, exceptions)

@@ -1,5 +1,5 @@
 DELIMITER $$
-CREATE PROCEDURE V2_LR_J1_MONTHLY(IN beginDate varchar(7), IN endDate varchar(7), IN collection varchar(3), collection_extra varchar(3))
+CREATE PROCEDURE V2_LR_J1_MONTHLY(IN beginDate varchar(7), IN endDate varchar(7), IN collection varchar(3), IN collection_extra varchar(3))
 BEGIN
 	SELECT
 		ajlymm.journal_id as journalID,
@@ -37,7 +37,7 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE V2_LR_J1_TOTALS(IN beginDate varchar(7), IN endDate varchar(7), IN collection varchar(3), collection_extra varchar(3))
+CREATE PROCEDURE V2_LR_J1_TOTALS(IN beginDate varchar(7), IN endDate varchar(7), IN collection varchar(3), IN collection_extra varchar(3))
 BEGIN
 	SELECT
 		ajlymm.journal_id as journalID,
@@ -74,7 +74,7 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE V2_LR_J1_JOURNAL_MONTHLY(IN beginDate varchar(7), IN endDate varchar(7), IN issn varchar(9), IN collection varchar(3), collection_extra varchar(3))
+CREATE PROCEDURE V2_LR_J1_JOURNAL_MONTHLY(IN beginDate varchar(7), IN endDate varchar(7), IN issn varchar(9), IN collection varchar(3), IN collection_extra varchar(3))
 BEGIN
 	SELECT
 		ajlymm.journal_id as journalID,
@@ -115,7 +115,7 @@ DELIMITER ;
 
 
 DELIMITER $$
-CREATE PROCEDURE V2_LR_J1_JOURNAL_TOTALS(IN beginDate varchar(7), IN endDate varchar(7), IN issn varchar(9), IN collection varchar(3), collection_extra varchar(3))
+CREATE PROCEDURE V2_LR_J1_JOURNAL_TOTALS(IN beginDate varchar(7), IN endDate varchar(7), IN issn varchar(9), IN collection varchar(3), IN collection_extra varchar(3))
 BEGIN
 	SELECT
 		ajlymm.journal_id as journalID,

@@ -65,6 +65,9 @@ DB_CALL_LR_A1_ARTICLE_MONTHLY = 'CALL LR_A1_ARTICLE_MONTHLY("%s", "%s", "%s", "%
 DB_CALL_IR_A1_JOURNAL_TOTALS = 'CALL IR_A1_JOURNAL_TOTALS("%s", "%s", "%s", "%s", "%s")'
 DB_CALL_IR_A1_JOURNAL_MONTHLY = 'CALL IR_A1_JOURNAL_MONTHLY("%s", "%s", "%s", "%s", "%s")'
 
+DB_CALL_V2_IR_A4_JOURNAL_YOP_TOTALS = 'CALL V2_IR_A1_JOURNAL_TOTALS("%s", "%s", "%s", "%s", "%s", "%s")'
+DB_CALL_V2_IR_A4_JOURNAL_YOP_MONTHLY = 'CALL V2_IR_A1_JOURNAL_MONTHLY("%s", "%s", "%s", "%s", "%s", "%s")'
+
 DB_CALL_V2_TR_J1_JOURNAL_TOTALS = 'CALL V2_TR_J1_JOURNAL_TOTALS("%s", "%s", "%s", "%s")'
 DB_CALL_V2_TR_J1_JOURNAL_MONTHLY = 'CALL V2_TR_J1_JOURNAL_MONTHLY("%s", "%s", "%s", "%s")'
 
@@ -112,6 +115,7 @@ DB_CALL_V2_CR_J1_MONTHLY = 'CALL V2_CR_J1_MONTHLY("%s", "%s", "%s", "%s")'
 REPORT_ID_TO_COLUMN_STATUS = {
     'cr_j1': 'status_sushi_journal_metric',
     'ir_a1': 'status_sushi_article_metric',
+    'ir_a4': 'status_aggr_article_journal_year_month_metric',
     'tr_j1': 'status_sushi_journal_metric',
     'tr_j4': 'status_sushi_journal_yop_metric',
     'lr_j1': 'status_aggr_journal_language_year_month_metric',
@@ -170,6 +174,7 @@ V2_GRANULARITY_MODE_REPORT_TO_PROCEDURE_AND_PARAMETERS = {
             'lr_j4': (DB_CALL_V2_LR_J4_JOURNAL_TOTALS, ['begin_date', 'end_date', 'issn', 'collection', 'collection_extra']),
             'tr_j1': (DB_CALL_V2_TR_J1_JOURNAL_TOTALS, ['begin_date', 'end_date', 'issn', 'collection']),
             'yop': {
+                'ir_a4': (DB_CALL_V2_IR_A4_JOURNAL_YOP_TOTALS, ['begin_date', 'end_date', 'issn', 'collection', 'collection_extra', 'yop']),
                 'gr_j4': (DB_CALL_V2_GR_J4_JOURNAL_YOP_TOTALS, ['begin_date', 'end_date', 'issn', 'collection', 'collection_extra', 'yop']),
                 'lr_j4': (DB_CALL_V2_LR_J4_JOURNAL_YOP_TOTALS, ['begin_date', 'end_date', 'issn', 'collection', 'collection_extra', 'yop']),
             }
@@ -198,6 +203,7 @@ V2_GRANULARITY_MODE_REPORT_TO_PROCEDURE_AND_PARAMETERS = {
             'lr_j4': (DB_CALL_V2_LR_J4_JOURNAL_MONTHLY, ['begin_date', 'end_date', 'issn', 'collection', 'collection_extra']),
             'tr_j1': (DB_CALL_V2_TR_J1_JOURNAL_MONTHLY, ['begin_date', 'end_date', 'issn', 'collection']),
             'yop': {
+                'ir_a4': (DB_CALL_V2_IR_A4_JOURNAL_YOP_MONTHLY, ['begin_date', 'end_date', 'issn', 'collection', 'collection_extra', 'yop']),
                 'gr_j4': (DB_CALL_V2_GR_J4_JOURNAL_YOP_MONTHLY, ['begin_date', 'end_date', 'issn', 'collection', 'collection_extra', 'yop']),
                 'lr_j4': (DB_CALL_V2_LR_J4_JOURNAL_YOP_MONTHLY, ['begin_date', 'end_date', 'issn', 'collection', 'collection_extra', 'yop']),
             }
@@ -352,6 +358,31 @@ TSV_REPORT_LR_A1_ROWS = [
     'Authors',
     'Publication_Date',
     'Article_Language',
+    'Article_Version',
+    'DOI',
+    'Proprietary_ID',
+    'Print_ISSN',
+    'Online_ISSN',
+    'URI',
+    'Parent_Title',
+    'Parent_Authors',
+    'Parent_Article_Version',
+    'Parent_DOI',
+    'Parent_Proprietary_ID',
+    'Parent_Print_ISSN',
+    'Parent_Online_ISSN',
+    'Parent_URI',
+    'Access_Type',
+    'Metric_Type',
+]
+
+TSV_REPORT_IR_A4_ROWS = [
+    'Item',
+    'Publisher',
+    'Publisher_ID',
+    'Platform',
+    'Authors',
+    'Publication_Date',
     'Article_Version',
     'DOI',
     'Proprietary_ID',

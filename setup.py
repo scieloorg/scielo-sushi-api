@@ -19,7 +19,7 @@ dev_requires = [
 
 setup(
     name='scielo-sushiapi',
-    version='0.9.4',
+    version='0.9.5.0',
     packages=find_packages(
         exclude=["*.tests", "*.tests.*", "tests.*", "tests", "docs"]
     ),

@@ -107,7 +107,7 @@ def validate_parameters(params, expected_params_list=[]):
 def validate_parameters_according_to_report(report_id, params):
     validation_results = {'errors': []}
 
-    if report_id in ('ir_a1',):
+    if report_id in ('ir_a1', 'ir_a4',):
         if 'issn' not in params and 'pid' not in params:
             validation_results['errors'].append(errors.error_required_filter_missing('issn or pid'))      
 

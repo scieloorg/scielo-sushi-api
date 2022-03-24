@@ -1,5 +1,5 @@
 DELIMITER $$
-CREATE PROCEDURE V2_GR_J4_MONTHLY(IN beginDate varchar(7), IN endDate varchar(7), IN collection varchar(3), collection_extra varchar(3))
+CREATE PROCEDURE V2_GR_J4_MONTHLY(IN beginDate varchar(7), IN endDate varchar(7), IN collection varchar(3), IN collection_extra varchar(3))
 BEGIN
 	SELECT
 		ajgyymm.journal_id as journalID,
@@ -38,7 +38,7 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE V2_GR_J4_TOTALS(IN beginDate varchar(7), IN endDate varchar(7), IN collection varchar(3), collection_extra varchar(3))
+CREATE PROCEDURE V2_GR_J4_TOTALS(IN beginDate varchar(7), IN endDate varchar(7), IN collection varchar(3), IN collection_extra varchar(3))
 BEGIN
 	SELECT
 		ajgyymm.journal_id as journalID,
@@ -76,7 +76,7 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE V2_GR_J4_JOURNAL_MONTHLY(IN beginDate varchar(7), IN endDate varchar(7), IN issn varchar(9), IN collection varchar(3), collection_extra varchar(3))
+CREATE PROCEDURE V2_GR_J4_JOURNAL_MONTHLY(IN beginDate varchar(7), IN endDate varchar(7), IN issn varchar(9), IN collection varchar(3), IN collection_extra varchar(3))
 BEGIN
 	SELECT
 		ajgyymm.journal_id as journalID,
@@ -117,7 +117,7 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE V2_GR_J4_JOURNAL_TOTALS(IN beginDate varchar(7), IN endDate varchar(7), IN issn varchar(9), IN collection varchar(3), collection_extra varchar(3))
+CREATE PROCEDURE V2_GR_J4_JOURNAL_TOTALS(IN beginDate varchar(7), IN endDate varchar(7), IN issn varchar(9), IN collection varchar(3), IN collection_extra varchar(3))
 BEGIN
 	SELECT
 		ajgyymm.journal_id as journalID,
@@ -157,7 +157,7 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE V2_GR_J4_YOP_MONTHLY(IN beginDate varchar(7), IN endDate varchar(7), IN collection varchar(3), collection_extra varchar(3), yop varchar(4))
+CREATE PROCEDURE V2_GR_J4_YOP_MONTHLY(IN beginDate varchar(7), IN endDate varchar(7), IN collection varchar(3), IN collection_extra varchar(3), IN yop varchar(4))
 BEGIN
 	SELECT
 		ajgyymm.journal_id as journalID,
@@ -197,7 +197,7 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE V2_GR_J4_YOP_TOTALS(IN beginDate varchar(7), IN endDate varchar(7), IN collection varchar(3), collection_extra varchar(3), yop varchar(4))
+CREATE PROCEDURE V2_GR_J4_YOP_TOTALS(IN beginDate varchar(7), IN endDate varchar(7), IN collection varchar(3), IN collection_extra varchar(3), IN yop varchar(4))
 BEGIN
 	SELECT
 		ajgyymm.journal_id as journalID,
@@ -236,7 +236,7 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE V2_GR_J4_JOURNAL_YOP_MONTHLY(IN beginDate varchar(7), IN endDate varchar(7), IN issn varchar(9), IN collection varchar(3), collection_extra varchar(3), yop varchar(4))
+CREATE PROCEDURE V2_GR_J4_JOURNAL_YOP_MONTHLY(IN beginDate varchar(7), IN endDate varchar(7), IN issn varchar(9), IN collection varchar(3), IN collection_extra varchar(3), IN yop varchar(4))
 BEGIN
 	SELECT
 		ajgyymm.journal_id as journalID,
@@ -279,7 +279,7 @@ DELIMITER ;
 
 
 DELIMITER $$
-CREATE PROCEDURE V2_GR_J4_JOURNAL_YOP_TOTALS(IN beginDate varchar(7), IN endDate varchar(7), IN issn varchar(9), IN collection varchar(3), collection_extra varchar(3), yop varchar(4))
+CREATE PROCEDURE V2_GR_J4_JOURNAL_YOP_TOTALS(IN beginDate varchar(7), IN endDate varchar(7), IN issn varchar(9), IN collection varchar(3), IN collection_extra varchar(3), IN yop varchar(4))
 BEGIN
 	SELECT
 		ajgyymm.journal_id as journalID,

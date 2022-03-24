@@ -82,7 +82,7 @@ def get_granularity_and_mode(params):
 def check_filter_by_yop(report_id, params):
     yop = params.get('yop', '')
 
-    if report_id in ['lr_j4', 'gr_j4', 'ir_a1']:
+    if report_id in ['lr_j4', 'gr_j4', 'ir_a1', 'ir_a4',]:
         if yop.isdigit():
             return True
 
@@ -116,7 +116,7 @@ def format_error_messages(exceptions: list):
 
 
 def set_collection_extra(report_id, attrs):
-    if report_id in ('cr_j1', 'gr_j1', 'lr_j1', 'gr_j4', 'lr_j4', 'lr_a1'):
+    if report_id in ('cr_j1', 'gr_j1', 'lr_j1', 'gr_j4', 'lr_j4', 'lr_a1', 'ir_a4',):
         if attrs['collection'] == 'scl':
             attrs.update({'collection_extra': 'nbr'})
 
@@ -138,7 +138,7 @@ def wrapper_call_report(report_id, params):
     else:
         procedure_name, params_names = values.GRANULARITY_MODE_REPORT_TO_PROCEDURE_AND_PARAMETERS.get(granularity, {}).get(mode, {}).get(report_id, ('', []))
 
-    if report_id in ('gr_j1', 'lr_j1', 'gr_j4', 'lr_j4', 'lr_a1',):
+    if report_id in ('gr_j1', 'lr_j1', 'gr_j4', 'lr_j4', 'lr_a1', 'ir_a4',):
         params['begin_date'] = cleaner.handle_str_date(params['begin_date'], year_month_only=True)
         params['end_date'] = cleaner.handle_str_date(params['end_date'], year_month_only=True)
 

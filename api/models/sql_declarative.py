@@ -281,6 +281,7 @@ class AggrStatus(Base):
     collection = Column(VARCHAR(3), nullable=False, primary_key=True)
     date = Column(DATE, nullable=False, primary_key=True)
 
+    status_aggr_article_journal_year_month_metric = Column(BOOLEAN, default=False)
     status_aggr_article_language_year_month_metric = Column(BOOLEAN, default=False)
     status_aggr_journal_language_year_month_metric = Column(BOOLEAN, default=False)
     status_aggr_journal_geolocation_year_month_metric = Column(BOOLEAN, default=False)

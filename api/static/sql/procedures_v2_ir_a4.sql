@@ -50,7 +50,8 @@ BEGIN
 			) AND
 			cjc.collection = ca.collection AND
 			cjc.collection in (collectionAcronym, collectionAcronymExtra) AND
-			ca.yop = yearOfPublication
+			ca.yop = yearOfPublication AND
+			(aajymm.year_month BETWEEN beginDate AND endDate)
 		UNION
 		SELECT 
 			cjc.collection AS journalCollection,
@@ -86,7 +87,8 @@ BEGIN
 			) AND
 			cjc.collection = ca.collection AND
 			cjc.collection in (collectionAcronym, collectionAcronymExtra) AND
-			ca.yop = yearOfPublication
+			ca.yop = yearOfPublication AND
+			(aajymm.year_month BETWEEN beginDate AND endDate)
 	) AS T1
 	JOIN counter_journal cj2 ON cj2.id = idjournal_jc
 	GROUP BY
@@ -149,7 +151,8 @@ BEGIN
 			) AND
 			cjc.collection = ca.collection AND
 			cjc.collection in (collectionAcronym, collectionAcronymExtra) AND
-			ca.yop = yearOfPublication
+			ca.yop = yearOfPublication AND
+			(aajymm.year_month BETWEEN beginDate AND endDate)
 		UNION
 		SELECT 
 			cjc.collection AS journalCollection,
@@ -185,7 +188,8 @@ BEGIN
 			) AND
 			cjc.collection = ca.collection AND
 			cjc.collection in (collectionAcronym, collectionAcronymExtra) AND
-			ca.yop = yearOfPublication
+			ca.yop = yearOfPublication AND
+			(aajymm.year_month BETWEEN beginDate AND endDate)
 	) AS T1
 	JOIN counter_journal cj2 ON cj2.id = idjournal_jc
 	GROUP BY

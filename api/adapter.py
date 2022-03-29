@@ -1142,28 +1142,45 @@ def _tsv_report_lr_a1(result_query, params, exceptions):
 
 
 def _tsv_report_ir_a1(result_query, params, exceptions):
+    if params['api'] == 'v2':
+        params['begin_date'], bd_discard  = cleaner.get_start_and_last_days(params['begin_date'])
+        ed_discard, params['end_date']  = cleaner.get_start_and_last_days(params['end_date'])
+
     result = {'headers': _tsv_header(params, exceptions, data_type='Article')}
 
     article2values = {}
+    article2description = {}
+    article_scielo_pids = _get_scielo_pids(result_query, 'articlePID')
     yms = ['Reporting_Period_Total']
 
     for ri in result_query:
-        journal_id = ri.onlineISSN or ri.printISSN or ri.journalID
-        article_key = (journal_id, ri.title, ri.publisherName, ri.printISSN, ri.onlineISSN, ri.uri, ri.pid, ri.yop)
+        article_doi = getattr(ri, 'articleDOI', '')
 
-        if article_key not in article2values:
-            article2values[article_key] = {'Reporting_Period_Total': (0, 0)}
+        if params.get('api', 'v1') == 'v2':
+            article_key = ri.articleDOI
+            article_description = (ri.printISSN, ri.onlineISSN, ri.journalTitle, ri.journalURI, ri.journalPublisher, ri.articleCollection, article_scielo_pids, ri.articleDOI)
+        else:
+            article_key = ri.articlePID
+            article_description = (ri.printISSN, ri.onlineISSN, ri.journalTitle, ri.journalURI, ri.journalPublisher, ri.articleCollection, ri.articlePID, '')
 
-        year_month = ri.beginDate.strftime('%b-%Y')
-        if year_month not in yms and params['granularity'] == 'monthly':
-            yms.append(year_month)
-        if year_month not in article2values[article_key]:
-            article2values[article_key][year_month] = 0
+        article2description[article_key] = article_description
 
         tir = getattr(ri, 'totalItemRequests')
         uir = getattr(ri, 'uniqueItemRequests')
 
-        article2values[article_key][year_month] = (tir, uir)
+        if article_key not in article2values:
+            article2values[article_key] = {'Reporting_Period_Total': (0, 0)}
+
+        if params['granularity'] == 'monthly':
+            year_month = cleaner.handle_str_date(ri.yearMonth, str_format=False).strftime('%b-%Y')
+            if year_month not in yms:
+                yms.append(year_month)
+
+            if year_month not in article2values[article_key]:
+                article2values[article_key][year_month] = 0
+
+            article2values[article_key][year_month] = (tir, uir)
+
         article2values[article_key]['Reporting_Period_Total'] = tuple(map(sum, zip(article2values[article_key]['Reporting_Period_Total'], (tir, uir))))
 
     output = {'rows': []}
@@ -1175,26 +1192,26 @@ def _tsv_report_ir_a1(result_query, params, exceptions):
     for i in article2values:
         for j, metric_name in enumerate(['Total_Item_Requests', 'Unique_Item_Requests']):
             line = [
-                i[6],
-                i[2],
+                i,
+                article2description[i][4],
                 '',
                 'SciELO SUSHI API',
                 '',
-                i[7],
                 '',
                 '',
-                '',
-                i[3],
-                i[4],
-                '',
-                i[1],
+                article_doi,
                 '',
                 '',
                 '',
                 '',
+                article2description[i][2],
                 '',
                 '',
-                i[5],
+                '',
+                '',
+                article2description[i][0],
+                article2description[i][1],
+                article2description[i][3],
                 '',
                 metric_name
             ]

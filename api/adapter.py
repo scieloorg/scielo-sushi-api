@@ -240,8 +240,8 @@ def _json_lr_j1(result_query_reports_lr_j1, params, exceptions):
             begin_date, end_date  = cleaner.get_start_and_last_days(r.yearMonth)
 
         elif params['granularity'] == 'totals':
-            begin_date, ed_discard  = cleaner.get_start_and_last_days(r.beginDate)
-            bd_discard, end_date  = cleaner.get_start_and_last_days(r.endDate)
+            begin_date, ed_discard  = cleaner.get_start_and_last_days(str(r.beginDate))
+            bd_discard, end_date  = cleaner.get_start_and_last_days(str(r.endDate))
 
         for m in ['Total_Item_Requests', 'Unique_Item_Requests']:
             metric_name = m[0].lower() + m[1:].replace('_', '')
@@ -341,8 +341,8 @@ def _json_lr_a1(result_query_reports_lr_a1, params, exceptions):
             begin_date, end_date  = cleaner.get_start_and_last_days(r.yearMonth)
 
         elif params['granularity'] == 'totals':
-            begin_date, ed_discard  = cleaner.get_start_and_last_days(r.beginDate)
-            bd_discard, end_date  = cleaner.get_start_and_last_days(r.endDate)
+            begin_date, ed_discard  = cleaner.get_start_and_last_days(str(r.beginDate))
+            bd_discard, end_date  = cleaner.get_start_and_last_days(str(r.endDate))
 
         for m in ['Total_Item_Requests', 'Unique_Item_Requests']:
             metric_name = m[0].lower() + m[1:].replace('_', '')
@@ -432,8 +432,8 @@ def _json_lr_j4(result_query_reports_lr_j4, params, exceptions):
             begin_date, end_date  = cleaner.get_start_and_last_days(r.yearMonth)
 
         elif params['granularity'] == 'totals':
-            begin_date, ed_discard  = cleaner.get_start_and_last_days(r.beginDate)
-            bd_discard, end_date  = cleaner.get_start_and_last_days(r.endDate)
+            begin_date, ed_discard  = cleaner.get_start_and_last_days(str(r.beginDate))
+            bd_discard, end_date  = cleaner.get_start_and_last_days(str(r.endDate))
 
         for m in ['Total_Item_Requests', 'Unique_Item_Requests']:
             metric_name = m[0].lower() + m[1:].replace('_', '')
@@ -705,8 +705,8 @@ def _json_ir_a4(result_query_reports_ir_a4, params, exceptions):
             begin_date, end_date  = cleaner.get_start_and_last_days(r.yearMonth)
 
         elif params['granularity'] == 'totals':
-            begin_date, ed_discard  = cleaner.get_start_and_last_days(r.beginDate)
-            bd_discard, end_date  = cleaner.get_start_and_last_days(r.endDate)
+            begin_date, ed_discard  = cleaner.get_start_and_last_days(str(r.beginDate))
+            bd_discard, end_date  = cleaner.get_start_and_last_days(str(r.endDate))
 
         for m in ['Total_Item_Requests', 'Unique_Item_Requests']:
             metric_name = m[0].lower() + m[1:].replace('_', '')
@@ -859,8 +859,8 @@ def _json_gr_j1(result_query_reports_gr_j1, params, exceptions):
             begin_date, end_date  = cleaner.get_start_and_last_days(r.yearMonth)
 
         elif params['granularity'] == 'totals':
-            begin_date, ed_discard  = cleaner.get_start_and_last_days(r.beginDate)
-            bd_discard, end_date  = cleaner.get_start_and_last_days(r.endDate)
+            begin_date, ed_discard  = cleaner.get_start_and_last_days(str(r.beginDate))
+            bd_discard, end_date  = cleaner.get_start_and_last_days(str(r.endDate))
 
         for m in ['Total_Item_Requests', 'Unique_Item_Requests']:
             metric_name = m[0].lower() + m[1:].replace('_', '')
@@ -949,8 +949,8 @@ def _json_gr_j4(result_query_reports_gr_j4, params, exceptions):
             begin_date, end_date  = cleaner.get_start_and_last_days(r.yearMonth)
 
         elif params['granularity'] == 'totals':
-            begin_date, ed_discard  = cleaner.get_start_and_last_days(r.beginDate)
-            bd_discard, end_date  = cleaner.get_start_and_last_days(r.endDate)
+            begin_date, ed_discard  = cleaner.get_start_and_last_days(str(r.beginDate))
+            bd_discard, end_date  = cleaner.get_start_and_last_days(str(r.endDate))
 
         for m in ['Total_Item_Requests', 'Unique_Item_Requests']:
             metric_name = m[0].lower() + m[1:].replace('_', '')

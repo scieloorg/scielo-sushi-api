@@ -212,12 +212,12 @@ BEGIN
     SELECT
            cj.online_issn AS onlineISSN,
            cj.print_issn AS printISSN,
-           cjc.title,
-           cjc.publisher_name AS publisherName,
-           cjc.uri,
-           ca.collection,
-           ca.pid,
-           ca.yop,
+           cjc.title AS journalTitle,
+           cjc.publisher_name AS journalPublisher,
+           cjc.uri AS journalURI,
+           ca.collection as articleCollection,
+           ca.pid as articlePID,
+           ca.yop as articleYOP,
            MIN(year_month_day) AS beginDate,
            MAX(year_month_day) AS endDate,
            SUM(total_item_requests) AS totalItemRequests,
@@ -232,7 +232,7 @@ BEGIN
           (year_month_day between beginDate AND endDate) AND
           (online_issn <> '' OR print_issn <> '') AND
           (ca.yop = yop)
-    GROUP BY ca.pid;
+    GROUP BY articlePID;
 END $$
 DELIMITER ;
 
@@ -243,12 +243,12 @@ BEGIN
            cj.id as journalID,
            cj.online_issn AS onlineISSN,
            cj.print_issn AS printISSN,
-           cjc.title,
-           cjc.publisher_name AS publisherName,
-           cjc.uri,
-           ca.collection,
-           ca.pid,
-           ca.yop,
+           cjc.title AS journalTitle,
+           cjc.publisher_name AS journalPublisher,
+           cjc.uri AS journalURI,
+           ca.collection AS articleCollection,
+           ca.pid AS articlePID,
+           ca.yop AS articleYOP,
            SUBSTR(year_month_day, 1, 7) AS yearMonth,
            MIN(year_month_day) AS beginDate,
            MAX(year_month_day) AS endDate,
@@ -264,7 +264,7 @@ BEGIN
           (year_month_day between beginDate AND endDate) AND
           (online_issn <> '' OR print_issn <> '') AND
           (ca.yop = yop)
-    GROUP BY ca.pid, yearMonth;
+    GROUP BY articlePID, yearMonth;
 END $$
 DELIMITER ;
 
@@ -274,12 +274,12 @@ BEGIN
     SELECT
            cj.online_issn AS onlineISSN,
            cj.print_issn AS printISSN,
-           cjc.title,
-           cjc.publisher_name AS publisherName,
-           cjc.uri,
-           ca.collection,
-           ca.pid,
-           ca.yop,
+           cjc.title AS journalTitle,
+           cjc.publisher_name AS journalPublisher,
+           cjc.uri AS journalURI,
+           ca.collection AS articleCollection,
+           ca.pid AS articlePID,
+           ca.yop AS articleYOP,
            MIN(year_month_day) AS beginDate,
            MAX(year_month_day) AS endDate,
            SUM(total_item_requests) AS totalItemRequests,
@@ -302,12 +302,12 @@ BEGIN
     SELECT
            cj.online_issn AS onlineISSN,
            cj.print_issn AS printISSN,
-           cjc.title,
-           cjc.publisher_name AS publisherName,
-           cjc.uri,
-           ca.collection,
-           ca.pid,
-           ca.yop,
+           cjc.title AS journalTitle,
+           cjc.publisher_name AS journalPublisher,
+           cjc.uri AS journalURI,
+           ca.collection AS articleCollection,
+           ca.pid AS articlePID,
+           ca.yop AS articleYOP,
            SUBSTR(year_month_day, 1, 7) AS yearMonth,
            MIN(year_month_day) AS beginDate,
            MAX(year_month_day) AS endDate,
@@ -332,12 +332,12 @@ BEGIN
     SELECT
            cj.online_issn AS onlineISSN,
            cj.print_issn AS printISSN,
-           cjc.title,
-           cjc.publisher_name AS publisherName,
-           cjc.uri,
-           ca.collection,
-           ca.pid,
-           ca.yop,
+           cjc.title AS journalTitle,
+           cjc.publisher_name AS journalPublisher,
+           cjc.uri AS journalURI,
+           ca.collection AS articleCollection,
+           ca.pid AS articlePID,
+           ca.yop AS articleYOP,
            SUBSTR(year_month_day, 1, 7) AS yearMonth,
            MIN(year_month_day) AS beginDate,
            MAX(year_month_day) AS endDate,
@@ -352,7 +352,7 @@ BEGIN
           (year_month_day between beginDate AND endDate) AND
           (online_issn <> '' OR print_issn <> '') AND
           (ca.yop = yop)
-    GROUP BY ca.pid, yearMonth;
+    GROUP BY articlePID, yearMonth;
 END $$
 DELIMITER ;
 
@@ -362,12 +362,12 @@ BEGIN
     SELECT
            cj.online_issn AS onlineISSN,
            cj.print_issn AS printISSN,
-           cjc.title,
-           cjc.publisher_name AS publisherName,
-           cjc.uri,
-           ca.collection,
-           ca.pid,
-           ca.yop,
+           cjc.title AS journalTitle,
+           cjc.publisher_name AS journalPublisher,
+           cjc.uri AS journalURI,
+           ca.collection AS articleCollection,
+           ca.pid AS articlePID,
+           ca.yop AS articleYOP,
            MIN(year_month_day) AS beginDate,
            MAX(year_month_day) AS endDate,
            SUM(total_item_requests) AS totalItemRequests,
@@ -381,7 +381,7 @@ BEGIN
           (year_month_day between beginDate AND endDate) AND
           (online_issn <> '' OR print_issn <> '') AND
           (ca.yop = yop)
-    GROUP BY ca.pid;
+    GROUP BY articlePID;
 END $$
 DELIMITER ;
 

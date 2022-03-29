@@ -65,6 +65,9 @@ DB_CALL_LR_A1_ARTICLE_MONTHLY = 'CALL LR_A1_ARTICLE_MONTHLY("%s", "%s", "%s", "%
 DB_CALL_IR_A1_JOURNAL_TOTALS = 'CALL IR_A1_JOURNAL_TOTALS("%s", "%s", "%s", "%s", "%s")'
 DB_CALL_IR_A1_JOURNAL_MONTHLY = 'CALL IR_A1_JOURNAL_MONTHLY("%s", "%s", "%s", "%s", "%s")'
 
+DB_CALL_V2_IR_A1_ARTICLE_TOTALS = 'CALL V2_IR_A1_ARTICLE_TOTALS("%s", "%s", "%s", "%s", "%s")'
+DB_CALL_V2_IR_A1_ARTICLE_MONTHLY = 'CALL V2_IR_A1_ARTICLE_MONTHLY("%s", "%s", "%s", "%s", "%s")'
+
 DB_CALL_V2_IR_A4_JOURNAL_YOP_TOTALS = 'CALL V2_IR_A4_JOURNAL_YOP_TOTALS("%s", "%s", "%s", "%s", "%s", "%s")'
 DB_CALL_V2_IR_A4_JOURNAL_YOP_MONTHLY = 'CALL V2_IR_A4_JOURNAL_YOP_MONTHLY("%s", "%s", "%s", "%s", "%s", "%s")'
 
@@ -165,6 +168,7 @@ GRANULARITY_MODE_REPORT_TO_PROCEDURE_AND_PARAMETERS = {
 V2_GRANULARITY_MODE_REPORT_TO_PROCEDURE_AND_PARAMETERS = {
     'totals': {
         'pid': {
+            'ir_a1': (DB_CALL_V2_IR_A1_ARTICLE_TOTALS, ['begin_date', 'end_date', 'pid', 'collection', 'collection_extra']),
             'lr_a1': (DB_CALL_V2_LR_A1_ARTICLE_TOTALS, ['begin_date', 'end_date', 'pid', 'collection', 'collection_extra']),
         },
         'issn': {
@@ -194,6 +198,7 @@ V2_GRANULARITY_MODE_REPORT_TO_PROCEDURE_AND_PARAMETERS = {
     },
     'monthly': {
         'pid': {
+            'ir_a1': (DB_CALL_V2_IR_A1_ARTICLE_MONTHLY, ['begin_date', 'end_date', 'pid', 'collection', 'collection_extra']),
             'lr_a1': (DB_CALL_V2_LR_A1_ARTICLE_MONTHLY, ['begin_date', 'end_date', 'pid', 'collection', 'collection_extra']),
         },
         'issn': {

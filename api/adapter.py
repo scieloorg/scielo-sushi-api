@@ -240,8 +240,8 @@ def _json_lr_j1(result_query_reports_lr_j1, params, exceptions):
             begin_date, end_date  = cleaner.get_start_and_last_days(r.yearMonth)
 
         elif params['granularity'] == 'totals':
-            begin_date, ed_discard  = cleaner.get_start_and_last_days(r.beginDate)
-            bd_discard, end_date  = cleaner.get_start_and_last_days(r.endDate)
+            begin_date, ed_discard  = cleaner.get_start_and_last_days(str(r.beginDate))
+            bd_discard, end_date  = cleaner.get_start_and_last_days(str(r.endDate))
 
         for m in ['Total_Item_Requests', 'Unique_Item_Requests']:
             metric_name = m[0].lower() + m[1:].replace('_', '')
@@ -341,8 +341,8 @@ def _json_lr_a1(result_query_reports_lr_a1, params, exceptions):
             begin_date, end_date  = cleaner.get_start_and_last_days(r.yearMonth)
 
         elif params['granularity'] == 'totals':
-            begin_date, ed_discard  = cleaner.get_start_and_last_days(r.beginDate)
-            bd_discard, end_date  = cleaner.get_start_and_last_days(r.endDate)
+            begin_date, ed_discard  = cleaner.get_start_and_last_days(str(r.beginDate))
+            bd_discard, end_date  = cleaner.get_start_and_last_days(str(r.endDate))
 
         for m in ['Total_Item_Requests', 'Unique_Item_Requests']:
             metric_name = m[0].lower() + m[1:].replace('_', '')
@@ -432,8 +432,8 @@ def _json_lr_j4(result_query_reports_lr_j4, params, exceptions):
             begin_date, end_date  = cleaner.get_start_and_last_days(r.yearMonth)
 
         elif params['granularity'] == 'totals':
-            begin_date, ed_discard  = cleaner.get_start_and_last_days(r.beginDate)
-            bd_discard, end_date  = cleaner.get_start_and_last_days(r.endDate)
+            begin_date, ed_discard  = cleaner.get_start_and_last_days(str(r.beginDate))
+            bd_discard, end_date  = cleaner.get_start_and_last_days(str(r.endDate))
 
         for m in ['Total_Item_Requests', 'Unique_Item_Requests']:
             metric_name = m[0].lower() + m[1:].replace('_', '')
@@ -534,6 +534,13 @@ def _json_tr_j4(result_query_reports_tr_j4, params, exceptions):
 
 
 def _json_ir_a1(result_query_reports_ir_a1, params, exceptions):
+    if params['api'] == 'v2':
+        report_begin_date, ed_discard = cleaner.get_start_and_last_days(params.get('begin_date', ''))
+        bd_discard, report_end_date = cleaner.get_start_and_last_days(params.get('end_date', ''))
+    else:
+        report_begin_date = params['begin_date']
+        report_end_date = params['end_date']
+
     json_results = {
         "Report_Header": {
             "Created": datetime.now().isoformat(),
@@ -550,10 +557,10 @@ def _json_ir_a1(result_query_reports_ir_a1, params, exceptions):
         },
         "Report_Filters": [{
             "Name": "Begin_Date",
-            "Value": params.get('begin_date', '')
+            "Value": str(report_begin_date)
         }, {
             "Name": "End_Date",
-            "Value": params.get('end_date', '')
+            "Value": str(report_end_date)
         }],
         "Report_Attributes": [{
             "Name": "Attributes_To_Show",
@@ -565,43 +572,59 @@ def _json_ir_a1(result_query_reports_ir_a1, params, exceptions):
 
     report_items = {}
 
+    article_scielo_ids = _get_scielo_pids(result_query_reports_ir_a1, 'articlePID')
+
     for r in result_query_reports_ir_a1:
-        key = '-'.join([r.collection, r.pid])
+        article_doi = getattr(r, 'articleDOI', '')
+        
+        if params.get('api', 'v1') == 'v2':
+            article_code_col = (article_doi, r.articleCollection)
+        else:
+            article_code_col = (r.articlePID, r.articleCollection)
+        
+        key = '-'.join(article_code_col)
 
         if key not in report_items:
             report_items[key] = {
-                'Item': r.pid,
-                'Publisher': r.publisherName,
+                'Item': article_code_col[0],
+                'Publisher': r.journalPublisher,
                 'Publisher_ID': [],
                 'Platform': params.get('platform', ''),
                 'Authors': '',
                 'Publication_Date': '',
                 'Article_Version': '',
-                'DOI': '',
+                'DOI': article_doi,
                 'Proprietary_ID': '',
                 'Print_ISSN': '',
                 'Online_ISSN': '',
                 'URI': '',
-                'Parent_Title': r.title,
+                'Parent_Title': r.journalTitle,
                 'Parent_DOI': '',
                 'Parent_Proprietary_ID': '',
                 'Parent_Print_ISSN': r.printISSN,
                 'Parent_Online_ISSN': r.onlineISSN,
                 'Parent_URI': '',
                 'Parent_Data_Type': 'Journal',
-                'Item_ID': [],
+                'Item_ID': article_scielo_ids,
                 'Data_Type': 'Article',
                 'Access_Type': 'Open Access',
                 'Access_Method': 'Regular',
                 'Performance': []}
+
+        if params['granularity'] == 'monthly':
+            begin_date, end_date  = cleaner.get_start_and_last_days(r.yearMonth)
+
+        elif params['granularity'] == 'totals':
+            begin_date, ed_discard  = cleaner.get_start_and_last_days(str(r.beginDate))
+            bd_discard, end_date  = cleaner.get_start_and_last_days(str(r.endDate))
 
         for m in ['Total_Item_Requests', 'Unique_Item_Requests']:
             metric_name = m[0].lower() + m[1:].replace('_', '')
 
             performance_m = {
                 'Period': {
-                    'Begin_Date': str(r.beginDate),
-                    'End_Date': str(r.endDate)
+                    'Begin_Date': str(begin_date),
+                    'End_Date': str(end_date)
                 },
                 'Instance': {
                     'Metric_Type': m,
@@ -610,7 +633,7 @@ def _json_ir_a1(result_query_reports_ir_a1, params, exceptions):
             }
             report_items[key]['Performance'].append(performance_m)
 
-        json_results['Report_Items'] = [ri for ri in report_items.values() if ri['Item']]
+        json_results['Report_Items'] = [ri for ri in report_items.values() if ri['Parent_Title']]
     return json_results
 
 
@@ -682,8 +705,8 @@ def _json_ir_a4(result_query_reports_ir_a4, params, exceptions):
             begin_date, end_date  = cleaner.get_start_and_last_days(r.yearMonth)
 
         elif params['granularity'] == 'totals':
-            begin_date, ed_discard  = cleaner.get_start_and_last_days(r.beginDate)
-            bd_discard, end_date  = cleaner.get_start_and_last_days(r.endDate)
+            begin_date, ed_discard  = cleaner.get_start_and_last_days(str(r.beginDate))
+            bd_discard, end_date  = cleaner.get_start_and_last_days(str(r.endDate))
 
         for m in ['Total_Item_Requests', 'Unique_Item_Requests']:
             metric_name = m[0].lower() + m[1:].replace('_', '')
@@ -836,8 +859,8 @@ def _json_gr_j1(result_query_reports_gr_j1, params, exceptions):
             begin_date, end_date  = cleaner.get_start_and_last_days(r.yearMonth)
 
         elif params['granularity'] == 'totals':
-            begin_date, ed_discard  = cleaner.get_start_and_last_days(r.beginDate)
-            bd_discard, end_date  = cleaner.get_start_and_last_days(r.endDate)
+            begin_date, ed_discard  = cleaner.get_start_and_last_days(str(r.beginDate))
+            bd_discard, end_date  = cleaner.get_start_and_last_days(str(r.endDate))
 
         for m in ['Total_Item_Requests', 'Unique_Item_Requests']:
             metric_name = m[0].lower() + m[1:].replace('_', '')
@@ -926,8 +949,8 @@ def _json_gr_j4(result_query_reports_gr_j4, params, exceptions):
             begin_date, end_date  = cleaner.get_start_and_last_days(r.yearMonth)
 
         elif params['granularity'] == 'totals':
-            begin_date, ed_discard  = cleaner.get_start_and_last_days(r.beginDate)
-            bd_discard, end_date  = cleaner.get_start_and_last_days(r.endDate)
+            begin_date, ed_discard  = cleaner.get_start_and_last_days(str(r.beginDate))
+            bd_discard, end_date  = cleaner.get_start_and_last_days(str(r.endDate))
 
         for m in ['Total_Item_Requests', 'Unique_Item_Requests']:
             metric_name = m[0].lower() + m[1:].replace('_', '')
@@ -1142,28 +1165,45 @@ def _tsv_report_lr_a1(result_query, params, exceptions):
 
 
 def _tsv_report_ir_a1(result_query, params, exceptions):
+    if params['api'] == 'v2':
+        params['begin_date'], bd_discard  = cleaner.get_start_and_last_days(params['begin_date'])
+        ed_discard, params['end_date']  = cleaner.get_start_and_last_days(params['end_date'])
+
     result = {'headers': _tsv_header(params, exceptions, data_type='Article')}
 
     article2values = {}
+    article2description = {}
+    article_scielo_pids = _get_scielo_pids(result_query, 'articlePID')
     yms = ['Reporting_Period_Total']
 
     for ri in result_query:
-        journal_id = ri.onlineISSN or ri.printISSN or ri.journalID
-        article_key = (journal_id, ri.title, ri.publisherName, ri.printISSN, ri.onlineISSN, ri.uri, ri.pid, ri.yop)
+        article_doi = getattr(ri, 'articleDOI', '')
 
-        if article_key not in article2values:
-            article2values[article_key] = {'Reporting_Period_Total': (0, 0)}
+        if params.get('api', 'v1') == 'v2':
+            article_key = ri.articleDOI
+            article_description = (ri.printISSN, ri.onlineISSN, ri.journalTitle, ri.journalURI, ri.journalPublisher, ri.articleCollection, article_scielo_pids, ri.articleDOI)
+        else:
+            article_key = ri.articlePID
+            article_description = (ri.printISSN, ri.onlineISSN, ri.journalTitle, ri.journalURI, ri.journalPublisher, ri.articleCollection, ri.articlePID, '')
 
-        year_month = ri.beginDate.strftime('%b-%Y')
-        if year_month not in yms and params['granularity'] == 'monthly':
-            yms.append(year_month)
-        if year_month not in article2values[article_key]:
-            article2values[article_key][year_month] = 0
+        article2description[article_key] = article_description
 
         tir = getattr(ri, 'totalItemRequests')
         uir = getattr(ri, 'uniqueItemRequests')
 
-        article2values[article_key][year_month] = (tir, uir)
+        if article_key not in article2values:
+            article2values[article_key] = {'Reporting_Period_Total': (0, 0)}
+
+        if params['granularity'] == 'monthly':
+            year_month = cleaner.handle_str_date(ri.yearMonth, str_format=False).strftime('%b-%Y')
+            if year_month not in yms:
+                yms.append(year_month)
+
+            if year_month not in article2values[article_key]:
+                article2values[article_key][year_month] = 0
+
+            article2values[article_key][year_month] = (tir, uir)
+
         article2values[article_key]['Reporting_Period_Total'] = tuple(map(sum, zip(article2values[article_key]['Reporting_Period_Total'], (tir, uir))))
 
     output = {'rows': []}
@@ -1175,26 +1215,26 @@ def _tsv_report_ir_a1(result_query, params, exceptions):
     for i in article2values:
         for j, metric_name in enumerate(['Total_Item_Requests', 'Unique_Item_Requests']):
             line = [
-                i[6],
-                i[2],
+                i,
+                article2description[i][4],
                 '',
                 'SciELO SUSHI API',
                 '',
-                i[7],
                 '',
                 '',
-                '',
-                i[3],
-                i[4],
-                '',
-                i[1],
+                article_doi,
                 '',
                 '',
                 '',
                 '',
+                article2description[i][2],
                 '',
                 '',
-                i[5],
+                '',
+                '',
+                article2description[i][0],
+                article2description[i][1],
+                article2description[i][3],
                 '',
                 metric_name
             ]

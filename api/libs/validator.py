@@ -109,7 +109,10 @@ def validate_parameters_according_to_report(report_id, params):
 
     if report_id in ('ir_a1', 'ir_a4',):
         if 'issn' not in params and 'pid' not in params:
-            validation_results['errors'].append(errors.error_required_filter_missing('issn or pid'))      
+            validation_results['errors'].append(errors.error_required_filter_missing('issn or pid'))
+
+        if 'pid' in params:
+            _validate_pid_according_to_api(params, validation_results)
 
         if 'yop' not in params:
             if 'pid' not in params:
@@ -128,11 +131,15 @@ def validate_parameters_according_to_report(report_id, params):
             if 'issn' in params:
                 validation_results['errors'].append(errors.error_parameter_not_recognized_in_this_context('issn'))
 
-            if params.get('api', 'v1') == 'v1':
-                if len(params['pid']) != 23:
-                    validation_results['errors'].append(errors.error_invalid_report_filter_value({'name': 'pid', 'value': params.get('pid', '')}, severity='error'))
-            elif params.get('api', 'v1') == 'v2':        
-                if len(params['pid']) > 255 or len(params['pid']) < 7:
-                    validation_results['errors'].append(errors.error_invalid_report_filter_value({'name': 'pid', 'value': params.get('pid', '')}, severity='error'))
+            _validate_pid_according_to_api(params, validation_results)
 
     return validation_results
+
+
+def _validate_pid_according_to_api(params, validation_results):
+    if params.get('api', 'v1') == 'v1':
+        if len(params['pid']) != 23:
+            validation_results['errors'].append(errors.error_invalid_report_filter_value({'name': 'pid', 'value': params.get('pid', '')}, severity='error'))
+    elif params.get('api', 'v1') == 'v2':        
+        if len(params['pid']) > 255 or len(params['pid']) < 7:
+            validation_results['errors'].append(errors.error_invalid_report_filter_value({'name': 'pid', 'value': params.get('pid', '')}, severity='error'))

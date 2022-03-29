@@ -53,20 +53,25 @@ Um **editor de periódico** pode estar interessado em visualizar os resultados d
 
 - `http://usage.apis.scielo.org/reports/gr_j4?begin_date=2021-06&end_date=2021-12&api=v2&collection=<ACRÔNIMO>&issn=<ISSN>&yop=<ANO>&fmt=tsv`
 
+Um **autor de artigo** pode estar interessado em visualizar os resultados de acesso ao seu artigo. É possível consultar acessos por idioma do texto e também para o artigo como um todo. Seguem exemplos de consultas
+
+- `http://usage.apis.scielo.org/reports/ir_a1?begin_date=2022-01&end_date=2022-02&api=v2&collection=<ACRONIMO>&pid=<DOI_ou_PIDv2_ou_PIDv3>&fmt=tsv`
+- `http://usage.apis.scielo.org/reports/lr_a1?begin_date=2022-01&end_date=2022-02&api=v2&collection=<ACRONIMO>&pid=<DOI_ou_PIDv2_ou_PIDv3>&fmt=tsv`
+
 
 ### 2.1. Tabela de parâmetros
 
 | Parâmetro | Descrição | Formato | Valor padrão | Obrigatório | Observações |
 | --------- | --------- | ------- | ------------ | ----------- | ----------- |
-| `begin_date` | Data de início | `AAAA-MM-DD` ou `AAAA-MM` | N/A | Sim | O formato `AAAA-MM` é obrigatório para relatórios `CR_J1`, `GR_J1` e `LR_J1` |
-| `end_date` | Data de fim | `AAAA-MM-DD` ou `AAAA-MM` | N/A | Sim | O formato `AAAA-MM` é obrigatório para relatórios `CR_J1`, `GR_J1` e `LR_J1` |
+| `begin_date` | Data de início | `AAAA-MM-DD` ou `AAAA-MM` | N/A | Sim | O formato `AAAA-MM` é obrigatório para relatórios `CR_J1`, `GR_J1`, `LR_A1`, `LR_J1` e `IR_A1` (`api=v2`) |
+| `end_date` | Data de fim | `AAAA-MM-DD` ou `AAAA-MM` | N/A | Sim | O formato `AAAA-MM` é obrigatório para relatórios `CR_J1`, `GR_J1`, `LR_A1`, `LR_J1` e `IR_A1` (`api=v2`) |
 | `granularity` | Exibir valores por mês/ano ou apenas totais | `monthly` ou `totals` | `monthly` | Não | N/A |
 | `issn` | Código ISSN de periódico | `0000-0000` | N/A | Não | N/A |
-| `pid` | Código PID v2 ou v3 de documento SciELO | `S0000-00000000000000000` ou 23 letras ou dígitos | N/A | Não | Este parâmetro é aplicável apenas em relatórios `IR_A1`. No relatório `LR_A1`, associado à api=v2, pode ser informado o código `DOI` |
+| `pid` | Código PID v2 ou v3 de documento SciELO (código DOI também pode ser informado em relatórios `IR_A1` com `api=v2`) | `S0000-00000000000000000` ou 23 letras ou dígitos, se PID. O menos de 255 caracteres, se código DOI | N/A | Não | Este parâmetro é aplicável apenas em relatórios `IR_A1` e `LR_A1`, que, se associados ao parâmetro `api=v2`, pode ser valorado com código `DOI` |
 | `collection` | Acrônimo de coleção da Rede SciELO | 3 letras minúsculas | `scl` | Não | N/A |
 | `fmt` | Formato de saída dos resultados | `json` ou `tsv` | `json` | Não | N/A |
 | `yop` | Ano de publicação dos documentos | `AAAA` | `json` | Não | Este parâmetro é aplicável apenas em relatórios `GR_J4` e `LR_J4` |
-| `api` | Versão da API utilizada | `v1` ou `v2` | `v1` | O parâmetro valorado com a versão 2 da api (`api=v2`) é obrigatório para os relatórios `CR_J1`, `GR_J1` e `LR_J1`. É optativo para o relatório `LR_A1` | N/A |
+| `api` | Versão da API utilizada | `v1` ou `v2` | `v1` | O parâmetro valorado com a versão 2 da api (`api=v2`) é obrigatório para os relatórios `CR_J1`, `GR_J1` e `LR_J1`. É optativo para os relatórios `LR_A1` e `IR_A1` | N/A |
 
 
 ---
@@ -339,6 +344,10 @@ Para visualizar dados de acesso de apenas um periódico, agregado pelo país de 
 **Figura 6**. Imagem ilustrativa de um exemplo de relatório **GR_J4** em formato TSV.
 
 ![Relatório GR_J4](gr_j4.png "Relatório GR_J4")
+
+**Figura 7**. Imagem ilustrativa de um exemplo de relatório **IR_A1** em formato TSV.
+
+![Relatório IR_A1](ir_a1.png "Relatório IR_A1")
 
 ---
 

@@ -534,6 +534,13 @@ def _json_tr_j4(result_query_reports_tr_j4, params, exceptions):
 
 
 def _json_ir_a1(result_query_reports_ir_a1, params, exceptions):
+    if params['api'] == 'v2':
+        report_begin_date, ed_discard = cleaner.get_start_and_last_days(params.get('begin_date', ''))
+        bd_discard, report_end_date = cleaner.get_start_and_last_days(params.get('end_date', ''))
+    else:
+        report_begin_date = params['begin_date']
+        report_end_date = params['end_date']
+
     json_results = {
         "Report_Header": {
             "Created": datetime.now().isoformat(),
@@ -550,10 +557,10 @@ def _json_ir_a1(result_query_reports_ir_a1, params, exceptions):
         },
         "Report_Filters": [{
             "Name": "Begin_Date",
-            "Value": params.get('begin_date', '')
+            "Value": str(report_begin_date)
         }, {
             "Name": "End_Date",
-            "Value": params.get('end_date', '')
+            "Value": str(report_end_date)
         }],
         "Report_Attributes": [{
             "Name": "Attributes_To_Show",
@@ -565,43 +572,59 @@ def _json_ir_a1(result_query_reports_ir_a1, params, exceptions):
 
     report_items = {}
 
+    article_scielo_ids = _get_scielo_pids(result_query_reports_ir_a1, 'articlePID')
+
     for r in result_query_reports_ir_a1:
-        key = '-'.join([r.collection, r.pid])
+        article_doi = getattr(r, 'articleDOI', '')
+        
+        if params.get('api', 'v1') == 'v2':
+            article_code_col = (article_doi, r.articleCollection)
+        else:
+            article_code_col = (r.articlePID, r.articleCollection)
+        
+        key = '-'.join(article_code_col)
 
         if key not in report_items:
             report_items[key] = {
-                'Item': r.pid,
-                'Publisher': r.publisherName,
+                'Item': article_code_col[0],
+                'Publisher': r.journalPublisher,
                 'Publisher_ID': [],
                 'Platform': params.get('platform', ''),
                 'Authors': '',
                 'Publication_Date': '',
                 'Article_Version': '',
-                'DOI': '',
+                'DOI': article_doi,
                 'Proprietary_ID': '',
                 'Print_ISSN': '',
                 'Online_ISSN': '',
                 'URI': '',
-                'Parent_Title': r.title,
+                'Parent_Title': r.journalTitle,
                 'Parent_DOI': '',
                 'Parent_Proprietary_ID': '',
                 'Parent_Print_ISSN': r.printISSN,
                 'Parent_Online_ISSN': r.onlineISSN,
                 'Parent_URI': '',
                 'Parent_Data_Type': 'Journal',
-                'Item_ID': [],
+                'Item_ID': article_scielo_ids,
                 'Data_Type': 'Article',
                 'Access_Type': 'Open Access',
                 'Access_Method': 'Regular',
                 'Performance': []}
+
+        if params['granularity'] == 'monthly':
+            begin_date, end_date  = cleaner.get_start_and_last_days(r.yearMonth)
+
+        elif params['granularity'] == 'totals':
+            begin_date, ed_discard  = cleaner.get_start_and_last_days(str(r.beginDate))
+            bd_discard, end_date  = cleaner.get_start_and_last_days(str(r.endDate))
 
         for m in ['Total_Item_Requests', 'Unique_Item_Requests']:
             metric_name = m[0].lower() + m[1:].replace('_', '')
 
             performance_m = {
                 'Period': {
-                    'Begin_Date': str(r.beginDate),
-                    'End_Date': str(r.endDate)
+                    'Begin_Date': str(begin_date),
+                    'End_Date': str(end_date)
                 },
                 'Instance': {
                     'Metric_Type': m,
@@ -610,7 +633,7 @@ def _json_ir_a1(result_query_reports_ir_a1, params, exceptions):
             }
             report_items[key]['Performance'].append(performance_m)
 
-        json_results['Report_Items'] = [ri for ri in report_items.values() if ri['Item']]
+        json_results['Report_Items'] = [ri for ri in report_items.values() if ri['Parent_Title']]
     return json_results
 
 

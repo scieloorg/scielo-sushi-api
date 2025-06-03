@@ -1,7 +1,7 @@
 # SciELO SUSHI API
 The SciELO SUSHI API is a service that provides usage data for SciELO journals. To help users utilize the API, we provide a Jupyter Notebook with examples on how to collect data for a given journal. You can find the notebook here:
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/scieloorg/scielo-sushi-api/blob/main/docs/acessos.ipynb)
+[![Abrir no Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/scieloorg/scielo-sushi-api/blob/master/docs/acessos.ipynb)
 
 
 ## Setting up Database

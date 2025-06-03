@@ -2,7 +2,7 @@
 
 A SciELO SUSHI API é um serviço que fornece dados de acesso aos artigos publicados nos periódicos da Rede SciELO. Para facilitar o uso da API, disponibilizamos um Jupyter Notebook com exemplos práticos de como coletar estatísticas de acesso de artigos de um periódico específico. O notebook pode ser facilmente adaptado para consultar dados de qualquer periódico SciELO. Acesse o notebook pelo link abaixo:
 
-[![Abrir no Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github.com/scieloorg/scielo-sushi-api/blob/master/docs/acessos.ipynb)
+[![Abrir no Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/scieloorg/scielo-sushi-api/blob/master/docs/acessos.ipynb)
 
 
 ## Sumário

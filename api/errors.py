@@ -81,3 +81,12 @@ def error_parameter_not_recognized_in_this_context(data):
         'Message': 'Parameter Not Recognized in this Context',
         'Data': data,
     }
+
+
+def error_invalid_collection(collection):
+    return {
+        'Code': 3060,
+        'Severity': 'error',
+        'Message': 'The requested collection does not exist in the database',
+        'Data': collection
+    }

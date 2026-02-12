@@ -47,3 +47,27 @@ def get_dates_not_ready(begin_date, end_date, collection, report_id):
                                                                      AggrStatus.date.between(begin_date, end_date))).all()
 
     return sorted([d.date.strftime('%Y-%m-%d') for d in not_read_dates])
+
+
+def collection_exists(collection):
+    """
+    Check if a collection exists in the database by querying DateStatus table.
+    Returns True if the collection has at least one entry, False otherwise.
+    """
+    if not collection:
+        return False
+    
+    # Check in DateStatus table (used by cr_j1, ir_a1, tr_j1, tr_j4)
+    date_status_exists = DBSession.query(DateStatus).filter(
+        DateStatus.collection == collection
+    ).first() is not None
+    
+    if date_status_exists:
+        return True
+    
+    # Check in AggrStatus table (used by gr_j1, lr_j1, etc.)
+    aggr_status_exists = DBSession.query(AggrStatus).filter(
+        AggrStatus.collection == collection
+    ).first() is not None
+    
+    return aggr_status_exists

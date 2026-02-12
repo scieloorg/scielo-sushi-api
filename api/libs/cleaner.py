@@ -27,7 +27,8 @@ def clean_collection_acronym(collection):
 def clean_collection_name(collection):
     collection_name = values.COLLECTION_ACRONYM_TO_COLLECTION_NAME.get(collection)
     if not collection_name:
-        collection_name = values.COLLECTION_ACRONYM_TO_COLLECTION_NAME['scl']
+        # Return a generic name for unknown collections instead of defaulting to 'scl'
+        collection_name = collection
     return collection_name
 
 

@@ -22,14 +22,25 @@ class CounterViewTests(unittest.TestCase):
 class CleanerTests(unittest.TestCase):
     """Tests for cleaner module functions"""
     
-    def test_clean_collection_acronym_with_valid_collection(self):
-        """Test that valid collection acronyms are returned as-is"""
+    def test_clean_collection_acronym_with_known_collections(self):
+        """Test that known collection acronyms (present in the mapping) are returned as-is"""
         from api.libs import cleaner
         
         self.assertEqual('scl', cleaner.clean_collection_acronym('scl'))
         self.assertEqual('ssp', cleaner.clean_collection_acronym('ssp'))
-        self.assertEqual('dom', cleaner.clean_collection_acronym('dom'))
         self.assertEqual('arg', cleaner.clean_collection_acronym('arg'))
+    
+    def test_clean_collection_acronym_with_unmapped_but_accepted_collections(self):
+        """
+        Test that collection acronyms not present in the mapping
+        are still accepted and returned as-is (no fallback to a default).
+        """
+        from api.libs import cleaner
+        
+        # 'dom' is not in COLLECTION_ACRONYM_TO_COLLECTION_NAME
+        self.assertEqual('dom', cleaner.clean_collection_acronym('dom'))
+        self.assertEqual('xyz', cleaner.clean_collection_acronym('xyz'))
+        self.assertEqual('unknown', cleaner.clean_collection_acronym('unknown'))
     
     def test_clean_collection_acronym_with_empty_collection(self):
         """Test that empty collection defaults to 'scl'"""
@@ -38,13 +49,19 @@ class CleanerTests(unittest.TestCase):
         self.assertEqual('scl', cleaner.clean_collection_acronym(''))
         self.assertEqual('scl', cleaner.clean_collection_acronym(None))
     
-    def test_clean_collection_acronym_no_fallback_for_unknown(self):
-        """Test that unknown collections are returned as-is, not defaulted to 'scl'"""
+    def test_clean_collection_name_with_known_collection(self):
+        """Test that known collections return their proper name"""
         from api.libs import cleaner
         
-        # Unknown collections should be returned as-is
-        self.assertEqual('xyz', cleaner.clean_collection_acronym('xyz'))
-        self.assertEqual('unknown', cleaner.clean_collection_acronym('unknown'))
+        self.assertEqual('Brasil', cleaner.clean_collection_name('scl'))
+        self.assertEqual('Saúde Pública', cleaner.clean_collection_name('ssp'))
+    
+    def test_clean_collection_name_with_unknown_collection(self):
+        """Test that unknown collections return the acronym itself instead of defaulting to 'scl'"""
+        from api.libs import cleaner
+        
+        self.assertEqual('dom', cleaner.clean_collection_name('dom'))
+        self.assertEqual('xyz', cleaner.clean_collection_name('xyz'))
 
 
 class UtilsTests(unittest.TestCase):

@@ -60,6 +60,11 @@ class CounterViews(object):
         cleaned_params = cleaner.clean_parameters(rp_validation_results, op_validation_results)
         utils.set_collection_extra(report_id, cleaned_params)
 
+        # Validate that the collection exists in the database
+        collection = cleaned_params.get('collection')
+        if collection and not db.collection_exists(collection):
+            return [errors.error_invalid_collection(collection)]
+
         try:
             report_db_params = db.get_report_by_id(report_id=report_id)
         except (NoResultFound, MultipleResultsFound):

@@ -19,15 +19,23 @@ def clean_api(api):
 
 
 def clean_collection_acronym(collection):
+    """
+    Returns the collection acronym as-is, defaulting to 'scl' only if empty.
+    This is the primary function for cleaning collection acronyms.
+    """
     if not collection:
         return 'scl'
     return collection
 
 
 def clean_collection_name(collection):
+    """
+    Returns the full name for a collection acronym.
+    Falls back to returning the acronym itself if not found in the mapping.
+    """
     collection_name = values.COLLECTION_ACRONYM_TO_COLLECTION_NAME.get(collection)
     if not collection_name:
-        # Return a generic name for unknown collections instead of defaulting to 'scl'
+        # Return the acronym itself for unknown collections instead of defaulting to 'scl'
         collection_name = collection
     return collection_name
 

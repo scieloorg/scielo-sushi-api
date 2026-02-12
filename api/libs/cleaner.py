@@ -19,7 +19,7 @@ def clean_api(api):
 
 
 def clean_collection_acronym(collection):
-    if not collection or collection not in values.COLLECTION_ACRONYM_TO_COLLECTION_NAME.keys():
+    if not collection:
         return 'scl'
     return collection
 

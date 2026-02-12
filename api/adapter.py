@@ -789,6 +789,36 @@ def _json_cr_j1(result_query_reports_cr_j1, params, exceptions):
             report_items[r_collection_acronym]['Performance'].append(performance_m)
 
         json_results['Report_Items'] = [ri for ri in report_items.values() if ri['Title']]
+    
+    # If no data was returned, create a report item with zero counts
+    if not report_items:
+        r_collection_acronym = params.get('collection')
+        report_items[r_collection_acronym] = {
+            'Title': r_collection_acronym,
+            'Item_ID': [],
+            'Platform': params.get('platform', ''),
+            'Data_Type': 'Collection',
+            'Section_Type': 'Journal',
+            'Access_Type': 'Open Access',
+            'Access_Method': 'Regular',
+            'Performance': []
+        }
+        
+        for m in ['Total_Item_Requests', 'Unique_Item_Requests']:
+            performance_m = {
+                'Period': {
+                    'Begin_Date': params.get('begin_date', ''),
+                    'End_Date': params.get('end_date', '')
+                },
+                'Instance': {
+                    'Metric_Type': m,
+                    'Count': '0'
+                }
+            }
+            report_items[r_collection_acronym]['Performance'].append(performance_m)
+        
+        json_results['Report_Items'] = [ri for ri in report_items.values() if ri['Title']]
+    
     return json_results
 
 

@@ -79,7 +79,7 @@ class CounterViews(object):
         if data is None:
             return errors.error_report_not_supported()
 
-        if utils.is_empty_report(data):
+        if utils.is_empty_report(data) and report_id != 'cr_j1':
             return errors.error_no_usage_available()
 
         self._override_render()

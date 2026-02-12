@@ -29,6 +29,7 @@ class CleanerTests(unittest.TestCase):
         self.assertEqual('scl', cleaner.clean_collection_acronym('scl'))
         self.assertEqual('ssp', cleaner.clean_collection_acronym('ssp'))
         self.assertEqual('arg', cleaner.clean_collection_acronym('arg'))
+        self.assertEqual('dom', cleaner.clean_collection_acronym('dom'))
     
     def test_clean_collection_acronym_with_unmapped_but_accepted_collections(self):
         """
@@ -37,8 +38,7 @@ class CleanerTests(unittest.TestCase):
         """
         from api.libs import cleaner
         
-        # 'dom' is not in COLLECTION_ACRONYM_TO_COLLECTION_NAME
-        self.assertEqual('dom', cleaner.clean_collection_acronym('dom'))
+        # Test with collections not in COLLECTION_ACRONYM_TO_COLLECTION_NAME
         self.assertEqual('xyz', cleaner.clean_collection_acronym('xyz'))
         self.assertEqual('unknown', cleaner.clean_collection_acronym('unknown'))
     
@@ -55,12 +55,12 @@ class CleanerTests(unittest.TestCase):
         
         self.assertEqual('Brasil', cleaner.clean_collection_name('scl'))
         self.assertEqual('Saúde Pública', cleaner.clean_collection_name('ssp'))
+        self.assertEqual('República Dominicana', cleaner.clean_collection_name('dom'))
     
     def test_clean_collection_name_with_unknown_collection(self):
         """Test that unknown collections return the acronym itself instead of defaulting to 'scl'"""
         from api.libs import cleaner
         
-        self.assertEqual('dom', cleaner.clean_collection_name('dom'))
         self.assertEqual('xyz', cleaner.clean_collection_name('xyz'))
 
 

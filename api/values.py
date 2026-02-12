@@ -3,6 +3,7 @@ COLLECTION_ACRONYM_TO_COLLECTION_NAME = {
     'chl': 'Chile',
     'col': 'Colômbia',
     'cub': 'Cuba',
+    'dom': 'República Dominicana',
     'esp': 'Espanha',
     'mex': 'México',
     'prt': 'Portugal',

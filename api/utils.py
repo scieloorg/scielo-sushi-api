@@ -119,10 +119,10 @@ def set_collection_extra(report_id, attrs):
     if report_id in ('cr_j1', 'gr_j1', 'lr_j1', 'gr_j4', 'lr_j4', 'lr_a1', 'ir_a4',) or (report_id == 'ir_a1' and attrs['api'] == 'v2'):
         if attrs['collection'] == 'scl':
             attrs.update({'collection_extra': 'nbr'})
-
-        if attrs['collection'] == 'nbr':
+        elif attrs['collection'] == 'nbr':
             attrs.update({'collection_extra': 'scl'})
-
+        else:
+            attrs.update({'collection_extra': ''})
     else:
         attrs.update({'collection_extra': ''})
 

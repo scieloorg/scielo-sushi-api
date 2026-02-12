@@ -742,6 +742,21 @@ def _create_cr_j1_report_item(collection_acronym, platform):
     }
 
 
+def _add_cr_j1_performance(report_item, metric_type, begin_date, end_date, count):
+    """Helper function to add a performance entry to a cr_j1 report item"""
+    performance_m = {
+        'Period': {
+            'Begin_Date': str(begin_date),
+            'End_Date': str(end_date)
+        },
+        'Instance': {
+            'Metric_Type': metric_type,
+            'Count': str(count)
+        }
+    }
+    report_item['Performance'].append(performance_m)
+
+
 def _json_cr_j1(result_query_reports_cr_j1, params, exceptions):
     json_results = {
         "Report_Header": {
@@ -785,20 +800,14 @@ def _json_cr_j1(result_query_reports_cr_j1, params, exceptions):
 
         for m in ['Total_Item_Requests', 'Unique_Item_Requests']:
             metric_name = m[0].lower() + m[1:].replace('_', '')
-
-            performance_m = {
-                'Period': {
-                    'Begin_Date': str(r.beginDate),
-                    'End_Date': str(r.endDate)
-                },
-                'Instance': {
-                    'Metric_Type': m,
-                    'Count': str(getattr(r, metric_name))
-                }
-            }
-            report_items[r_collection_acronym]['Performance'].append(performance_m)
-
-        json_results['Report_Items'] = [ri for ri in report_items.values() if ri['Title']]
+            count = getattr(r, metric_name)
+            _add_cr_j1_performance(
+                report_items[r_collection_acronym],
+                m,
+                r.beginDate,
+                r.endDate,
+                count
+            )
     
     # If no data was returned, create a report item with zero counts
     if not report_items:
@@ -808,20 +817,15 @@ def _json_cr_j1(result_query_reports_cr_j1, params, exceptions):
         )
         
         for m in ['Total_Item_Requests', 'Unique_Item_Requests']:
-            performance_m = {
-                'Period': {
-                    'Begin_Date': params.get('begin_date', ''),
-                    'End_Date': params.get('end_date', '')
-                },
-                'Instance': {
-                    'Metric_Type': m,
-                    'Count': '0'
-                }
-            }
-            report_items[r_collection_acronym]['Performance'].append(performance_m)
-        
-        json_results['Report_Items'] = [ri for ri in report_items.values() if ri['Title']]
+            _add_cr_j1_performance(
+                report_items[r_collection_acronym],
+                m,
+                params.get('begin_date', ''),
+                params.get('end_date', ''),
+                0
+            )
     
+    json_results['Report_Items'] = [ri for ri in report_items.values() if ri['Title']]
     return json_results
 
 

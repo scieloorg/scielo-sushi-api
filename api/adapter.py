@@ -728,35 +728,6 @@ def _json_ir_a4(result_query_reports_ir_a4, params, exceptions):
     return json_results
 
 
-def _create_cr_j1_report_item(collection_acronym, platform):
-    """Helper function to create a cr_j1 report item structure"""
-    return {
-        'Title': collection_acronym,
-        'Item_ID': [],
-        'Platform': platform,
-        'Data_Type': 'Collection',
-        'Section_Type': 'Journal',
-        'Access_Type': 'Open Access',
-        'Access_Method': 'Regular',
-        'Performance': []
-    }
-
-
-def _add_cr_j1_performance(report_item, metric_type, begin_date, end_date, count):
-    """Helper function to add a performance entry to a cr_j1 report item"""
-    performance_m = {
-        'Period': {
-            'Begin_Date': str(begin_date),
-            'End_Date': str(end_date)
-        },
-        'Instance': {
-            'Metric_Type': metric_type,
-            'Count': str(count)
-        }
-    }
-    report_item['Performance'].append(performance_m)
-
-
 def _json_cr_j1(result_query_reports_cr_j1, params, exceptions):
     json_results = {
         "Report_Header": {
@@ -788,43 +759,36 @@ def _json_cr_j1(result_query_reports_cr_j1, params, exceptions):
     }
 
     report_items = {}
-    collection_acronym = params.get('collection')
 
-    # Process data rows if any
     for r in result_query_reports_cr_j1:
-        if collection_acronym not in report_items:
-            report_items[collection_acronym] = _create_cr_j1_report_item(
-                collection_acronym, 
-                params.get('platform', '')
-            )
+        r_collection_acronym = params.get('collection')
+        if r_collection_acronym not in report_items:
+            report_items[r_collection_acronym] = {
+                'Title': r_collection_acronym,
+                'Item_ID': [],
+                'Platform': params.get('platform', ''),
+                'Data_Type': 'Collection',
+                'Section_Type': 'Journal',
+                'Access_Type': 'Open Access',
+                'Access_Method': 'Regular',
+                'Performance': []}
 
         for m in ['Total_Item_Requests', 'Unique_Item_Requests']:
             metric_name = m[0].lower() + m[1:].replace('_', '')
-            _add_cr_j1_performance(
-                report_items[collection_acronym],
-                m,
-                r.beginDate,
-                r.endDate,
-                getattr(r, metric_name)
-            )
-    
-    # If no data was returned, create a report item with zero counts
-    if not report_items:
-        report_items[collection_acronym] = _create_cr_j1_report_item(
-            collection_acronym,
-            params.get('platform', '')
-        )
-        
-        for m in ['Total_Item_Requests', 'Unique_Item_Requests']:
-            _add_cr_j1_performance(
-                report_items[collection_acronym],
-                m,
-                params.get('begin_date', ''),
-                params.get('end_date', ''),
-                0
-            )
-    
-    json_results['Report_Items'] = [ri for ri in report_items.values() if ri['Title']]
+
+            performance_m = {
+                'Period': {
+                    'Begin_Date': str(r.beginDate),
+                    'End_Date': str(r.endDate)
+                },
+                'Instance': {
+                    'Metric_Type': m,
+                    'Count': str(getattr(r, metric_name))
+                }
+            }
+            report_items[r_collection_acronym]['Performance'].append(performance_m)
+
+        json_results['Report_Items'] = [ri for ri in report_items.values() if ri['Title']]
     return json_results
 
 

@@ -92,7 +92,7 @@ class AdapterTests(unittest.TestCase):
     """Tests for adapter module functions"""
     
     def test_json_cr_j1_with_empty_data(self):
-        """Test that cr_j1 returns zero counts when no data is available"""
+        """Test that cr_j1 returns empty Report_Items when no data is available"""
         from api import adapter
         from api.models.sql_declarative import Report
         
@@ -115,22 +115,10 @@ class AdapterTests(unittest.TestCase):
         # Call with empty data
         result = adapter._json_cr_j1([], params, [])
         
-        # Verify structure
+        # Verify structure exists but Report_Items is empty
         self.assertIn('Report_Header', result)
         self.assertIn('Report_Items', result)
-        self.assertEqual(1, len(result['Report_Items']))
-        
-        # Verify the collection title matches requested collection
-        report_item = result['Report_Items'][0]
-        self.assertEqual('dom', report_item['Title'])
-        
-        # Verify Performance has entries with zero counts
-        self.assertIn('Performance', report_item)
-        self.assertEqual(2, len(report_item['Performance']))
-        
-        # Check that counts are zero
-        for performance in report_item['Performance']:
-            self.assertEqual('0', performance['Instance']['Count'])
+        self.assertEqual(0, len(result['Report_Items']))
     
     def test_json_cr_j1_title_matches_requested_collection(self):
         """Test that Title in Report_Items always matches the requested collection"""

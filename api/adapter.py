@@ -788,37 +788,36 @@ def _json_cr_j1(result_query_reports_cr_j1, params, exceptions):
     }
 
     report_items = {}
-    r_collection_acronym = params.get('collection')
+    collection_acronym = params.get('collection')
 
     # Process data rows if any
     for r in result_query_reports_cr_j1:
-        if r_collection_acronym not in report_items:
-            report_items[r_collection_acronym] = _create_cr_j1_report_item(
-                r_collection_acronym, 
+        if collection_acronym not in report_items:
+            report_items[collection_acronym] = _create_cr_j1_report_item(
+                collection_acronym, 
                 params.get('platform', '')
             )
 
         for m in ['Total_Item_Requests', 'Unique_Item_Requests']:
             metric_name = m[0].lower() + m[1:].replace('_', '')
-            count = getattr(r, metric_name)
             _add_cr_j1_performance(
-                report_items[r_collection_acronym],
+                report_items[collection_acronym],
                 m,
                 r.beginDate,
                 r.endDate,
-                count
+                getattr(r, metric_name)
             )
     
     # If no data was returned, create a report item with zero counts
     if not report_items:
-        report_items[r_collection_acronym] = _create_cr_j1_report_item(
-            r_collection_acronym,
+        report_items[collection_acronym] = _create_cr_j1_report_item(
+            collection_acronym,
             params.get('platform', '')
         )
         
         for m in ['Total_Item_Requests', 'Unique_Item_Requests']:
             _add_cr_j1_performance(
-                report_items[r_collection_acronym],
+                report_items[collection_acronym],
                 m,
                 params.get('begin_date', ''),
                 params.get('end_date', ''),

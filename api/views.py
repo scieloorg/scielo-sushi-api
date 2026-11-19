@@ -41,16 +41,29 @@ class CounterViews(object):
         return adapter.mount_json_for_reports(res_reports)
 
     def _ir_a1_admission_response(self):
-        if self.request.registry.settings.get('sushi.ir_a1_max_concurrent') != 0:
+        settings = self.request.registry.settings
+        limit = settings.get('sushi.ir_a1_max_concurrent')
+        if limit is None:
             return None
 
-        detail = 'The ir_a1 report is temporarily disabled.'
+        if limit == 0:
+            detail = 'The ir_a1 report is temporarily disabled.'
+        else:
+            slots = settings['sushi.ir_a1_slots']
+            if slots.acquire(blocking=False):
+                # Keep the slot through response rendering and transaction cleanup.
+                self.request.add_finished_callback(lambda request: slots.release())
+                return None
+            detail = 'The ir_a1 report is busy. Retry later.'
+
         response = Response(
             status=503,
             content_type='application/json',
             json_body=errors.error_service_not_available(detail),
         )
         response.cache_control.no_store = True
+        if limit:
+            response.retry_after = 5
         return response
 
     @view_config(route_name='reports_report_id', renderer='json')

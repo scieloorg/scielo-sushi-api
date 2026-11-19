@@ -1,4 +1,5 @@
 from os import environ
+from threading import BoundedSemaphore
 
 from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
@@ -22,6 +23,8 @@ def main(global_config, **settings):
         except ValueError:
             raise ValueError('SUSHI_IR_A1_MAX_CONCURRENT must be a non-negative integer')
         settings['sushi.ir_a1_max_concurrent'] = ir_a1_limit
+        if ir_a1_limit > 0:
+            settings['sushi.ir_a1_slots'] = BoundedSemaphore(ir_a1_limit)
 
     config = Configurator(settings=settings)
 

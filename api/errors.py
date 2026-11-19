@@ -1,3 +1,12 @@
+def error_service_not_available(detail):
+    return {
+        'Code': 1000,
+        'Severity': 'error',
+        'Message': 'Service Not Available',
+        'Data': detail,
+    }
+
+
 def error_invalid_date_arguments():
     return {
         'Code': 3020,

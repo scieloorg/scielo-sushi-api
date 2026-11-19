@@ -1,5 +1,7 @@
+from pyramid.response import Response
 from pyramid.view import view_config
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
+
 from api import adapter, errors, utils, values
 from api.libs import cleaner, db, validator
 
@@ -38,9 +40,26 @@ class CounterViews(object):
 
         return adapter.mount_json_for_reports(res_reports)
 
+    def _ir_a1_admission_response(self):
+        if self.request.registry.settings.get('sushi.ir_a1_max_concurrent') != 0:
+            return None
+
+        detail = 'The ir_a1 report is temporarily disabled.'
+        response = Response(
+            status=503,
+            content_type='application/json',
+            json_body=errors.error_service_not_available(detail),
+        )
+        response.cache_control.no_store = True
+        return response
+
     @view_config(route_name='reports_report_id', renderer='json')
     def reports_report_id(self):
         report_id = self.request.matchdict.get('report_id', '')
+        if report_id == 'ir_a1':
+            rejection = self._ir_a1_admission_response()
+            if rejection is not None:
+                return rejection
 
         required_params = utils.extract_parameters(self.request, values.URI_REQUIRED_PARAMETERS)
         optional_params = utils.extract_parameters(self.request, values.URI_OPTIONAL_PARAMETERS)

@@ -29,7 +29,14 @@ _Environment variables_
 |-------- | ----------- |
 | `APPLICATION_URL` | Application address |
 | `STR_CONNECTION` | Database string connection |
+| `SUSHI_IR_A1_MAX_CONCURRENT` | Maximum number of concurrent `/reports/ir_a1` requests per application process. Unset preserves the existing behavior; `0` temporarily disables the report. |
 
+To prioritize the other reports, start with `-e SUSHI_IR_A1_MAX_CONCURRENT=1`
+when creating the container. Use `2` to give `ir_a1` more capacity. Recreate
+the container with an updated environment to change the value. Requests over
+the limit get HTTP `503` with `Retry-After: 5`, without waiting for a slot or
+querying the database. With `0` the report also returns `503`, but without a
+retry estimate. This does not change the wait queue in front of the app.
 
 ## Routes
 
